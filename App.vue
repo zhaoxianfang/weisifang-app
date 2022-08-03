@@ -55,7 +55,12 @@ export default {
 		// #endif
 	},
 	onShow: function() {
-		
+		// 获取完整的urlscheme字符串
+		var args= plus.runtime.arguments;
+		if(args){
+			// 处理args参数，如直达到某新页面等
+			this.tui.modal('得到urlscheme', args.toString(), false, res => {});
+		}
 	},
 	onHide: function() {
 		//console.log('App Hide')
