@@ -27,3 +27,7 @@ Homestead.yaml
 # 忽略所有 . 开头的目录
 .*/
 !.gitignore
+
+/unpackage/cache
+/unpackage/dist
+/unpackage/release

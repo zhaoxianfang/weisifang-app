@@ -36,7 +36,8 @@
             "Geolocation" : {},
             "Bluetooth" : {},
             "Messaging" : {},
-            "OAuth" : {}
+            "OAuth" : {},
+            "Maps" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
@@ -87,14 +88,15 @@
                     }
                 },
                 "urltypes" : "wsf,weisifang",
-                "UIBackgroundModes" : "audio,location"
+                "UIBackgroundModes" : "audio,location",
+                "dSYMs" : false
             },
             /* SDK配置 */
             "sdkConfigs" : {
                 "maps" : {
                     "amap" : {
-                        "appkey_ios" : "110e39a865a3265432853b47f8f7a576",
-                        "appkey_android" : "ccbe5c19ff124f7b7fc9af59c674c5a1"
+                        "appkey_ios" : "8dd5ecfb43116afff70bfc17e314e782",
+                        "appkey_android" : "2012d8debdcb9dbd721e3b0a7d4358c8"
                     }
                 },
                 "oauth" : {
@@ -106,8 +108,14 @@
                 "geolocation" : {
                     "system" : {
                         "__platform__" : [ "ios", "android" ]
+                    },
+                    "amap" : {
+                        "__platform__" : [ "ios", "android" ],
+                        "appkey_ios" : "8dd5ecfb43116afff70bfc17e314e782",
+                        "appkey_android" : "2012d8debdcb9dbd721e3b0a7d4358c8"
                     }
-                }
+                },
+                "ad" : {}
             },
             "icons" : {
                 "android" : {
