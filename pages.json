@@ -5,7 +5,7 @@
 			// #ifdef H5
 			"titleNView": false,
 			// #endif
-			"navigationBarTitleText": "Thor UI",
+			"navigationBarTitleText": "威四方",
 			"app-plus": {
 				"bounce": "vertical"
 			}
@@ -1947,7 +1947,7 @@
 	"globalStyle": {
 		"backgroundTextStyle": "dark",
 		"navigationBarBackgroundColor": "#5677FC",
-		"navigationBarTitleText": "Thor UI",
+		"navigationBarTitleText": "威四方",
 		"navigationBarTextStyle": "white",
 		"backgroundColor": "#fafafa",
 		"backgroundColorTop": "#fafafa",

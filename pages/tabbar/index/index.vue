@@ -4,7 +4,7 @@
 			<view class="tui-page-title" @tap="doc">
 				<image src="/static/images/index/logo.png" class="tui-logo"></image>
 				<view class="tui-title">
-					Thor UI
+					威四方
 					<view class="tui-badge">文档</view>
 				</view>
 			</view>
