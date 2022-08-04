@@ -63,7 +63,7 @@ export default {
 			if(args.substring(0, 6) === "wsf://" || args.substring(0, 12) === "weisifang://"){
 				var urlschemeContent = (args.substring(0, 6) === "wsf://")?args.slice(6):args.slice(12);
 				this.tui.modal('urlscheme', urlschemeContent, false, res => {});
-				plus.runtime.arguments = ''
+				plus.runtime.arguments = '';
 			}
 		}
 		// #endif

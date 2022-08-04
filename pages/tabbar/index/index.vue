@@ -15,7 +15,7 @@
 		</view>
 		<view class="page_bd page_bd_spacing">
 			<view class="kind-list">
-				<block v-for="(item, index) in list" :key="item.id">
+				<block v-for="(item, index) in list" :key="'a-'+item.id">
 					<view class="kind-list_item">
 						<view :id="item.id" class="tui-flex kind-list_item-hd"
 							:class="{ 'kind-list_item-hd_show': item.open }" @tap="kindToggle">

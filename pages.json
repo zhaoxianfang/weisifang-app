@@ -22,6 +22,17 @@
 			}
 		}
 	}, {
+		"path" : "pages/tabbar/work/work",
+		"style" : {
+			// #ifdef H5
+			"titleNView": false,
+			// #endif
+			"navigationBarTitleText": "应用",
+			"app-plus": {
+				"bounce": "vertical"
+			}
+		}
+    }, {
 		"path": "pages/tabbar/my/my",
 		"style": {
 			// #ifdef H5
@@ -404,8 +415,27 @@
 			"navigationBarTextStyle": "black"
 		}
 
-	}],
+	}
+    ],
 	"subPackages": [{
+		"root": "pages/warehouse",
+		"pages": [{
+			"path": "index/index",
+			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black",
+				"backgroundColorTop": "#F7F7F7",
+				"backgroundColorBottom": "#F7F7F7",
+				"navigationBarTitleText": "仓库管理",
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50
+			}
+		}]
+	},
+	{
 		"root": "pages/extend",
 		"pages": [{
 			"path": "icon/icon",
@@ -1965,6 +1995,18 @@
 			},
 			{
 				"pagePath": "pages/tabbar/extend/extend",
+				"text": "消息",
+				"iconPath": "static/images/tabbar/work_gray.png",
+				"selectedIconPath": "static/images/tabbar/work_active.png"
+			},
+			{
+				"pagePath": "pages/tabbar/index/index",
+				"text": "首页",
+				"iconPath": "static/images/tabbar/home_gray.png",
+				"selectedIconPath": "static/images/tabbar/home_active.png"
+			},
+			{
+				"pagePath": "pages/tabbar/work/work",
 				"text": "应用",
 				"iconPath": "static/images/tabbar/work_gray.png",
 				"selectedIconPath": "static/images/tabbar/work_active.png"
