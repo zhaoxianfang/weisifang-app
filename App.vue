@@ -56,6 +56,7 @@ export default {
 	},
 	onShow: function() {
 		// 获取完整的urlscheme字符串
+		// #ifdef APP-PLUS
 		var args = plus.runtime.arguments;
 		if(args){
 			// 处理args参数，如直达到某新页面等
@@ -65,6 +66,7 @@ export default {
 				plus.runtime.arguments = ''
 			}
 		}
+		// #endif
 	},
 	onHide: function() {
 		//console.log('App Hide')

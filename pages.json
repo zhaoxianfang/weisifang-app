@@ -1959,21 +1959,21 @@
 		"backgroundColor": "#FFFFFF",
 		"list": [{
 				"pagePath": "pages/tabbar/index/index",
-				"text": "code",
-				"iconPath": "static/images/tabbar/code_gray.png",
-				"selectedIconPath": "static/images/tabbar/code_active.png"
+				"text": "首页",
+				"iconPath": "static/images/tabbar/home_gray.png",
+				"selectedIconPath": "static/images/tabbar/home_active.png"
 			},
 			{
 				"pagePath": "pages/tabbar/extend/extend",
-				"text": "extend",
-				"iconPath": "static/images/tabbar/extend_gray.png",
-				"selectedIconPath": "static/images/tabbar/extend_active.png"
+				"text": "应用",
+				"iconPath": "static/images/tabbar/work_gray.png",
+				"selectedIconPath": "static/images/tabbar/work_active.png"
 			},
 			{
 				"pagePath": "pages/tabbar/my/my",
-				"text": "thor",
-				"iconPath": "static/images/tabbar/thor_gray.png",
-				"selectedIconPath": "static/images/tabbar/thor_active.png"
+				"text": "我的",
+				"iconPath": "static/images/tabbar/user_gray.png",
+				"selectedIconPath": "static/images/tabbar/user_active.png"
 			}
 		]
 	}
