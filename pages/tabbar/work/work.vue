@@ -40,12 +40,33 @@
 					name: "picture",
 					label: "相册",
 					color: "#8a5966",
+					page: "/pagesA/picture/index/index",
 					size: 30
 				}, {
 					name: "shop",
 					label: "仓库管理",
 					color: "#8a5966",
 					page: "/pagesA/warehouse/index/index",
+					size: 30
+				}, {
+					name: "tool",
+					label: "音乐",
+					color: "#8a5966",
+					size: 30
+				}, {
+					name: "feedback",
+					label: "笔记",
+					color: "#8a5966",
+					size: 30
+				}, {
+					name: "weather",
+					label: "天气",
+					color: "#8a5966",
+					size: 30
+				}, {
+					name: "gps",
+					label: "附近",
+					color: "#8a5966",
 					size: 30
 				}, {
 					name: "more-fill",

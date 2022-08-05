@@ -79,6 +79,12 @@
 				"enablePullDownRefresh": true,
 				"onReachBottomDistance": 50
 			}
+		} ,{
+			"path": "picture/index/index",
+			"style": {
+				"navigationBarTitleText": "相册",
+				"enablePullDownRefresh": false
+			}
 		}]
 	}, {
 		"root": "pagesB",
