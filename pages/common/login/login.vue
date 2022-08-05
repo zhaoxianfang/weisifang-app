@@ -3,7 +3,7 @@
 		<view class="tui-bg-box">
 			<image src="/static/images/login/bg_login.png" class="tui-bg-img"></image>
 			<image src="/static/images/my/mine_def_touxiang_3x.png" class="tui-photo"></image>
-			<view class="tui-login-name">Thor UI</view>
+			<view class="tui-login-name">威四方</view>
 		</view>
 		<form :report-submit="true" @submit="formLogin">
 			<view class="tui-login-from">

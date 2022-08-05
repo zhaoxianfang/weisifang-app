@@ -4,7 +4,7 @@
 			<view class="tui-page-title" @tap="doc">
 				<image src="/static/images/index/logo.png" class="tui-logo"></image>
 				<view class="tui-title">
-					威四方
+					Thor UI
 					<view class="tui-badge">文档</view>
 				</view>
 			</view>
@@ -15,7 +15,7 @@
 		</view>
 		<view class="page_bd page_bd_spacing">
 			<view class="kind-list">
-				<block v-for="(item, index) in list" :key="'a-'+item.id">
+				<block v-for="(item, index) in list" :key="item.id">
 					<view class="kind-list_item">
 						<view :id="item.id" class="tui-flex kind-list_item-hd"
 							:class="{ 'kind-list_item-hd_show': item.open }" @tap="kindToggle">

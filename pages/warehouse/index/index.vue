@@ -14,7 +14,7 @@
 		<view style="height: 300px;"></view>
 		<image src="/static/images/my/mine_bg_3x.png" class="tui-image" mode="widthFix"></image>
 
-		<tui-tabbar :current="current" @click="tabbarSwitch"  backdropFilter :backgroundColor="backgroundColor" :tabBar="tabBar" color="#777" selectedColor="#AC9157"></tui-tabbar>
+		<tui-tabbar :current="current" @click="tabbarSwitch"  backdropFilter :backgroundColor="backgroundColor" :tabBar="tabBar2" color="#777" selectedColor="#AC9157"></tui-tabbar>
 	</view>
 </template>
 
@@ -26,34 +26,34 @@ export default {
 			tabBar: [
 				{
 					pagePath: '/pages/tabbar/index/index',
-					text: 'code',
-					iconPath: '/static/images/tabbar/code_gray.png',
-					selectedIconPath: '/static/images/tabbar/code_active.png',
+					text: 'home',
+					iconPath: '/static/images/tabbar/home_gray.png',
+					selectedIconPath: '/static/images/tabbar/home_active.png',
 					num: 1,
 					isDot: false
 				},
 				{
 					pagePath: '/pages/tabbar/extend/extend',
-					text: 'extend',
-					iconPath: '/static/images/tabbar/extend_gray.png',
-					selectedIconPath: '/static/images/tabbar/extend_active.png',
+					text: 'work',
+					iconPath: '/static/images/tabbar/work_gray.png',
+					selectedIconPath: '/static/images/tabbar/work_active.png',
 					num: 2,
 					isDot: true
 				},
 				{
 					pagePath: '/pages/tabbar/my/my',
-					text: 'thor',
-					iconPath: '/static/images/tabbar/thor_gray.png',
-					selectedIconPath: '/static/images/tabbar/thor_active.png',
+					text: 'user',
+					iconPath: '/static/images/tabbar/user_gray.png',
+					selectedIconPath: '/static/images/tabbar/user_active.png',
 					verify: true
 				}
 			],
 			tabBar2: [
 				{
 					pagePath: '/pages/tabbar/index/index',
-					text: 'code',
-					iconPath: '/static/images/tabbar/code_gray.png',
-					selectedIconPath: '/static/images/tabbar/code_active.png'
+					text: 'home',
+					iconPath: '/static/images/tabbar/home_gray.png',
+					selectedIconPath: '/static/images/tabbar/home_active.png'
 				},
 				{
 					pagePath: '',
@@ -64,9 +64,9 @@ export default {
 				},
 				{
 					pagePath: '/pages/tabbar/my/my',
-					text: 'thor',
-					iconPath: '/static/images/tabbar/thor_gray.png',
-					selectedIconPath: '/static/images/tabbar/thor_active.png',
+					text: 'user',
+					iconPath: '/static/images/tabbar/user_gray.png',
+					selectedIconPath: '/static/images/tabbar/user_active.png',
 					num: 2,
 					isDot: true,
 					verify: true
