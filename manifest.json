@@ -7,6 +7,10 @@
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
+        // 设置手机状态栏不被遮挡
+        "statusbar": {
+            "immersed": false
+        },
         "usingComponents" : true,
         "safearea" : {
             "background" : "#FFFFFF",
