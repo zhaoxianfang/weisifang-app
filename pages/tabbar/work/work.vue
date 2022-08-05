@@ -45,7 +45,7 @@
 					name: "shop",
 					label: "仓库管理",
 					color: "#8a5966",
-					page: "/pages/warehouse/index/index",
+					page: "/pagesA/warehouse/index/index",
 					size: 30
 				}, {
 					name: "more-fill",

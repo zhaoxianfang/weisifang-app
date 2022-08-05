@@ -57,10 +57,16 @@
 			}
 		}
 	],
+	"preloadRule": {
+		"pages/tabbar/work/work": {
+			"network": "all",
+			"packages": ["pagesA"]
+		}
+	},
 	"subPackages": [{
-		"root": "pages/warehouse",
+		"root": "pagesA",
 		"pages": [{
-			"path": "index/index",
+			"path": "warehouse/index/index",
 			"style": {
 				// #ifdef H5
 				"titleNView": false,
@@ -75,7 +81,7 @@
 			}
 		}]
 	}, {
-		"root": "pages/docs",
+		"root": "pagesB",
 		"pages": []
 	}],
 	"easycom": {
