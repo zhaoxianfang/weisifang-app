@@ -3,18 +3,13 @@
 		<view class="header">
 			<view class="title">Tabbar</view>
 			<view class="sub-title">类似uni-app原生tabbar组件，可用于自定义tabbar</view>
+			<view class="sub-title">库存根据 tab 切换仓库，以及管理员可在tab 右侧编辑仓库</view>
 		</view>
-		<view class="tui-mtop"><tui-tabbar :tabBar="tabBar" :isFixed="false" :current="current" @click="tabbarSwitch"></tui-tabbar></view>
-
-		<view class="tui-mtop">
-			<tui-tabbar :tabBar="tabBar2" :isFixed="false" :unlined="true" backgroundColor="#F7F7F7" :current="current" @click="tabbarSwitch"></tui-tabbar>
-		</view>
-		<view class="tui-mtop"><tui-tabbar :isFixed="false" :tabBar="tabBar2" hump :current="current" @click="tabbarSwitch"></tui-tabbar></view>
 		
 		<view style="height: 300px;"></view>
 		<image src="/static/images/my/mine_bg_3x.png" class="tui-image" mode="widthFix"></image>
 
-		<tui-tabbar :current="current" @click="tabbarSwitch"  backdropFilter :backgroundColor="backgroundColor" :tabBar="tabBar2" color="#777" selectedColor="#AC9157"></tui-tabbar>
+		<tui-tabbar :current="current" @click="tabbarSwitch" isFixed hump :backgroundColor="backgroundColor" :tabBar="tabBar" color="#646464" selectedColor="#5677FC"></tui-tabbar>
 	</view>
 </template>
 
@@ -26,45 +21,32 @@ export default {
 			tabBar: [
 				{
 					pagePath: '/pages/tabbar/index/index',
-					text: 'home',
-					iconPath: '/static/images/tabbar/home_gray.png',
-					selectedIconPath: '/static/images/tabbar/home_active.png',
-					num: 1,
-					isDot: false
+					text: '库存',
+					iconPath: '/static/images/tabbar/warehouse_gray.png',
+					selectedIconPath: '/static/images/tabbar/warehouse_active.png'
 				},
-				{
-					pagePath: '/pages/tabbar/extend/extend',
-					text: 'work',
-					iconPath: '/static/images/tabbar/work_gray.png',
-					selectedIconPath: '/static/images/tabbar/work_active.png',
-					num: 2,
-					isDot: true
-				},
-				{
-					pagePath: '/pages/tabbar/my/my',
-					text: 'user',
-					iconPath: '/static/images/tabbar/user_gray.png',
-					selectedIconPath: '/static/images/tabbar/user_active.png',
-					verify: true
-				}
-			],
-			tabBar2: [
 				{
 					pagePath: '/pages/tabbar/index/index',
-					text: 'home',
-					iconPath: '/static/images/tabbar/home_gray.png',
-					selectedIconPath: '/static/images/tabbar/home_active.png'
+					text: '库存记录',
+					iconPath: '/static/images/tabbar/log_gray.png',
+					selectedIconPath: '/static/images/tabbar/log_active.png'
 				},
 				{
 					pagePath: '',
-					text: 'extend',
-					iconPath: '/static/images/tabbar/release.png',
+					text: '出入库',
+					iconPath: '/static/images/tabbar/scan_gray.png',
 					hump: true,
-					selectedIconPath: '/static/images/tabbar/release.png'
+					selectedIconPath: '/static/images/tabbar/scan_active.png'
+				},
+				{
+					pagePath: '/pages/tabbar/index/index',
+					text: '团队',
+					iconPath: '/static/images/tabbar/users_gray.png',
+					selectedIconPath: '/static/images/tabbar/users_active.png'
 				},
 				{
 					pagePath: '/pages/tabbar/my/my',
-					text: 'user',
+					text: '我的',
 					iconPath: '/static/images/tabbar/user_gray.png',
 					selectedIconPath: '/static/images/tabbar/user_active.png',
 					num: 2,
