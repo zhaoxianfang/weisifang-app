@@ -31,3 +31,5 @@ Homestead.yaml
 /unpackage/cache
 /unpackage/dist
 /unpackage/release
+/unpackage/debug
+ 

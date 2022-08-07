@@ -8,8 +8,8 @@
     /* 5+App特有相关 */
     "app-plus" : {
         // 设置手机状态栏不被遮挡
-        "statusbar": {
-            "immersed": false
+        "statusbar" : {
+            "immersed" : false
         },
         "usingComponents" : true,
         "safearea" : {
@@ -80,8 +80,10 @@
                     "<uses-permission android:name=\"android.permission.BLUETOOTH\"/>",
                     "<uses-permission android:name=\"android.permission.BLUETOOTH_ADMIN\"/>"
                 ],
-                "abiFilters" : [ "armeabi-v7a", "arm64-v8a" ],
-                "schemes" : "wsf,weisifang"
+                "abiFilters" : [ "armeabi-v7a", "arm64-v8a", "x86" ],
+                "schemes" : "wsf,weisifang",
+                "minSdkVersion" : 23,
+                "targetSdkVersion" : 23
             },
             /* ios打包配置 */
             "ios" : {
@@ -157,7 +159,65 @@
                 "useOriginalMsgbox" : true
             }
         },
-        "nvueCompiler" : "uni-app"
+        "nvueCompiler" : "uni-app",
+        "nativePlugins" : {
+            "Ys-UniNotification" : {
+                "__plugin_info__" : {
+                    "name" : "极速通知防杀死",
+                    "description" : "在本地发送通知，Notification，不依赖推送，支持自定义图标，提示音等格式，可根据需求修改插件，增加防杀死几率",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=5959",
+                    "android_package_name" : "uni.UNIF89051B",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "5959",
+                    "parameters" : {}
+                }
+            },
+            "Zhimi-Album-JustPicker" : {
+                "__plugin_info__" : {
+                    "name" : "智密相册-自定义原生相册+图片视频过滤-QQ群755910061-智密科技",
+                    "description" : "智密相册插件是一款致力于uniapp自由布局的插件，通过分离api的方式，使得开发者可以在nvue中随意布局，插件本身提供的控件仅处理画布/图视频选择编辑逻辑，将api开放给开发者，给予足够的自由控制",
+                    "platforms" : "Android,iOS",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=5846",
+                    "android_package_name" : "uni.UNIF89051B",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "5846",
+                    "parameters" : {}
+                }
+            },
+            "neoceansoft-permission" : {
+                "__plugin_info__" : {
+                    "name" : "安卓原生权限插件组，主动申请系统敏感权限",
+                    "description" : "安卓原生权限插件组，主动申请系统敏感权限",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=8031",
+                    "android_package_name" : "uni.UNIF89051B",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "8031",
+                    "parameters" : {}
+                }
+            },
+            "cameraAlum-local" : {
+                "__plugin_info__" : {
+                    "name" : "cameraAlum-local",
+                    "description" : "带图片 视频编辑功能",
+                    "platforms" : "iOS",
+                    "url" : "",
+                    "android_package_name" : "",
+                    "ios_bundle_id" : "",
+                    "isCloud" : false,
+                    "bought" : -1,
+                    "pid" : "",
+                    "parameters" : {}
+                }
+            }
+        }
     },
     /* 快应用特有相关 */
     "quickapp" : {},

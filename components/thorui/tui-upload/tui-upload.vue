@@ -129,7 +129,42 @@
 		},
 		created() {
 			this.initImages()
+			
+			let that = this
+			// 监听文件选择 或照相机
+			uni.$on('albumCheckedImages',function(data){
+				// 逐个验证文件
+				let checkFiles = [];
+				for (let file of data) {
+					checkFiles.push( that.getFileInfo(file) );
+				}
+				let p = Promise.all(checkFiles).then(result => {
+					// 都成功
+					// plus.nativeUI.toast("都成功");
+					console.log('都成功');
+					
+					that.customCheckFiles(result)
+					
+					// 其实是 处理 chooseImage 时候 跳转 到 ... album/album 操作后 返回页面
+					uni.navigateBack({
+						delta: 1
+					})
+				})
+				.catch(e => {
+					// 只要有一个异常
+					console.log('有异常',e);
+					plus.nativeUI.toast("选择文件时出错啦！");
+				});
+			})
 		},
+		beforeUpdate(){
+			console.log('数据发生变化');
+		},
+		updated(e){
+			console.log('数据渲染完成',this.albumCheckedImages,e);
+			
+		},
+		
 		watch: {
 			value(val) {
 				if (val) {
@@ -146,6 +181,7 @@
 				return isShow
 			}
 		},
+		
 		methods: {
 			initImages() {
 				this.statusArr = [];
@@ -187,72 +223,167 @@
 				});
 			},
 			chooseImage: function() {
-				let _this = this;
-				uni.chooseImage({
-					count: _this.limit - _this.imageList.length,
-					sizeType: _this.sizeType,
-					sourceType: _this.sourceType,
-					success: function(e) {
-						let imageArr = [];
-						for (let i = 0; i < e.tempFiles.length; i++) {
-							let len = _this.imageList.length;
-							if (len >= _this.limit) {
-								_this.toast(`最多可上传${_this.limit}张图片`);
-								break;
-							}
-							//过滤图片类型
-							let path = e.tempFiles[i].path;
+				// 需要在 pages.json 中定义 智密组件 nvue 地址
+				uni.navigateTo({
+					url: '/pages/common/album/album'
+				})
+				
+				// return true;
+				
+				// let _this = this;
+				// uni.chooseImage({
+				// 	count: _this.limit - _this.imageList.length,
+				// 	sizeType: _this.sizeType,
+				// 	sourceType: _this.sourceType,
+				// 	success: function(e) {
+				// 		let imageArr = [];
+				// 		for (let i = 0; i < e.tempFiles.length; i++) {
+				// 			let len = _this.imageList.length;
+				// 			if (len >= _this.limit) {
+				// 				_this.toast(`最多可上传${_this.limit}张图片`);
+				// 				break;
+				// 			}
+				// 			//过滤图片类型
+				// 			let path = e.tempFiles[i].path;
 
-							if (_this.imageFormat.length > 0) {
-								let format = ""
-								// #ifdef H5
-								let type = e.tempFiles[i].type;
-								format = type.split('/')[1]
-								// #endif
+				// 			if (_this.imageFormat.length > 0) {
+				// 				let format = ""
+				// 				// #ifdef H5
+				// 				let type = e.tempFiles[i].type;
+				// 				format = type.split('/')[1]
+				// 				// #endif
 
-								// #ifndef H5
-								format = path.split(".")[(path.split(".")).length - 1];
-								// #endif
+				// 				// #ifndef H5
+				// 				format = path.split(".")[(path.split(".")).length - 1];
+				// 				// #endif
 
-								if (_this.imageFormat.indexOf(format) == -1) {
-									let text = `只能上传 ${_this.imageFormat.join(',')} 格式图片！`
-									_this.toast(text);
-									continue;
-								}
-							}
+				// 				if (_this.imageFormat.indexOf(format) == -1) {
+				// 					let text = `只能上传 ${_this.imageFormat.join(',')} 格式图片！`
+				// 					_this.toast(text);
+				// 					continue;
+				// 				}
+				// 			}
 
-							//过滤超出大小限制图片
-							let size = e.tempFiles[i].size;
+				// 			//过滤超出大小限制图片
+				// 			let size = e.tempFiles[i].size;
 
-							if (_this.size * 1024 * 1024 < size) {
-								let err = `单张图片大小不能超过：${_this.size}MB`
-								_this.toast(err);
-								continue;
-							}
-							imageArr.push(path)
-							_this.imageList.push(path)
-							_this.statusArr.push("2")
+				// 			if (_this.size * 1024 * 1024 < size) {
+				// 				let err = `单张图片大小不能超过：${_this.size}MB`
+				// 				_this.toast(err);
+				// 				continue;
+				// 			}
+				// 			imageArr.push(path)
+				// 			_this.imageList.push(path)
+				// 			_this.statusArr.push("2")
+				// 		}
+				// 		_this.change()
+
+				// 		let start = _this.imageList.length - imageArr.length
+				// 		for (let j = 0; j < imageArr.length; j++) {
+				// 			let index = start + j
+				// 			//服务器地址
+				// 			if (_this.serverUrl) {
+				// 				_this.uploadImage(index, imageArr[j]).then(() => {
+				// 					_this.change()
+				// 				}).catch(() => {
+				// 					_this.change()
+				// 				})
+				// 			} else {
+				// 				//无服务器地址则直接返回成功
+				// 				_this.$set(_this.statusArr, index, "1")
+				// 				_this.change()
+				// 			}
+				// 		}
+				// 	}
+				// })
+			},
+			// zxf 获取文件大小和类型等
+			async getFileInfo(path){
+				var _this = this;
+				const fileType = path.substring(path.lastIndexOf('.') + 1)
+				
+				return new Promise(function(resolve, reject) {
+				    //异步操作
+					var _this = this;
+					const fileType = path.substring(path.lastIndexOf('.') + 1)
+					uni.getFileInfo({
+						filePath:path,
+						success:res=>{
+							res.path = path;
+							res.type = fileType;
+							resolve(res);
+						},
+						fail: (err) => {
+							reject('文件读取失败')
 						}
-						_this.change()
-
-						let start = _this.imageList.length - imageArr.length
-						for (let j = 0; j < imageArr.length; j++) {
-							let index = start + j
-							//服务器地址
-							if (_this.serverUrl) {
-								_this.uploadImage(index, imageArr[j]).then(() => {
-									_this.change()
-								}).catch(() => {
-									_this.change()
-								})
-							} else {
-								//无服务器地址则直接返回成功
-								_this.$set(_this.statusArr, index, "1")
-								_this.change()
-							}
+					})
+				});
+			},
+			// zxf 自定义验证文件
+			customCheckFiles(flleList){
+				let _this = this;
+				let imageArr = [];
+				for (let i = 0; i < flleList.length; i++) {
+					let len = _this.imageList.length;
+					if (len >= _this.limit) {
+						_this.toast(`最多可上传${_this.limit}张图片`);
+						plus.nativeUI.toast(`最多可上传${_this.limit}张图片`);
+						break;
+					}
+					
+					//过滤图片类型
+					let path = flleList[i].path;
+				
+					if (_this.imageFormat.length > 0) {
+						let format = ""
+						// #ifdef H5
+						let type = flleList[i].type;
+						format = type.split('/')[1]
+						// #endif
+				
+						// #ifndef H5
+						format = path.split(".")[(path.split(".")).length - 1];
+						// #endif
+				
+						if (_this.imageFormat.indexOf(format) == -1) {
+							let text = `只能上传 ${_this.imageFormat.join(',')} 格式图片！`
+							_this.toast(text);
+							plus.nativeUI.toast(text);
+							continue;
 						}
 					}
-				})
+				
+					//过滤超出大小限制图片
+					let size = flleList[i].size;
+				
+					if (_this.size * 1024 * 1024 < size) {
+						let err = `单张图片大小不能超过：${_this.size}MB`
+						_this.toast(err);
+						plus.nativeUI.toast(err);
+						continue;
+					}
+					imageArr.push(path)
+					_this.imageList.push(path)
+					_this.statusArr.push("2")
+				}
+				_this.change()
+				
+				let start = _this.imageList.length - imageArr.length
+				for (let j = 0; j < imageArr.length; j++) {
+					let index = start + j
+					//服务器地址
+					if (_this.serverUrl) {
+						_this.uploadImage(index, imageArr[j]).then(() => {
+							_this.change()
+						}).catch(() => {
+							_this.change()
+						})
+					} else {
+						//无服务器地址则直接返回成功
+						_this.$set(_this.statusArr, index, "1")
+						_this.change()
+					}
+				}
 			},
 			uploadImage: function(index, url, serverUrl) {
 				let _this = this;

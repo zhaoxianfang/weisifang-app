@@ -55,6 +55,18 @@
 					}]
 				}
 			}
+		},
+		{
+			"path" : "pages/common/album/album",
+			"style" : {
+				"navigationBarTitleText": "我的相册",
+				"navigationStyle":"custom",
+				"enablePullDownRefresh": false,
+				"app-plus": {
+					"popGesture": "none", // 禁用侧滑
+					"bounce": "none" // 禁用上下拖动页面
+				}
+			}
 		}
 	],
 	"preloadRule": {
@@ -83,7 +95,23 @@
 			"path": "picture/index/index",
 			"style": {
 				"navigationBarTitleText": "相册",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"app-plus": {
+					"bounce": "vertical",
+					// #ifdef APP-PLUS
+					"titleNView": {
+						"padding-right": "12px",
+						"buttons": [{
+							"name":"create_picture",
+							"color": "#ffffff",
+							"fontSize": "35rpx",
+							"float": "right",
+							"text":"新建相册",
+							"width":"90px"
+						}]
+					}
+					// #endif
+				}
 			}
 		}]
 	}, {

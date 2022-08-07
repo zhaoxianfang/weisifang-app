@@ -1,0 +1,209 @@
+<template>
+	<view class="album-container" :style="{ paddingTop: statusBarHeight + 'px' }">
+		<view class="album-title-bar">
+			<!-- <view class="album-title-bar__left" @click="doBack">
+				<text class="album-title-bar__left-text" style="float: left;">返回</text>
+			</view> -->
+			<view class="album-title-bar__left" @click="doClear">
+				<text class="album-title-bar__left-text">清空</text>
+			</view>
+
+			<view class="album-title-bar__center" @click="showAlbumSelect = !showAlbumSelect">
+				<text class="album-title-bar__center-name">{{ albumName || '所有照片' }}</text>
+				<image v-if="!showAlbumSelect" class="album-title-bar__center-arrow" src="/static/images/picture/arrow.png"></image>
+			</view>
+			<view class="album-title-bar__right" @click="doFinish">
+				<text class="album-title-bar__right-text">下一步</text>
+			</view>
+		</view>
+		<scroll-view class="album-select-container" :class="{ 'show-album-ctx': showAlbumSelect }" scroll-y>
+			<list>
+				<cell @click="loadAlbum('')">
+				  <text class="album-select-item">所有图片</text>
+				</cell>
+			    <cell v-for="(item, index) in albums" :key="item.albumId" @click="loadAlbum(item)">
+			      <text class="album-select-item">{{item.name}}({{item.total}}张)</text>
+			    </cell>
+			  </list>
+		</scroll-view>
+		<zhimi_album_view ref='albumView' class="album-elem" :class="{ 'show-album-ctx': !showAlbumSelect }"></zhimi_album_view>
+	</view>
+</template>
+
+<script>
+	// 图片/视频 选择完成后 通过 albumCheckedImages 事件返回 上一页，上一页 通过  uni.$on('albumCheckedImages',function(data){ ... }) 来接收文件
+	export default {
+		data () {
+			let sysInfo = uni.getSystemInfoSync()
+			return {
+				statusBarHeight: sysInfo.statusBarHeight,
+				albums: [],
+				showAlbumSelect: false,
+				albumName: ''
+			}
+		},
+		onBackPress() {
+			
+		},
+		mounted () {
+			plus.navigator.setStatusBarStyle('light')
+			// 初始化相册控件
+			this.AlbumInit()
+		},
+		methods: {
+			// 后退界面
+			doBack () {
+				uni.navigateBack()
+			},
+			// 调用照相机拍照
+			getCamera() {
+				uni.chooseImage({
+					count: 6, //默认9
+					sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+					sourceType: ['camera'], //album 从相册选图，camera 使用相机，默认二者都有。如需直接开相机或直接选相册，请只使用一个选项
+					success: function (res) {
+						uni.$emit('albumCheckedImages', res.tempFilePaths)
+						// 不手动返回，去到 tui-upload 组件里面监听数据变化
+						// uni.navigateBack({
+						// 	delta: 1
+						// })
+					}
+				});
+			},
+			//  初始化相册控件
+			AlbumInit () {
+				var _this = this;
+				// 获取相册控件对象
+				let albumView = this.$refs.albumView
+				if (!albumView.setEventCallback) {
+					//相册组件加载失败  请先打包自定义基座或检查是否使用自定义基座运行
+					uni.showModal({ content: '相册组件加载失败' })
+					return
+				}
+				// 监听相册事件回调
+				albumView.setEventCallback(this.AlbumCallbackHanlder)
+				// 设置相册类型
+				albumView.albumType(0); // 0 全部, 1 照片, 2 视频
+				// 获取系统相册列表; debug 下面的这行代码需要执行2遍
+				albumView.getAlbumTypeNames(albums => _this.albums = albums)
+				albumView.getAlbumTypeNames(albums => this.albums = albums)
+				// 注册自定义按钮 没有购买此包相机权限，所以注释下面的按钮
+				let buttons = [
+				// 	{
+				// 	tag:"record", // 视频按钮标记
+				// 	imagePath: plus.io.convertLocalFileSystemURL("_www/static/images/picture/camera_icon.png")// 视频按钮路径
+				// },
+				{
+					tag:"takePhoto", // 照相机按钮标记
+					imagePath: plus.io.convertLocalFileSystemURL("_www/static/images/picture/album_icon.png")// 照相机按钮路径
+				}]
+				albumView.setCustomButtons(buttons)
+				// 设置每行显示数量
+				let spanCount = 4;
+				albumView.setSpanCount(spanCount)
+				// 设置最大选择数量
+				var maxCount = 99;
+				albumView.setMaxCount(maxCount)
+				// 加载相册(为空则加载全部图片)
+				setTimeout(() => {
+				  this.doClearByIndex(0)
+				}, 10000)
+
+			},
+			// 相册事件回调
+			AlbumCallbackHanlder (res) {
+				let { type, data } = res
+				switch (type) {
+					// 未获取相册权限
+					case 'noAuthority':
+						uni.showModal({ content: `未获取相册权限` })
+						break;
+					// 点击自定义按钮
+					case 'onClickCustomButton':
+						// uni.navigateTo({
+						// 	url: './camera'
+						// })
+						if(data === 'takePhoto'){
+							// uni.showModal({ content: `点击自定义 照相 按钮${data}` })
+							this.getCamera();
+						}else{
+							uni.showModal({ content: `点击自定义按钮${data}` })
+						}
+						break
+					// 图片/视频选择变化
+					case 'onCheckedChanged':
+						// console.log(res)
+						break
+					default:
+						console.log(res)
+						break;
+				}
+			},
+			// 加载相册
+			loadAlbum(item) {
+				// 获取相册控件对象
+				let albumView = this.$refs.albumView
+				if (!item) {
+					// 没有选择相册，则默认加载全部图片
+					this.albumName = ''
+					albumView.loadAlbum('')
+				} else {
+					// 加载选中的相册
+					this.albumName = item.name
+					albumView.loadAlbum(item.albumId)
+				}
+				this.showAlbumSelect = false
+			},
+			// 清空已选图片/视频
+			doClear () {
+				// 获取相册控件对象
+				let albumView = this.$refs.albumView
+				// 清空选择
+				albumView.clearCheckedImages();
+			},
+			// 根据图片索引清空图片
+			doClearByIndex(index) {
+				// 获取相册控件对象
+				let albumView = this.$refs.albumView
+				// 索引从0开始，表示第1张
+				albumView.clearCheckedIndex(index)
+			},
+			// 获取已选图片/视频
+			doFinish () {
+				this.isFinish = true
+				// 获取相册控件对象
+				let albumView = this.$refs.albumView
+				// 获取选择数据
+				albumView.getCheckedImagePaths(filePaths => {
+					// 注意：此处返回的filePaths为平台路径，前端显示请加file://前缀
+					// console.log(filePaths)
+					// 给文件 路径加上  file://  前缀
+					let fileArr = [];
+					for (let file of filePaths) {
+						fileArr.push('file://'+file)
+					}
+					uni.$emit('albumCheckedImages', fileArr)
+					// 不手动返回，去到 tui-upload 组件里面监听数据变化
+					// uni.navigateBack({
+					// 	delta: 1
+					// })
+				})
+				
+			},
+		}
+	}
+</script>
+
+<style>
+	.album-container { position: fixed;top: 0;bottom: 0;width: 750rpx;background-color: #0078FB; }
+	.album-elem { height: 0;background-color: #fff; }
+	.album-title-bar { height: 50px;flex-shrink: 0;flex-direction: row;align-items: center;justify-content: center; }
+	.album-title-bar__center { flex: 1;flex-direction: row;align-items: center;justify-content: center;height: 50px; }
+	.album-title-bar__center-name { color: #fff;font-size: 16px;lines: 1;text-align: center; }
+	.album-title-bar__center-arrow { width: 10px;height: 5px;margin-left: 5px; }
+	.album-title-bar__left,.album-title-bar__right { width: 80px;height: 50px;align-items: center;justify-content: center; }
+	.album-title-bar__left-text,.album-title-bar__right-text { color: #fff;font-size: 14px;padding: 0 15px; }
+	.album-select-container { height: 0;width: 750rpx;background-color: #FFF; }
+	.album-select-item { height: 60px;line-height: 60px;font-size: 14px;padding: 0 15px;border-bottom-width: 1px;border-bottom-color: #f2f2f2; }
+	.show-album-ctx { flex: 1; }
+</style>
