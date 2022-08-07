@@ -95,6 +95,8 @@
 			more: function(e) {
 				this.tui.toast("敬请期待~");
 				
+				
+				plus.push.setAutoNotification(true);  //设置通知栏显示通知 //必须设置
 				// 第一步，引入插件
 				const uniNotification = uni.requireNativePlugin('Ys-UniNotification')
 				// 下面使用文件的地方，需要先使用这个方法将路径转换为本地路径

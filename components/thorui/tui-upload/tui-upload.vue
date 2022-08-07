@@ -247,6 +247,7 @@
 							resolve(res);
 						},
 						fail: (err) => {
+							console.log('文件读取失败',err)
 							reject('文件读取失败')
 						}
 					})

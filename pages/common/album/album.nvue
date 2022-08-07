@@ -180,10 +180,17 @@
 					// 给文件 路径加上  file://  前缀
 					let fileArr = [];
 					for (let file of filePaths) {
+						let checkMedia = file.split(",") // 检测视频等带封面的文件
+						if(checkMedia.length > 1){
+							console.log('视频文件',checkMedia)
+							file = checkMedia[0]
+							let cover = checkMedia[1]; // 封面图
+						}
+						const fileType = file.substring(file.lastIndexOf('.') + 1)
 						fileArr.push('file://'+file)
 					}
 					uni.$emit('albumCheckedImages', fileArr)
-					// 不手动返回，去到 tui-upload 组件里面监听数据变化
+					// 不手动返回，去到 tui-upload 组件里面监听数据变化， tui-upload 里面还有验证文件逻辑要判断
 					// uni.navigateBack({
 					// 	delta: 1
 					// })
