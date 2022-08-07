@@ -124,7 +124,9 @@
 				//图片地址
 				imageList: [],
 				//上传状态：1-上传成功 2-上传中 3-上传失败
-				statusArr: []
+				statusArr: [],
+				// album 选择相册的 组件地址，该地址需要在 pages.json 中注册
+				albumPageAddress:'pages/common/album/album'
 			}
 		},
 		created() {
@@ -144,11 +146,13 @@
 					console.log('都成功');
 					
 					that.customCheckFiles(result)
-					
+					const pages = getCurrentPages();
 					// 其实是 处理 chooseImage 时候 跳转 到 ... album/album 操作后 返回页面
-					uni.navigateBack({
-						delta: 1
-					})
+					if(pages[pages.length - 1]['route'] === that.albumPageAddress){
+						uni.navigateBack({
+							delta: 1
+						})
+					}
 				})
 				.catch(e => {
 					// 只要有一个异常
@@ -158,13 +162,11 @@
 			})
 		},
 		beforeUpdate(){
-			console.log('数据发生变化');
+			// console.log('数据发生变化');
 		},
 		updated(e){
-			console.log('数据渲染完成',this.albumCheckedImages,e);
-			
+			// console.log('数据渲染完成',this.albumCheckedImages,e);
 		},
-		
 		watch: {
 			value(val) {
 				if (val) {
@@ -225,77 +227,8 @@
 			chooseImage: function() {
 				// 需要在 pages.json 中定义 智密组件 nvue 地址
 				uni.navigateTo({
-					url: '/pages/common/album/album'
+					url: '/'+this.albumPageAddress
 				})
-				
-				// return true;
-				
-				// let _this = this;
-				// uni.chooseImage({
-				// 	count: _this.limit - _this.imageList.length,
-				// 	sizeType: _this.sizeType,
-				// 	sourceType: _this.sourceType,
-				// 	success: function(e) {
-				// 		let imageArr = [];
-				// 		for (let i = 0; i < e.tempFiles.length; i++) {
-				// 			let len = _this.imageList.length;
-				// 			if (len >= _this.limit) {
-				// 				_this.toast(`最多可上传${_this.limit}张图片`);
-				// 				break;
-				// 			}
-				// 			//过滤图片类型
-				// 			let path = e.tempFiles[i].path;
-
-				// 			if (_this.imageFormat.length > 0) {
-				// 				let format = ""
-				// 				// #ifdef H5
-				// 				let type = e.tempFiles[i].type;
-				// 				format = type.split('/')[1]
-				// 				// #endif
-
-				// 				// #ifndef H5
-				// 				format = path.split(".")[(path.split(".")).length - 1];
-				// 				// #endif
-
-				// 				if (_this.imageFormat.indexOf(format) == -1) {
-				// 					let text = `只能上传 ${_this.imageFormat.join(',')} 格式图片！`
-				// 					_this.toast(text);
-				// 					continue;
-				// 				}
-				// 			}
-
-				// 			//过滤超出大小限制图片
-				// 			let size = e.tempFiles[i].size;
-
-				// 			if (_this.size * 1024 * 1024 < size) {
-				// 				let err = `单张图片大小不能超过：${_this.size}MB`
-				// 				_this.toast(err);
-				// 				continue;
-				// 			}
-				// 			imageArr.push(path)
-				// 			_this.imageList.push(path)
-				// 			_this.statusArr.push("2")
-				// 		}
-				// 		_this.change()
-
-				// 		let start = _this.imageList.length - imageArr.length
-				// 		for (let j = 0; j < imageArr.length; j++) {
-				// 			let index = start + j
-				// 			//服务器地址
-				// 			if (_this.serverUrl) {
-				// 				_this.uploadImage(index, imageArr[j]).then(() => {
-				// 					_this.change()
-				// 				}).catch(() => {
-				// 					_this.change()
-				// 				})
-				// 			} else {
-				// 				//无服务器地址则直接返回成功
-				// 				_this.$set(_this.statusArr, index, "1")
-				// 				_this.change()
-				// 			}
-				// 		}
-				// 	}
-				// })
 			},
 			// zxf 获取文件大小和类型等
 			async getFileInfo(path){
