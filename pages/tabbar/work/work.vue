@@ -27,16 +27,6 @@
 			return {
 				gridColumn: 2,
 				dataList: [{
-					name: "strategy",
-					label: "文档",
-					color: "#8a5966",
-					size: 30
-				}, {
-					name: "addressbook",
-					label: "通讯录",
-					color: "#8a5966",
-					size: 30
-				}, {
 					name: "picture",
 					label: "相册",
 					color: "#8a5966",
@@ -46,7 +36,17 @@
 					name: "shop",
 					label: "仓库管理",
 					color: "#8a5966",
-					page: "/pagesA/warehouse/index/index",
+					page: "/pagesA/wms/index/index",
+					size: 30
+				}, {
+					name: "strategy",
+					label: "文档",
+					color: "#8a5966",
+					size: 30
+				}, {
+					name: "addressbook",
+					label: "通讯录",
+					color: "#8a5966",
 					size: 30
 				}, {
 					name: "tool",

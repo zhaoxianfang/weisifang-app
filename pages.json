@@ -78,7 +78,7 @@
 	"subPackages": [{
 		"root": "pagesA",
 		"pages": [{
-			"path": "warehouse/index/index",
+			"path": "wms/index/index",
 			"style": {
 				// #ifdef H5
 				"titleNView": false,
