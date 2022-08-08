@@ -132,6 +132,7 @@
 		created() {
 			this.initImages()
 			
+			// #ifdef APP-PLUS
 			let that = this
 			// 监听文件选择 或照相机
 			uni.$on('albumCheckedImages',function(data){
@@ -160,6 +161,7 @@
 					plus.nativeUI.toast("选择文件时出错啦！");
 				});
 			})
+			// #endif
 		},
 		beforeUpdate(){
 			// console.log('数据发生变化');
@@ -225,10 +227,24 @@
 				});
 			},
 			chooseImage: function() {
+				// #ifdef APP-PLUS
 				// 需要在 pages.json 中定义 智密组件 nvue 地址
 				uni.navigateTo({
 					url: '/'+this.albumPageAddress
 				})
+				// #endif
+				
+				// #ifndef APP-PLUS
+				let _this = this;
+				uni.chooseImage({
+					count: _this.limit - _this.imageList.length,
+					sizeType: _this.sizeType,
+					sourceType: _this.sourceType,
+					success: function(e) {
+						_this.customCheckFiles(e.tempFiles);
+					}
+				})
+				// #endif
 			},
 			// zxf 获取文件大小和类型等
 			async getFileInfo(path){
