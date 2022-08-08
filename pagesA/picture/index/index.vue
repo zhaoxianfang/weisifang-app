@@ -1,10 +1,20 @@
 <template>
 	<view class="container">
-		<view class="header">
-			<view class="title">相册</view>
-			<view class="sub-title">类似uni-app原生tabbar组件，可用于自定义tabbar</view>
+		<view class="no-data">
+			<tui-no-data :fixed="false" imgUrl="/static/images/tabbar/null.png"  btnText="新建相册"  @click="folderModal = true">
+				<text class="tui-color__black">您还没有添加任何相册~</text>
+			</tui-no-data>
 		</view>
-
+		
+		<block>
+			<view class="tui-ranking__list tui-justify__start" >
+				<view class="tui-ranking__item tui-item-mr__16" @tap="openFolder" v-for="(item, key) in folderList" :key="key">
+					<image :src="item.img"></image>
+					<view class="tui-ranking__gtitle">{{ item.title }}</view>
+					<view class="tui-ranking__sub">2022-01-01</view>
+				</view>
+			</view>
+		</block>
 
 		<tui-modal :show="folderModal" @cancel="hideFolder" :custom="true" fadeIn>
 			<view class="tui-modal-custom">
@@ -17,9 +27,7 @@
 			</view>
 		</tui-modal>
 		
-		<view class="tui-box-upload">
-			<tui-upload :value="value" :limit="99" :size="8" :serverUrl="serverUrl" @complete="result" @remove="remove"></tui-upload>
-		</view>
+		<view class="tui-btn-back" @click="folderModal = true">+</view>
 		
 		<tui-tabbar :current="current" @click="tabbarSwitch"  backdropFilter :backgroundColor="backgroundColor" :tabBar="tabBar" color="#646464" selectedColor="#5677FC"></tui-tabbar>
 	</view>
@@ -52,12 +60,40 @@ export default {
 			// 新建文件夹 名称
 			folder_name:"",
 			folderModal:false,
-			// 上传文件
-			imageData: [],
-			//上传接口地址
-			serverUrl: "https://api.thorui.cn/",
-			 //初始化图片
-			value:[]
+			
+			// 相册列表
+			folderList: [
+				{
+					img: '/static/images/tabbar/picture_gray.png',
+					title: '我的相册一',
+					sales: 100000
+				},
+				{
+					img: '/static/images/tabbar/picture_active.png',
+					title: '我的相册二',
+					sales: 98000
+				},
+				{
+					img: '/static/images/tabbar/picture_active.png',
+					title: '我的相册三',
+					sales: 90000
+				},
+				{
+					img: '/static/images/tabbar/picture_gray.png',
+					title: '我的相册一',
+					sales: 100000
+				},
+				{
+					img: '/static/images/tabbar/picture_active.png',
+					title: '我的相册二',
+					sales: 98000
+				},
+				{
+					img: '/static/images/tabbar/picture_active.png',
+					title: '我的相册三',
+					sales: 90000
+				}
+			]
 		};
 	},
 	onNavigationBarButtonTap(e) {
@@ -96,16 +132,14 @@ export default {
 			}
 			this.hideFolder();
 		},
-		// 上传文件
-		result: function(e) {
-			console.log(e)
-			this.imageData = e.imgArr;
+		
+		// 打开相册
+		openFolder() {
+			console.log('openFolder')
+			uni.navigateTo({
+			    url: 'detail?id=99'
+			});
 		},
-		remove: function(e) {
-			//移除图片
-			console.log(e)
-			let index = e.index
-		}
 	}
 };
 </script>
@@ -118,31 +152,6 @@ export default {
 .container {
 	padding: 20rpx 0 120rpx 0;
 	box-sizing: border-box;
-}
-
-.header {
-	padding: 80rpx 90rpx 60rpx 90rpx;
-	box-sizing: border-box;
-}
-
-.title {
-	font-size: 34rpx;
-	color: #333;
-	font-weight: 500;
-}
-
-.sub-title {
-	font-size: 24rpx;
-	color: #7a7a7a;
-	padding-top: 18rpx;
-}
-
-.tui-mtop {
-	margin-top: 80rpx;
-}
-.tui-image{
-	width: 100%;
-	height: auto;
 }
 
 /* 新建相册 */
@@ -171,9 +180,58 @@ export default {
 	.tui-modal-custom .modal-button{
 		float: left;
 	}
-	/* 上传文件 */
-	.tui-box-upload {
-		padding-left: 25rpx;
+	
+	/* 相册列表 */
+	.tui-ranking__list {
+		padding-left: 16px;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+	}
+	
+	.tui-justify__start {
+		justify-content: flex-start !important;
+	}
+	
+	.tui-item-mr__16 {
+		margin-right: 16rpx;
+	}
+	
+	.tui-ranking__item {
+		width: 224rpx;
+		border-radius: 12rpx;
+		overflow: hidden;
+		background-color: #fff;
+		padding-bottom: 20rpx;
+		box-shadow: 0 3rpx 20rpx rgba(183, 183, 183, 0.1);
+	}
+	
+	.tui-ranking__item image {
+		width: 224rpx;
+		height: 224rpx;
+		display: block;
+	}
+	.tui-ranking__gtitle {
+		font-size: 24rpx;
+		line-height: 24rpx;
+		padding: 24rpx 12rpx 8rpx;
 		box-sizing: border-box;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	
+	.tui-ranking__sub {
+		font-size: 25rpx;
+		line-height: 25rpx;
+		padding: 8rpx 18rpx 8rpx;
+		transform: scale(0.8);
+		transform-origin: 0 center;
+		color: #999;
+	}
+	/* 没数据 */
+	.no-data{
+		margin-top: 30%;
 	}
 </style>

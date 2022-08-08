@@ -94,7 +94,7 @@
 		} ,{
 			"path": "picture/index/index",
 			"style": {
-				"navigationBarTitleText": "相册",
+				"navigationBarTitleText": "我的相册",
 				"enablePullDownRefresh": false,
 				"app-plus": {
 					"bounce": "vertical",
@@ -106,14 +106,27 @@
 							"color": "#ffffff",
 							"fontSize": "35rpx",
 							"float": "right",
-							"text":"新建相册",
-							"width":"90px"
+							"text":"管理",
+							"width":"45px"
 						}]
 					}
 					// #endif
 				}
 			}
-		}]
+		}, {
+			"path" : "picture/index/detail",
+			"style" : {
+				"navigationBarTitleText": "相片列表详情",
+				"enablePullDownRefresh": false
+			}
+        }, {
+			"path" : "picture/index/upload",
+			"style" : {
+				"navigationBarTitleText": "上传图片",
+				"enablePullDownRefresh": false
+			}
+                
+        }]
 	}, {
 		"root": "pagesB",
 		"pages": []

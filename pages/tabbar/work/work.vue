@@ -84,7 +84,7 @@
 				// (4)uni.switchTab(OBJECT) 跳转到 tabBar 页面，并关闭其他所有非 tabBar 页面
 				// (5)uni.navigateBack(OBJECT) 关闭当前页面，返回上一页面或多级页面
 				if(e.page){
-					uni.redirectTo({
+					uni.navigateTo({
 					    url: e.page
 					});
 				}else{
