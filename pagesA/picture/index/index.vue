@@ -1,5 +1,6 @@
 <template>
 	<view class="container">
+		<t-rt-popup :itemList="clickManageTips" ref="rtBubble"></t-rt-popup>
 		<view class="no-data" v-if="folderList.length < 1">
 			<tui-no-data :fixed="false" imgUrl="/static/images/tabbar/null.png"  btnText="新建相册"  @click="folderModal = true">
 				<text class="tui-color__black">您还没有添加任何相册~</text>
@@ -11,14 +12,18 @@
 				<view class="tui-ranking__item tui-item-mr__16" @tap="openFolder" v-for="(item, key) in folderList" :key="key">
 					<image :src="item.img"></image>
 					<view class="tui-ranking__gtitle">{{ item.title }}</view>
-					<view class="tui-ranking__sub">2022-01-01</view>
+					<view class="tui-ranking__sub" v-if="!isManage">包含999张照片</view>
+					<view class="tui-flex-box" v-if="isManage">
+						<tui-button margin="0 10rpx 6rpx 0" type="danger" plain shape="rightAngle" width="100rpx" height="50rpx" :size="24" @click="deleteFolder(item)">删除</tui-button>
+						<tui-button margin="0 10rpx 6rpx 0" type="green" plain shape="rightAngle" width="100rpx" height="50rpx" :size="24" @click="renameFolder(item)">改名</tui-button>
+					</view>
 				</view>
 			</view>
 		</block>
 
 		<tui-modal :show="folderModal" @cancel="hideFolder" :custom="true" fadeIn>
 			<view class="tui-modal-custom">
-				<view class="tui-prompt-title">新建一个相册</view>
+				<view class="tui-prompt-title">{{folder_name?'修改':'新建'}}相册</view>
 				<view class="tui-input__box">
 					<input placeholder="请填写相册名称" class="tui-modal-input" v-if="folderModal" v-model="folder_name" />
 				</view>
@@ -28,13 +33,18 @@
 		</tui-modal>
 		
 		<view class="tui-btn-addfolder" @click="folderModal = true">+</view>
+		<tui-modal :show="showDelete" @click="handleClickDelete" @cancel="hideDelete" title="提示" :content="`确定删除相册( ${currentFolder.title} ) 吗？`"></tui-modal>
 		
 		<tui-tabbar :current="current" @click="tabbarSwitch"  backdropFilter :backgroundColor="backgroundColor" :tabBar="tabBar" color="#646464" selectedColor="#5677FC"></tui-tabbar>
 	</view>
 </template>
 
 <script>
+import tRtPopup from '@/components/views/t-rt-popup/t-rt-popup';
 export default {
+	components: {
+		tRtPopup
+	},
 	data() {
 		return {
 			current: 0,
@@ -44,8 +54,8 @@ export default {
 					text: '我的相册',
 					iconPath: '/static/images/tabbar/picture_gray.png',
 					selectedIconPath: '/static/images/tabbar/picture_active.png',
-					num: 1,
-					isDot: false
+					// num: 1,
+					// isDot: false
 				},
 				{
 					pagePath: '/pages/tabbar/my/my',
@@ -64,44 +74,59 @@ export default {
 			// 相册列表
 			folderList: [
 				{
-					img: '/static/images/tabbar/picture_gray.png',
+					img: '/static/images/tabbar/default_img.png',
 					title: '我的相册一',
 					sales: 100000
 				},
 				{
-					img: '/static/images/tabbar/picture_active.png',
+					img: '/static/images/tabbar/default_img.png',
 					title: '我的相册二',
 					sales: 98000
 				},
 				{
-					img: '/static/images/tabbar/picture_active.png',
+					img: '/static/images/tabbar/default_img.png',
 					title: '我的相册三',
 					sales: 90000
 				},
 				{
-					img: '/static/images/tabbar/picture_gray.png',
+					img: '/static/images/tabbar/default_img.png',
 					title: '我的相册一',
 					sales: 100000
 				},
 				{
-					img: '/static/images/tabbar/picture_active.png',
+					img: '/static/images/tabbar/default_img.png',
 					title: '我的相册二',
 					sales: 98000
 				},
 				{
-					img: '/static/images/tabbar/picture_active.png',
+					img: '/static/images/tabbar/default_img.png',
 					title: '我的相册三',
 					sales: 90000
 				}
-			]
+			],
+			// 管理相册
+			isManage:false , // 是否启用管理相册按钮
+			// 点击右上角的管理提示
+			clickManageTips: [{
+				title: '点此可编辑',
+				icon: 'setup'
+			}],
+			showDelete:false , // 提示删除
+			currentFolder:{}, // 当前选中的相册文件夹
 		};
 	},
 	onNavigationBarButtonTap(e) {
-		if(e.name == 'create_picture'){
-			// 新建文件夹 相册
-			this.folder_name = '';
-			this.folderModal = true;
+		if(e.name == 'manage_folders'){
+			// 管理 相册
+			this.isManage = !this.isManage;
+			this.$refs.rtBubble.toggle();
 		}
+	},
+	onShow() {
+		this.isManage = false
+	},
+	mounted() {
+		this.$refs.rtBubble.toggle();
 	},
 	onLoad() {
 		// #ifdef H5
@@ -124,6 +149,8 @@ export default {
 		},
 		// 新建相册
 		hideFolder() {
+			this.folder_name="";
+			this.currentFolder={};
 			this.folderModal = false;
 		},
 		handleCreateddFolder() {
@@ -140,6 +167,21 @@ export default {
 			    url: 'detail?id=99'
 			});
 		},
+		deleteFolder(info){
+			this.currentFolder = info
+			this.showDelete = true
+		},
+		renameFolder(info){
+			this.currentFolder = info
+			this.folder_name=info.title;
+			this.folderModal = true
+		},
+		hideDelete() {
+			this.showDelete = false;
+		},
+		handleClickDelete(){
+			this.hideDelete()
+		}
 	}
 };
 </script>
@@ -210,8 +252,9 @@ export default {
 	}
 	
 	.tui-ranking__item image {
-		width: 224rpx;
+		width: 204rpx;
 		height: 224rpx;
+		padding: 10rpx;
 		display: block;
 	}
 	.tui-ranking__gtitle {
@@ -251,5 +294,12 @@ export default {
 		bottom: 160rpx;
 		right: 30rpx;
 		z-index: 9999;
+	}
+	/* 管理相册 */
+	.tui-flex-box {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
 	}
 </style>

@@ -67,6 +67,18 @@
 					"bounce": "none" // 禁用上下拖动页面
 				}
 			}
+		},
+		{
+			"path": "components/app-upgrade/views/app-upgrade",
+			"style": {
+				"navigationBarTitleText": "APP更新",
+				"navigationStyle": "custom",
+				"app-plus": {
+					"background": "transparent",
+					"webviewBGTransparent": true, //webview的背景是否透明//配合background属性防止跳转闪白
+					"popGesture": "none" //禁止侧滑关闭（ios）
+				}
+			}
 		}
 	],
 	"preloadRule": {
@@ -102,7 +114,7 @@
 					"titleNView": {
 						"padding-right": "12px",
 						"buttons": [{
-							"name":"create_picture",
+							"name":"manage_folders",
 							"color": "#ffffff",
 							"fontSize": "35rpx",
 							"float": "right",

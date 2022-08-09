@@ -1,11 +1,17 @@
 <script>
+// #ifdef APP-PLUS
+import helper from '@/js_sdk/weisifang/helper.js'
+// #endif
 export default {
 	onLaunch: function() { 
 		let that = this;
 		// #ifdef APP-PLUS
 		/* 5+环境锁定屏幕方向 */
 		plus.screen.lockOrientation('portrait-primary'); //锁定
-		
+
+		// app 检测版本更新
+		helper.checkAppUpgrade(0)
+
 		/* 5+环境升级提示 */
 		//app检测更新
 		let platform = plus.os.name.toLocaleLowerCase()
