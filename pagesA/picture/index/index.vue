@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<view class="no-data">
+		<view class="no-data" v-if="folderList.length < 1">
 			<tui-no-data :fixed="false" imgUrl="/static/images/tabbar/null.png"  btnText="新建相册"  @click="folderModal = true">
 				<text class="tui-color__black">您还没有添加任何相册~</text>
 			</tui-no-data>
@@ -27,7 +27,7 @@
 			</view>
 		</tui-modal>
 		
-		<view class="tui-btn-back" @click="folderModal = true">+</view>
+		<view class="tui-btn-addfolder" @click="folderModal = true">+</view>
 		
 		<tui-tabbar :current="current" @click="tabbarSwitch"  backdropFilter :backgroundColor="backgroundColor" :tabBar="tabBar" color="#646464" selectedColor="#5677FC"></tui-tabbar>
 	</view>
@@ -188,6 +188,7 @@ export default {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		flex-wrap: wrap; // flex 自动换行
 	}
 	
 	.tui-justify__start {
@@ -204,6 +205,7 @@ export default {
 		overflow: hidden;
 		background-color: #fff;
 		padding-bottom: 20rpx;
+		margin-bottom: 20rpx;
 		box-shadow: 0 3rpx 20rpx rgba(183, 183, 183, 0.1);
 	}
 	
@@ -233,5 +235,21 @@ export default {
 	/* 没数据 */
 	.no-data{
 		margin-top: 30%;
+	}
+	/* 上传图标 */
+	.tui-btn-addfolder {
+		width: 88rpx;
+		height: 88rpx;
+		font-size: 80rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		background-color: #5677FC;
+		color: #fff;
+		position: fixed;
+		bottom: 160rpx;
+		right: 30rpx;
+		z-index: 9999;
 	}
 </style>

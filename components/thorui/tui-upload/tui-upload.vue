@@ -121,6 +121,7 @@
 		},
 		data() {
 			return {
+				useZhimiAlbum:false, // 是否启用 智密相册 读取相册文件，如果启用，需要到 mainfest.json ->app原生插件 配置中查看是否 启用了 智密相册
 				//图片地址
 				imageList: [],
 				//上传状态：1-上传成功 2-上传中 3-上传失败
@@ -131,37 +132,51 @@
 		},
 		created() {
 			this.initImages()
-			
-			// #ifdef APP-PLUS
-			let that = this
-			// 监听文件选择 或照相机
-			uni.$on('albumCheckedImages',function(data){
-				// 逐个验证文件
-				let checkFiles = [];
-				for (let file of data) {
-					checkFiles.push( that.getFileInfo(file) );
-				}
-				let p = Promise.all(checkFiles).then(result => {
-					// 都成功
-					// plus.nativeUI.toast("都成功");
-					console.log('都成功');
-					
-					that.customCheckFiles(result)
-					const pages = getCurrentPages();
-					// 其实是 处理 chooseImage 时候 跳转 到 ... album/album 操作后 返回页面
-					if(pages[pages.length - 1]['route'] === that.albumPageAddress){
-						uni.navigateBack({
-							delta: 1
+			if(this.useZhimiAlbum){
+				// #ifdef APP-PLUS
+				let that = this
+				// 监听文件选择 或照相机
+				uni.$on('albumCheckedImages',function(data){
+					// 逐个验证文件
+					let checkFiles = [];
+					for (let file of data) {
+						checkFiles.push( that.getFileInfo(file) );
+					}
+					let p = Promise.all(checkFiles).then(result => {
+						// 都成功
+						// plus.nativeUI.toast("都成功");
+						console.log('都成功');
+						
+						that.customCheckFiles(result)
+						const pages = getCurrentPages();
+						// 其实是 处理 chooseImage 时候 跳转 到 ... album/album 操作后 返回页面
+						if(pages[pages.length - 1]['route'] === that.albumPageAddress){
+							uni.navigateBack({
+								delta: 1
+							})
+						}
+					})
+					.catch(e => {
+						// 只要有一个异常
+						console.log('有异常',e);
+						plus.nativeUI.toast("选择文件时出错啦！");
+					});
+				})
+				uni.$on('albumLoadFail',function(isFail){
+					if(isFail){
+						uni.chooseImage({
+							count: that.limit - that.imageList.length,
+							sizeType: that.sizeType,
+							sourceType: that.sourceType,
+							success: function(e) {
+								that.customCheckFiles(e.tempFiles);
+							}
 						})
 					}
 				})
-				.catch(e => {
-					// 只要有一个异常
-					console.log('有异常',e);
-					plus.nativeUI.toast("选择文件时出错啦！");
-				});
-			})
-			// #endif
+				
+				// #endif
+			}
 		},
 		beforeUpdate(){
 			// console.log('数据发生变化');
@@ -227,24 +242,32 @@
 				});
 			},
 			chooseImage: function() {
-				// #ifdef APP-PLUS
-				// 需要在 pages.json 中定义 智密组件 nvue 地址
-				uni.navigateTo({
-					url: '/'+this.albumPageAddress
-				})
-				// #endif
+				let loadZhimiAlbum = false;
+				if(this.useZhimiAlbum){
+					// #ifdef APP-PLUS
+					loadZhimiAlbum = true;
+					// 需要在 pages.json 中定义 智密组件 nvue 地址
+					uni.navigateTo({
+						url: '/'+this.albumPageAddress
+					})
+					// #endif
+					
+					// #ifndef APP-PLUS
+					loadZhimiAlbum = false
+					// #endif
+				}
 				
-				// #ifndef APP-PLUS
-				let _this = this;
-				uni.chooseImage({
-					count: _this.limit - _this.imageList.length,
-					sizeType: _this.sizeType,
-					sourceType: _this.sourceType,
-					success: function(e) {
-						_this.customCheckFiles(e.tempFiles);
-					}
-				})
-				// #endif
+				if(!loadZhimiAlbum){
+					let _this = this;
+					uni.chooseImage({
+						count: _this.limit - _this.imageList.length,
+						sizeType: _this.sizeType,
+						sourceType: _this.sourceType,
+						success: function(e) {
+							_this.customCheckFiles(e.tempFiles);
+						}
+					})
+				}
 			},
 			// zxf 获取文件大小和类型等
 			async getFileInfo(path){

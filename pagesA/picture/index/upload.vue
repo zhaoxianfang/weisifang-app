@@ -42,7 +42,7 @@
 	}
 </script>
 
-<style>
+<style scoped>
 	.container {
 		padding: 20rpx 0 120rpx 0;
 		box-sizing: border-box;
@@ -52,19 +52,8 @@
 		padding-left: 25rpx;
 		box-sizing: border-box;
 	}
-	.tui-btn-back {
-		width: 88rpx;
-		height: 88rpx;
-		font-size: 80rpx;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-radius: 50%;
-		background-color: #5677FC;
+	::v-deep .tui-upload-add{
 		color: #fff;
-		position: fixed;
-		bottom: 160rpx;
-		right: 30rpx;
-		z-index: 9999;
+		background-color: #C0C0C0;
 	}
 </style>

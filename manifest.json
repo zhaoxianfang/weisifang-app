@@ -175,20 +175,6 @@
                     "parameters" : {}
                 }
             },
-            "Zhimi-Album-JustPicker" : {
-                "__plugin_info__" : {
-                    "name" : "智密相册-自定义原生相册+图片视频过滤-QQ群755910061-智密科技",
-                    "description" : "智密相册插件是一款致力于uniapp自由布局的插件，通过分离api的方式，使得开发者可以在nvue中随意布局，插件本身提供的控件仅处理画布/图视频选择编辑逻辑，将api开放给开发者，给予足够的自由控制",
-                    "platforms" : "Android,iOS",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=5846",
-                    "android_package_name" : "uni.UNIF89051B",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 1,
-                    "pid" : "5846",
-                    "parameters" : {}
-                }
-            },
             "neoceansoft-permission" : {
                 "__plugin_info__" : {
                     "name" : "安卓原生权限插件组，主动申请系统敏感权限",

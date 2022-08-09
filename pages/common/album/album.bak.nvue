@@ -43,7 +43,13 @@
 			}
 		},
 		onBackPress() {
+			// #ifdef APP-PLUS
 			plus.nativeUI.toast("返回");
+			plus.nativeUI.toast('居中提示', {
+				verticalAlign: 'center', // "top"、"center"、"bottom"
+				duration: "long" // "long"3.5s、"short"2s，
+			});
+			// #endif
 		},
 		mounted () {
 			plus.navigator.setStatusBarStyle('light')

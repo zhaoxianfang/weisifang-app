@@ -77,7 +77,19 @@
 				let albumView = this.$refs.albumView
 				if (!albumView.setEventCallback) {
 					//相册组件加载失败  请先打包自定义基座或检查是否使用自定义基座运行
-					uni.showModal({ content: '相册组件加载失败' })
+					// uni.showModal({ content: '相册组件加载失败' })
+					// plus.nativeUI.toast('相册组件加载失败', {
+					// 	verticalAlign: 'center', // "top"、"center"、"bottom"
+					// 	duration: "long" // "long"3.5s、"short"2s，
+					// });
+					uni.$emit('albumLoadFail', true)
+					const pages = getCurrentPages();
+					// 其实是 处理 chooseImage 时候 跳转 到 ... album/album 操作后 返回页面
+					if(pages[pages.length - 1]['route'] === 'pages/common/album/album'){
+						uni.navigateBack({
+							delta: 1
+						})
+					}
 					return
 				}
 				// 监听相册事件回调
@@ -127,7 +139,11 @@
 							// uni.showModal({ content: `点击自定义 照相 按钮${data}` })
 							this.getCamera();
 						}else{
-							uni.showModal({ content: `点击自定义按钮${data}` })
+							// uni.showModal({ content: `点击自定义按钮${data}` })
+							plus.nativeUI.toast(`点击自定义按钮${data}`, {
+								verticalAlign: 'center', // "top"、"center"、"bottom"
+								duration: "long" // "long"3.5s、"short"2s，
+							});
 						}
 						break
 					// 图片/视频选择变化
