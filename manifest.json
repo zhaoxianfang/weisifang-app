@@ -41,7 +41,8 @@
             "Bluetooth" : {},
             "Messaging" : {},
             "OAuth" : {},
-            "Maps" : {}
+            "Maps" : {},
+            "Push" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
@@ -121,7 +122,10 @@
                         "appkey_android" : "2012d8debdcb9dbd721e3b0a7d4358c8"
                     }
                 },
-                "ad" : {}
+                "ad" : {},
+                "push" : {
+                    "unipush" : null
+                }
             },
             "icons" : {
                 "android" : {
