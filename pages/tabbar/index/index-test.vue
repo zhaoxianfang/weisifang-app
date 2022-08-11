@@ -9,6 +9,7 @@
         <scroll-view
           class="tui-scroll-v"
           refresher-enabled
+          :refresher-triggered="tab.refreshing"
           refresher-background="#fafafa"
           enable-back-to-top
           :refresher-threshold="100"
@@ -18,7 +19,10 @@
         >
           <!--小程序ios端 不设高度会导致无法滚动-->
           <view style="min-height:101%">
-            <view v-for="(newsitem, i) in tab.data" :key="i"><view class="">t-news-item</view></view>
+            <view v-for="newsitem in 4" :key="newsitem.id">
+              <!-- <t-news-item :entity="newsitem" :lastChild="index2 === tab.data.length - 1" @click="goDetail(newsitem)"></t-news-item> -->
+              <view class="">t-news-item</view>
+            </view>
             <view class="tui-loading-more" v-if="tab.isLoading || tab.pageIndex > 3">
               <text class="tui-loadmore-line" v-if="tab.pageIndex > 3"></text>
               <text class="tui-loading-more-text">{{ tab.loadingText }}</text>
@@ -31,78 +35,141 @@
 </template>
 
 <script>
-import thorui from '@/components/common/tui-clipboard/tui-clipboard.js'
-import VTabs from '@/components/v-tabs/v-tabs.vue'
-import { mapActions, mapState } from 'vuex'
+import thorui from '@/components/common/tui-clipboard/tui-clipboard.js';
+import VTabs from '@/components/v-tabs/v-tabs.vue';
+import { mapActions, mapState } from 'vuex';
 
 // 缓存最多页数
-const MAX_CACHE_PAGEINDEX = 3
+const MAX_CACHE_PAGEINDEX = 3;
 // 缓存页签数量
-const MAX_CACHE_PAGE = 3
+const MAX_CACHE_PAGE = 3;
 
 export default {
-    components: { VTabs },
-    data() {
-        return {
-            current: 0,
-            tabs: ['军事', '国内', '新闻新闻', '军事', '国内', '新闻', '军事', '国内', '新闻', '国内', '新闻新闻', '军事', '国内', '新闻', '军事', '国内', '新闻'],
+  components: { VTabs },
+  data() {
+    return {
+      current: 0,
+      tabs: ['军事', '国内', '新闻新闻', '军事', '国内', '新闻', '军事', '国内', '新闻', '国内', '新闻新闻', '军事', '国内', '新闻', '军事', '国内', '新闻'],
 
-            // =============
-            newsList: [],
-            tabIndex: 0,
-            pulling: false
+      // =============
+      isIos: false,
+      newsList: [],
+      cacheTab: [],
+      tabIndex: 0,
+      scrollInto: '',
+      showTips: false,
+      navigateFlag: false,
+      pulling: false,
+      refreshIcon:
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFEAAABRBAMAAABYoVcFAAAAKlBMVEUAAACXl5eZmZmfn5+YmJiXl5eampqZmZmYmJiYmJiZmZmYmJiZmZmZmZl02B9kAAAADXRSTlMAQKAQ0GAsUN+wz5CA21ow0AAAAM5JREFUSMftzLEJAkEQheFR4WzjGji4wC5E0A7E0OgaEIwF4RqwJEEODKcX1114yQ/uhsLtY6Lh57NZ7Dz1heXd27Kwcb+WlQv3Vy1rWcta1rKW/1Q2R8PWt8FYdhPLi79ZLt33KB/hibJzH1E+PaAqRfqAcuMBVSlyMmy1C6hKka0CoCpBAlUJEmgsQQJVCRKoSpBAU0mSaCpJEk0lSSMaS5JG9FuK/IkeQkmSaEjikSSaRpJoHEmiIvOoyCwqMo+KzKMi8+hoZTtte5vDPrSGI5zJ/Z1kAAAAAElFTkSuQmCC'
+    };
+  },
+  computed: {},
+  watch: {},
+  onLoad() {
+    setTimeout(() => {
+      this.newsList = this.randomfn();
+      console.log(this.newsList);
+      uni.getSystemInfo({
+        success: res => {
+          this.isIos = 'ios' == res.platform.toLocaleLowerCase();
         }
+      });
+    }, 200);
+  },
+  methods: {
+    changeTab(index) {
+      console.log('当前选中的项：' + index);
     },
-    computed: {},
-    watch: {},
-    onLoad() {
+    randomfn() {
+      let ary = [];
+      for (let i = 0, length = this.tabs.length; i < length; i++) {
+        let aryItem = {
+          loadingText: '正在加载...',
+          refreshing: false,
+          refreshText: '',
+          data: [],
+          isLoading: false,
+          pageIndex: 1
+        };
+        if (i === this.tabIndex) {
+          aryItem.pageIndex = 2;
+          aryItem.data = [];
+        }
+        ary.push(aryItem);
+      }
+      return ary;
+    },
+    getList(index, refresh) {},
+    goDetail(e) {},
+    loadMore(e) {},
+    tabClick(e) {
+      let index = e.target.dataset.current || e.currentTarget.dataset.current;
+      this.switchTab(index);
+    },
+    tabChange(e) {
+      console.log(e);
+      if (e.detail.source == 'touch' || e.detail.source == 'autoplay') {
+        let index = e.target.current || e.detail.current;
+        this.switchTab(index);
+      }
+    },
+    switchTab(index) {},
+    clearTabData(e) {
+      this.newsList[e].data.length = 0;
+      this.newsList[e].loadingText = '加载更多...';
+    },
+    onrefresh(e) {
+      let index = this.tabIndex;
+      var tab = this.newsList[index];
+      // #ifdef APP-PLUS
+      if (!tab.refreshFlag) {
+        return;
+      }
+      // #endif
+
+      // #ifndef APP-PLUS
+      if (tab.refreshing) {
+        return;
+      }
+      // #endif
+
+      tab.refreshing = true;
+      tab.refreshText = '正在刷新...';
+
+      setTimeout(() => {
+        this.getList(index, true);
+        this.pulling = true;
+        tab.refreshing = false;
+        tab.refreshFlag = false;
+        tab.refreshText = '刷新成功';
+        // #ifndef H5
+        uni.showToast({
+          title: '刷新成功',
+          icon: 'none'
+        });
+        // #endif
         setTimeout(() => {
-            this.newsList = this.randomfn()
-            console.log(this.newsList)
-        }, 200)
+          // TODO fix ios和Android 动画时间相反问题
+          this.pulling = false;
+        }, 500);
+      }, 1000);
     },
-    methods: {
-        changeTab(index) {
-            console.log('当前选中的项：' + index)
-        },
-        randomfn() {
-            let ary = []
-            for (let i = 0, length = this.tabs.length; i < length; i++) {
-                let aryItem = {
-                    loadingText: '正在加载...',
-                    refreshing: false,
-                    refreshText: '',
-                    data: ['a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a', 'a'],
-                    isLoading: false,
-                    pageIndex: 1
-                }
-                if (i === this.tabIndex) {
-                    aryItem.pageIndex = 2
-                    // aryItem.data = []
-                }
-                ary.push(aryItem)
-            }
-            return ary
-        },
-        loadMore(e) {
-            console.log('loadMore', e)
-        },
-
-        tabChange(e) {
-            console.log('tabChange', e)
-            if (e.detail.source == 'touch' || e.detail.source == 'autoplay') {
-                let index = e.target.current || e.detail.current
-            }
-        },
-        clearTabData(e) {
-            this.newsList[e].data.length = 0
-            this.newsList[e].loadingText = '加载更多...'
-        },
-        onrefresh(e) {
-            console.log('onrefresh', e)
-        }
+    onpullingdown(e) {
+      var tab = this.newsList[this.tabIndex];
+      if (tab.refreshing || this.pulling) {
+        return;
+      }
+      if (Math.abs(e.pullingDistance) > Math.abs(e.viewHeight)) {
+        tab.refreshFlag = true;
+        tab.refreshText = '释放立即刷新';
+      } else {
+        tab.refreshFlag = false;
+        tab.refreshText = '下拉可以刷新';
+      }
     }
-}
+  }
+};
 </script>
 
 <style>
