@@ -1,203 +1,179 @@
 <template>
-	<view class="wsf-tabs-swiper">
-		<v-tabs v-model="tabIndex" :tabs="tabs" @change="changeTab"></v-tabs>
+	<view>
+		<view class="wrap">
+			<v-tabs fixed v-model="tabIndex" :tabs="topTabs" @change="tabChange" height="80rpx" fontSize="32rpx" padding="4rpx"></v-tabs>
 
-		<view class="wsf-line-h"></view>
-		<swiper :current="tabIndex" class="wsf-swiper-box" :duration="300" @change="tabChange">
-			<swiper-item class="wsf-swiper-item" v-for="(swData, swIndex) in swiperList" :key="`swiper-${swIndex}`">
-				<!-- #ifdef APP-NVUE -->
-				<list class="wsf-scroll-v" enableBackToTop="true" scroll-y loadmoreoffset="15" @loadmore="loadMore(swIndex)">
-					<refresh class="wsf-refresh" @refresh="onrefresh(swIndex)" @pullingdown="onpullingdown" :display="swData.refreshing ? 'show' : 'hide'">
-						<div class="wsf-refresh-view">
-							<image
-								class="wsf-refresh-icon"
-								:src="refreshIcon"
-								:style="{ width: swData.refreshing || pulling ? 0 : '20px' }"
-								:class="{ 'wsf-refresh-icon-active': swData.refreshFlag }"
-							></image>
-							<loading-indicator class="wsf-loading-icon" animating="true" v-if="swData.refreshing"></loading-indicator>
-							<text class="wsf-loading-text">{{ swData.refreshText }}</text>
-						</div>
-					</refresh>
-					<cell v-for="(item, itemIndex) in swData.data" :key="`swiper-item-${itemIndex}`">
-						<!-- 通过插槽传值 -->
-						<slot name="item" :data="item"></slot>
-					</cell>
-					<cell class="wsf-loading-more" v-if="swData.isLoading">
-						<text class="wsf-loadmore-line" v-if="!swData.hasMore"></text>
-						<text class="wsf-loading-more-text">{{ swData.loadingText }}</text>
-					</cell>
-				</list>
-				<!-- #endif -->
-				<!-- #ifndef APP-NVUE -->
-				<scroll-view
-					class="wsf-scroll-v"
-					refresher-enabled
-					:refresher-triggered="swData.refreshing"
-					refresher-background="#fafafa"
-					enable-back-to-top
-					:refresher-threshold="100"
-					scroll-y
-					@scrolltolower="loadMore(swIndex)"
-					@refresherrefresh="onrefresh"
-				>
-					<!--小程序ios端 不设高度会导致无法滚动-->
-					<view style="min-height:101%">
-						<view v-for="(item, itemIndex) in swData.data" :key="`swiper-item-${itemIndex}`">
+			<swiper class="swiper-box" :current="tabIndex" @change="swiperChange" :duration="300" @transition="transition" @animationfinish="animationfinish">
+				<swiper-item class="swiper-item" v-for="(swList, swIndex) in swiperData" :key="`swiper-${swIndex}`">
+					<scroll-view
+						scroll-y
+						style="height: 100%;width: 100%;"
+						refresher-enabled
+						:refresher-triggered="swList.refreshing"
+						refresher-background="#fafafa"
+						enable-back-to-top
+						:refresher-threshold="65"
+						:lower-threshold="120"
+						@scrolltolower="loadMore"
+						@refresherrestore="refresherrestore"
+						@refresherrefresh="onRefresh"
+					>
+						<view v-for="(item, itemIndex) in swList.data" :key="`swiper-item-${itemIndex}`">
 							<!-- 通过插槽传值 -->
 							<slot name="item" :data="item"></slot>
 						</view>
-						<view class="wsf-loading-more" v-if="swData.isLoading || swData.pageIndex > 3">
-							<text class="wsf-loadmore-line" v-if="swData.pageIndex > 3"></text>
-							<text class="wsf-loading-more-text">{{ swData.loadingText }}</text>
+						<view class="wsf-loading-more" v-if="swList.isLoading || !swList.hasMore">
+							<text class="wsf-loadmore-line" v-if="!swList.hasMore"></text>
+							<text class="wsf-loading-more-text">{{ swList.loadingText }}</text>
 						</view>
-					</view>
-				</scroll-view>
-				<!-- #endif -->
-			</swiper-item>
-		</swiper>
+					</scroll-view>
+				</swiper-item>
+			</swiper>
+		</view>
 	</view>
 </template>
+
 <script>
 import VTabs from '@/components/v-tabs/v-tabs.vue'
-
 export default {
-    name: 'wsfTabsSwiper',
-    emits: ['loadList'],
+    name: 'WsfTabSwiper',
+    emits: ['loadMore'],
     components: {
         VTabs
     },
     props: {
-        // tabs 列表; 一维数组 例如['北京','云南','四川']
+        // 顶部v-tabs 数据
         tabs: {
             type: Array,
             default() {
                 return []
             }
         },
-        // 当前激活的 单个tab 下的 swiper 数据; 例如：[{...},{...}]
+        // 顶部v-tabs 显示使用 tabs 里面的哪个字段
+        tabTitle: {
+            type: String,
+            default: 'title'
+        },
+        // 加载当前激活tab 的数据
         list: {
             type: Array,
             default() {
                 return []
             }
         },
-        // 获取新数据后 是 追加到尾部还是覆盖,默认 追加到现有数据尾部
-        cover: {
+        // 新加载进来的数据是否 重叠 覆盖原数据，否表示在现有据后追加 或者加到现有数据前面
+        overlap: {
             type: Boolean,
             default: false
         }
     },
     watch: {
-        multiple(val) {
-            this.initData()
-        },
         list(val) {
-            this.setData(val)
+            this.addData(val)
         }
     },
     data() {
         return {
-            tabIndex: 0,
-            swiperList: [],
-
-            isIos: false,
-
-            pulling: false,
-            refreshIcon:
-				'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFEAAABRBAMAAABYoVcFAAAAKlBMVEUAAACXl5eZmZmfn5+YmJiXl5eampqZmZmYmJiYmJiZmZmYmJiZmZmZmZl02B9kAAAADXRSTlMAQKAQ0GAsUN+wz5CA21ow0AAAAM5JREFUSMftzLEJAkEQheFR4WzjGji4wC5E0A7E0OgaEIwF4RqwJEEODKcX1114yQ/uhsLtY6Lh57NZ7Dz1heXd27Kwcb+WlQv3Vy1rWcta1rKW/1Q2R8PWt8FYdhPLi79ZLt33KB/hibJzH1E+PaAqRfqAcuMBVSlyMmy1C6hKka0CoCpBAlUJEmgsQQJVCRKoSpBAU0mSaCpJEk0lSSMaS5JG9FuK/IkeQkmSaEjikSSaRpJoHEmiIvOoyCwqMo+KzKMi8+hoZTtte5vDPrSGI5zJ/Z1kAAAAAElFTkSuQmCC'
+            tabIndex: 0, // 初始激活的 tab index
+            topTabs: ['默认'],
+            swiperData: []
         }
     },
     created() {
-        this.initData()
-        this.getList(0, true)
-        setTimeout(() => {
-            uni.getSystemInfo({
-                success: res => {
-                    this.isIos = 'ios' == res.platform.toLocaleLowerCase()
-                }
-            })
-        }, 200)
+        this.initTabs()
+        this.initSwiper()
+        this.getList()
     },
     methods: {
-        initData() {
-            console.log('initData', this.tabs)
-            let ary = []
+        // 初始化 顶部 tabs 显示的标题数据
+        initTabs() {
+            if (this.tabs.length < 1) {
+                this.topTabs = ['默认']
+            } else {
+                let tabsTitleArr = []
+                for (let index in this.tabs) {
+                    this.tabs[index][this.tabTitle] || '未知'
+                    tabsTitleArr.push(this.tabs[index][this.tabTitle] || '未知')
+                }
+                this.topTabs = tabsTitleArr
+            }
+        },
+        // 初始化 swiper 数据格式
+        initSwiper() {
+            let swiper = []
+            // 有多少个数据，就初始化多少个 swiper item
             for (let i = 0, length = this.tabs.length; i < length; i++) {
-                let aryItem = {
-                    loadingText: '正在加载...',
-                    refreshing: false, // 真正刷新中
-                    refreshText: '', // 刷新提示
-                    data: [], // 列表数据
-                    isLoading: false, // 是否正在加载
-                    hasMore: true, // 有没有更多数据
-                    pageIndex: 0 // 当前页码
+                let swiperItem = {
+                    isLoading: false, // 正在加载数据中
+                    loadingText: '正在加载...', // 加载提示信息
+                    refreshing: false, // 正在刷新数据中
+                    refreshText: '', // 刷新提示信息
+                    pageIndex: 0, // 当前tab初始化的页码
+                    hasMore: true, // 当前tab 是否有更多数据，如果某次加载后传入的数据为空，就置为false,表示该tab不再加载更多数据
+                    data: [] // 展示出来的数据
                 }
-                if (i === this.tabIndex) {
-                    aryItem.pageIndex = 1
-                    aryItem.data = this.list
+                // 如果传入了默认值，则默认值 list 作为第一页的数据展示
+                if (i === this.tabIndex && this.list.length > 0) {
+                    swiperItem.pageIndex = 1
+                    swiperItem.data = this.list
                 }
-                ary.push(aryItem)
+                swiper.push(swiperItem)
             }
-            this.swiperList = ary
+            this.swiperData = swiper
+            return swiper
         },
-        // 接收到新数据后进行渲染
-        setData(data) {
-            console.log('setData', data)
-            let activeTab = this.swiperList[this.tabIndex]
-            if (this.isEmpty(data)) {
-                // 没有数据了
+        addData(data) {
+            let activeTab = this.swiperData[this.tabIndex]
+            if (data === '' || data === undefined || data.length < 1) {
                 activeTab.hasMore = false
-                activeTab.loadingText = '没有更多了'
+                if (activeTab.isLoading) {
+                    activeTab.loadingText = '没有了'
+                } else {
+                    activeTab.refreshText = '没有了'
+                }
             } else {
-                activeTab.data = this.cover || this.pulling ? data : activeTab.data.concat(data)
+                if (activeTab.isLoading) {
+                    // 底部加载
+                    activeTab.data = activeTab.data.concat(data)
+                } else {
+                    // 刷新 直接覆盖数据
+                    activeTab.data = data
+                }
             }
-            activeTab.refreshing = false
             activeTab.isLoading = false
-            activeTab.refreshFlag = false
-            activeTab.refreshText = '刷新成功'
-            // TODO fix ios和Android 动画时间相反问题
-            this.pulling = false
-        },
+            // activeTab.refreshing = false
+            // this.$set(this.swiperData, this.tabIndex, activeTab)
 
-        //判断字符是否为空的方法
-        isEmpty: function(obj) {
-            if (
-                typeof obj === 'undefined' ||
-				obj === null ||
-				obj === '' ||
-				obj.length === 0 ||
-				!/[^(^\s*)|(\s*$)]/.test(obj) ||
-				(this.getType(obj) === 'Object' && Object.keys(obj).length < 1) ||
-				(this.getType(obj) === 'string' && ['{}', '[]'].includes(obj))
-            ) {
-                return true
-            } else {
-                return false
+            // 【关键】直接 操作  activeTab.refreshing = false 无法 使 下拉 加载状态 修改为 false ,需要 在 $nextTick 之后才有效
+            // this.$nextTick(function() {
+            //     activeTab.refreshing = false
+            // })
+            // 防止 无新数据渲染 手动关闭状态
+            setTimeout(() => {
+                activeTab.refreshing = false
+            }, 300)
+        },
+        // v-tabs 变化时候
+        tabChange(index) {
+            this.switchTab(index)
+        },
+        // 手势滑动swiper的时候
+        swiperChange(e) {
+            let index = e.target.current || e.detail.current
+            if (e.detail.source == 'touch' || e.detail.source == 'autoplay') {
+                this.switchTab(index)
             }
         },
-        // 判断一个对象的类型
-        getType: function(data) {
-            let type = typeof data
-            if (type !== 'object') {
-                return type
-            }
-            return Object.prototype.toString.call(data).replace(/^\[object (\S+)\]$/, '$1')
-        },
-        changeTab(index) {
-            console.log('当前选中的项：' + index)
+        switchTab(index) {
             this.tabIndex = index
-            let activeTab = this.swiperList[index]
-            if (this.isEmpty(activeTab.data) && activeTab.hasMore && !activeTab.isLoading) {
-                // 当前tab数据为空，且未设置无数据，就进行通知加载数据
-                // 通知父组件 加载数据
-                this.pulling = true
-                this.getList(index, true)
+            let activeTab = this.swiperData[index]
+            if (activeTab.hasMore && activeTab.data.length < 1 && !activeTab.isLoading && !activeTab.refreshing) {
+                this.getList()
             }
         },
-        getList(index, refresh = false) {
-            let activeTab = this.swiperList[index]
-            console.log('getList', activeTab)
+        getList(refresh = false) {
+            let index = this.tabIndex
+            let activeTab = this.swiperData[index]
             if (!activeTab.hasMore) {
                 activeTab.loadingText = '没有更多了'
                 return false
@@ -205,195 +181,47 @@ export default {
             if (activeTab.isLoading) {
                 return false
             }
-            console.log('getList ing')
             // 通知父组件 加载数据
-            activeTab.pageIndex = refresh ? 1 : activeTab.pageIndex + 1
-            activeTab.isLoading = true
-            activeTab.loadingText = '正在加载...'
-            this.$emit('loadList', {
-                tabIndex: index,
+            if (refresh) {
+                // 下滑刷新数据
+                activeTab.pageIndex = 1
+                activeTab.refreshing = true
+                activeTab.isLoading = false
+                activeTab.refreshText = '正在刷新...'
+            } else {
+                // 底部加载数据
+                activeTab.pageIndex = activeTab.pageIndex + 1
+                activeTab.isLoading = true
+                activeTab.refreshing = false
+                activeTab.loadingText = '正在加载...'
+            }
+            this.$emit('loadMore', {
+                tabInfo: this.tabs[index],
                 pageIndex: activeTab.pageIndex
             })
         },
-        // 通知加载 数据
+        transition(e) {
+            // console.log('transition swiper-item 的位置发生改变时会触发 transition 事件，event.detail = {dx: dx, dy: dy}，支付宝小程序暂不支持dx, dy', e)
+        },
+        animationfinish(e) {
+            // console.log('动画结束', e.detail.current)
+        },
+        onRefresh(e) {
+            // console.log('顶部刷新', e)
+            this.getList(true)
+        },
+        refresherrestore(e) {
+            console.log('下拉被复位', e, this.tabIndex)
+        },
         loadMore(e) {
-            let tabIndex = this.tabIndex
-            let activeTab = this.swiperList[tabIndex]
-            if (activeTab.hasMore && !activeTab.isLoading) {
-                this.getList(tabIndex)
-            }
-        },
-
-        onrefresh(e) {
-            let index = this.tabIndex
-            var tab = this.swiperList[index]
-            console.log('onrefresh', e, tab)
-            // #ifdef APP-PLUS
-            // 临时关闭
-            // if (!tab.refreshFlag) {
-            //     return
-            // }
-            // #endif
-
-            // #ifndef APP-PLUS
-            if (tab.refreshing) {
-                return
-            }
-            // #endif
-
-            tab.refreshing = true
-            tab.refreshText = '正在刷新...'
-            this.pulling = true
-            this.getList(index, true)
-        },
-        onpullingdown(e) {
-            console.log('onpullingdown', e)
-            let index = this.tabIndex
-            var tab = this.swiperList[index]
-            if (tab.refreshing || this.pulling) {
-                return
-            }
-            if (Math.abs(e.pullingDistance) > Math.abs(e.viewHeight)) {
-                tab.refreshFlag = true
-                tab.refreshText = '释放立即刷新'
-            } else {
-                tab.refreshFlag = false
-                tab.refreshText = '下拉可以刷新'
-            }
-        },
-
-        // 手势滑动的时候
-        tabChange(e) {
-            console.log('tabChange', e)
-            if (e.detail.source == 'touch' || e.detail.source == 'autoplay') {
-                let index = e.target.current || e.detail.current
-                this.switchTab(index)
-            }
-        },
-        switchTab(index) {
-            if (this.tabIndex === index) return
-            if (this.swiperList[index].data.length === 0) {
-                this.getList(index)
-            }
-
-            this.tabIndex = index
-            let scrollIndex = index - 1 < 0 ? 0 : index - 1
-        },
-        clearTabData(e) {
-            this.newsList[e].data.length = 0
-            this.newsList[e].loadingText = '加载更多...'
+            // console.log('底部加载', e)
+            this.getList(false)
         }
     }
 }
 </script>
 
-<style>
-/* #ifndef APP-PLUS */
-page {
-	width: 100%;
-	min-height: 100%;
-	display: flex;
-}
-
-/* #endif */
-
-.wsf-tabs-swiper {
-	flex: 1;
-	flex-direction: column;
-	overflow: auto;
-	background-color: #fafafa;
-	height: 100vh;
-}
-
-.wsf-line-h {
-	/* #ifdef APP-PLUS */
-	height: 1rpx;
-	background-color: #cccccc;
-	/* #endif */
-	position: relative;
-}
-
-/* #ifndef APP-PLUS*/
-.wsf-line-h::after {
-	content: '';
-	position: absolute;
-	border-bottom: 1rpx solid #cccccc;
-	-webkit-transform: scaleY(0.5);
-	transform: scaleY(0.5);
-	bottom: 0;
-	right: 0;
-	left: 0;
-}
-
-/* #endif */
-
-.wsf-swiper-box {
-	flex: 1 !important;
-	/* #ifdef H5 */
-	margin-top: 80rpx;
-	/* #endif */
-	height: 100vh;
-	border: 2px solid red;
-	overflow: auto;
-}
-
-.wsf-swiper-item {
-	flex: 1 !important;
-	flex-direction: row;
-}
-
-.wsf-scroll-v {
-	flex: 1;
-	/* #ifndef MP-ALIPAY */
-	flex-direction: column;
-	/* #endif */
-	width: 750rpx;
-}
-
-.wsf-update-tips {
-	position: absolute;
-	left: 0;
-	top: 41px;
-	right: 0;
-	padding-top: 5px;
-	padding-bottom: 5px;
-	background-color: #fddd9b;
-	align-items: center;
-	justify-content: center;
-	text-align: center;
-}
-
-.wsf-update-tips-text {
-	font-size: 14px;
-	color: #ffffff;
-}
-
-.wsf-refresh {
-	width: 750rpx;
-	height: 64px;
-	justify-content: center;
-}
-
-.wsf-refresh-view {
-	flex-direction: row;
-	flex-wrap: nowrap;
-	align-items: center;
-	justify-content: center;
-}
-
-.wsf-refresh-icon {
-	width: 20px;
-	height: 20px;
-	transition-duration: 0.25s;
-	transition-property: transform;
-	transform: rotate(0deg);
-	transform-origin: 10px 10px;
-}
-
-.wsf-refresh-icon-active {
-	transform: rotate(180deg);
-}
-
+<style lang="scss" scoped>
 .wsf-loading-icon {
 	width: 20px;
 	height: 20px;
@@ -433,5 +261,20 @@ page {
 	background-color: #fafafa;
 	text-align: center;
 	color: #999;
+}
+
+.wrap {
+	display: flex;
+	flex-direction: column;
+	height: calc(100vh - var(--window-top));
+	width: 100%;
+}
+
+.swiper-box {
+	flex: 1;
+}
+
+.swiper-item {
+	height: 100%;
 }
 </style>

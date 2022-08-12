@@ -1,8 +1,8 @@
 <template>
 	<view class="container">
-		<wsf-tabs-swiper :tabs="tabs" @loadList="loadList" :list="items">
+		<wsf-tabs-swiper :tabs="tabs" @loadMore="loadList" :list="items">
 			<template v-slot:item="{ data }">
-				<view class="" style="line-height: 300rpx;background-color: #fff;margin: 10rpx;">接收插槽值 ： {{ data.name }}</view>
+				<view class="" style="height: 60px;background-color: #fff;margin: 10rpx;">接收插槽值 ： {{ data.name }}</view>
 			</template>
 		</wsf-tabs-swiper>
 	</view>
@@ -14,61 +14,68 @@ import thorui from '@/components/common/tui-clipboard/tui-clipboard.js'
 export default {
     data() {
         return {
-            current: 0,
-            tabs: ['军事', '国内', '新闻新闻', '军事', '国内', '新闻', '军事', '国内', '新闻', '国内', '新闻新闻', '军事', '国内', '新闻', '军事', '国内', '新闻'],
+            tabs: [
+                {
+                    id: 1,
+                    title: '军事1'
+                },
+                {
+                    id: 2,
+                    title: '军事2'
+                },
+                {
+                    id: 3,
+                    title: '军事3'
+                },
+                {
+                    id: 4,
+                    title: '军事4'
+                },
+                {
+                    id: 5,
+                    title: '军事5'
+                },
+                {
+                    id: 6,
+                    title: '军事6'
+                },
+                {
+                    id: 7,
+                    title: '军事7'
+                },
+                {
+                    id: 8,
+                    title: '军事8'
+                },
+                {
+                    id: 9,
+                    title: '军事9'
+                }
+            ],
             items: []
         }
     },
 
-    onLoad() {
-        // setTimeout(() => {
-        //     this.newsList = this.randomfn()
-        //     console.log(this.newsList)
-        // }, 200)
-    },
+    onLoad() {},
     methods: {
-        loadList(option) {
-            console.log('需要加载数据：', option)
-            var date = new Date()
-            // var y = date.getFullYear();
-            // var m = date.getMonth() + 1;
-            // var d = date.getDate();
-            var h = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
-            var minute = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
-            var s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+        loadList(obj) {
+            // console.log('需要加载数据：', obj)
 
-            function formatNumber(num) {
-                if (num <= 9) {
-                    return '0' + num
-                } else {
-                    return '' + num
+            var _this = this
+
+            var num = (obj.pageIndex - 1) * 10
+            var tempList = []
+            for (let i = 1; i < 11; i++) {
+                let index = parseInt(num) + parseInt(i)
+                let tempItem = {
+                    name: index + '_' + obj.tabInfo.title
                 }
+                tempList.push(tempItem)
             }
-            let time = date.getFullYear() + '-' + formatNumber(date.getMonth() + 1) + '-' + formatNumber(date.getDate()) + ' ' + h + ':' + minute + ':' + s
-
-            this.items = [
-                {
-                    name: time + ':111111111111111111'
-                },
-                {
-                    name: '1112222221111'
-                },
-                {
-                    name: '11333333111111'
-                },
-                {
-                    name: '111444444444441111111'
-                },
-                {
-                    name: '1115555555555555111111'
-                },
-                {
-                    name: '1116666666666666661111'
-                },
-                {
-                    name: '111117777777777771111'
-                }
-            ]
+            // 模拟延时3秒
+            setTimeout(() => {
+                _this.items = tempList
+            }, 3000)
         }
     }
 }

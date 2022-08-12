@@ -92,10 +92,11 @@ data() {
 
 |       参数        |  类型   |  默认值   |                                   说明                                    |
 | :---------------: | :-----: | :-------: | :-----------------------------------------------------------------------: |
+|       tabs        |  Array  |    []     |                              控制 tab 的列表                              |
 |       value       | Number  |     0     |                            必传(双向绑定的值)                             |
 |       color       | String  |  '#333'   |                               默认文字颜色                                |
 |    activeColor    | String  | '#2979ff' |                              选中文字的颜色                               |
-|     fontSize      | String  |  '28rpx'  |                          默认文字大小(rpx 或 px)                          |
+|     fontSize      | String  |  '28rpx'  |                      默认文字大小(rpx 或 px)（弃用）                      |
 |       bold        | Boolean |   true    |                              是否加粗选中项                               |
 |      scroll       | Boolean |   true    |                      是否显示滚动条，平铺设置 false                       |
 |      height       | String  |  '70rpx'  |                            tab 高度(rpx 或 px)                            |
@@ -113,6 +114,40 @@ data() {
 |    paddingItem    | String  | '0 22rpx' |                选项的边距（设置上下不生效，需要设置高度）                 |
 |   lineAnimation   | Boolean |   true    | 是否需要 line 和 pills 的动画，在隐藏页面后默认移动到第一个的时候比较实用 |
 
+### 1.1 `tabs`参数展开说明
+
+#### 1.1。1 当`tabs`仅仅是单纯的数组时候，没有什么特别的地方
+
+```js
+export default {
+  data() {
+    return {
+      tabs: ['全部', '待付款', '待消费', '已完成', '已评价', '已过期', '已退款']
+    }
+  }
+}
+```
+
+#### 1.1.2 当`tabs`使用的数组对象的方式，特定参数需要注意一下
+
+- `disabled` 参数，可以控制按钮是否可以点击
+
+```js
+export default {
+  data() {
+    return {
+      tabs: [
+        { id: 1, name: '待付款', disabled: false },
+        { id: 2, name: '待收货', disabled: false },
+        { id: 3, name: '待评价', disabled: false },
+        { id: 4, name: '退款/售后', disabled: true },
+        { id: 5, name: '我的订单', disabled: false }
+      ]
+    }
+  }
+}
+```
+
 ### 2、事件说明
 
 |  名称  | 参数  |                说明                |
@@ -120,6 +155,20 @@ data() {
 | change | index | 改变选中项触发, index 选中项的下标 |
 
 ## 更新日志
+
+### 2022-08-12
+
+1. 增加`disable`参数，控制是否可以点击，只能应用在数组对象中，见[disabled 的用法](#112-当tabs使用的数组对象的方式特定参数需要注意一下)
+
+```js
+export default {
+  data() {
+    return {
+      tabs: [{ id: 1, name: '' }]
+    }
+  }
+}
+```
 
 ### 2022-01-27
 
