@@ -6,9 +6,10 @@ export function checkUpdate(update_info, type = 0) {
 	return new Promise((reolve, reject) => {
 		// 获取版本号
 		plus.runtime.getProperty(plus.runtime.appid, async (inf) => {
-			console.log('当前版本', inf.version);
-			console.log('最新版本', update_info.version);
-			let need_update = await compareVersion(inf.version, update_info.version); // 检查是否需要升级（对比版本号）
+			// console.log('当前版本', inf.version);
+			// console.log('最新版本', update_info.version);
+			let need_update = await compareVersion(inf.version, update_info
+			.version); // 检查是否需要升级（对比版本号）
 			if (!need_update) {
 				return reolve({
 					msg: "已经是最新版本了"
@@ -33,17 +34,19 @@ export function checkUpdate(update_info, type = 0) {
 			//判断当前版本是不是点击过暂不更新
 			let update_ignore_version = uni.getStorageSync("update_ignore") || "0.0.0";
 
-			console.log("强制更新", update_info.force);
-			if (type === 0 && update_ignore_version == update_info.version && update_info.force === 0) {
+			// console.log("强制更新", update_info.force);
+			if (type === 0 && update_ignore_version == update_info.version && update_info.force ===
+				0) {
 				console.log("之前取消过这个版本，就不再提示了");
 				return reolve({
-					msg:''
+					msg: ''
 				})
 			}
 
 			//弹出更新
 			uni.navigateTo({
-				url: "/components/app-upgrade/views/app-upgrade?updata_info=" + JSON.stringify(update_info),
+				url: "/components/app-upgrade/views/app-upgrade?updata_info=" + JSON
+					.stringify(update_info),
 				animationType: "fade-in"
 			})
 		});
