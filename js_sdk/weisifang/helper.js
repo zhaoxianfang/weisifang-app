@@ -1,6 +1,9 @@
+var isIos = false
 // #ifdef APP-PLUS
 import { checkUpdate } from '../../components/app-upgrade/js/app-update-check.js'
+isIos = (plus.os.name === 'iOS')
 // #endif
+
 const helper = {
     debounceTime: null, // 防抖计时器
     debounceOldArgs: [], // 防抖老参数
@@ -93,6 +96,86 @@ const helper = {
         }
 
         return _debounce
+    },
+    // 判断推送权限是否开启
+    judgeIosPermissionPush() {
+        if (isIos) { //ios
+            var result = false
+            var UIApplication = plus.ios.import('UIApplication')
+            var app = UIApplication.sharedApplication()
+            var enabledTypes = 0
+            if (app.currentUserNotificationSettings) {
+                var settings = app.currentUserNotificationSettings()
+                enabledTypes = settings.plusGetAttribute('types')
+                console.log('enabledTypes1:' + enabledTypes)
+                if (enabledTypes === 0) {
+                    // gotoAppPermissionSetting()
+                    console.log('推送权限没有开启')
+                } else {
+                    result = true
+                    console.log('已经开启推送功能!')
+                }
+                plus.ios.deleteObject(settings)
+            } else {
+                enabledTypes = app.enabledRemoteNotificationTypes()
+                if (enabledTypes === 0) {
+                    // gotoAppPermissionSetting()
+                    console.log('推送权限没有开启!')
+                } else {
+                    result = true
+                    console.log('已经开启推送功能!')
+                }
+                console.log('enabledTypes2:' + enabledTypes)
+            }
+            plus.ios.deleteObject(app)
+            plus.ios.deleteObject(UIApplication)
+            return result
+        } else { //android
+            var result = false
+            var main = plus.android.runtimeMainActivity()
+            var pkName = main.getPackageName()
+            var uid = main.getApplicationInfo().plusGetAttribute('uid')
+            var NotificationManagerCompat = plus.android.importClass('androidx.core.app.NotificationManagerCompat')
+            //("android.support.v4.app.NotificationManagerCompat");
+            var areNotificationsEnabled = NotificationManagerCompat.from(main)
+            // 未开通‘允许通知’权限，则弹窗提醒开通，并点击确认后，跳转到系统设置页面进行设置  
+            if (!areNotificationsEnabled.areNotificationsEnabled()) {
+                uni.showModal({
+                    title: '通知权限开启提醒',
+                    content: '您还没有开启通知权限，无法接受到消息通知，请前往设置！',
+                    showCancel: false,
+                    confirmText: '去设置',
+                    success: function(res) {
+                        if (res.confirm) {
+                            var Intent = plus.android.importClass('android.content.Intent')
+                            var Build = plus.android.importClass('android.os.Build')
+                            //android 8.0引导  
+                            if (Build.VERSION.SDK_INT >= 26) {
+                                var intent = new Intent('android.settings.APP_NOTIFICATION_SETTINGS')
+                                intent.putExtra('android.provider.extra.APP_PACKAGE', pkName)
+                            } else if (Build.VERSION.SDK_INT >= 21) { //android 5.0-7.0  
+                                var intent = new Intent('android.settings.APP_NOTIFICATION_SETTINGS')
+                                intent.putExtra('app_package', pkName)
+                                intent.putExtra('app_uid', uid)
+                            } else { //(<21)其他--跳转到该应用管理的详情页
+                                var Settings = plus.android.importClass('android.provider.Settings')
+                                var Uri = plus.android.importClass('android.net.Uri')
+                                var intent = new Intent()
+                                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                var uri = Uri.fromParts('package', main.getPackageName(), null)
+                                intent.setData(uri)
+                            }
+                            // 跳转到该应用的系统通知设置页  
+                            main.startActivity(intent)
+                            return result
+                        }
+                    }
+                })
+            } else {
+                result = true
+                return result
+            }
+        }
     }
 }
 export default helper

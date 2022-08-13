@@ -6,7 +6,7 @@
 const tui = {
     //接口地址
     interfaceUrl: function() {
-        return 'http://www.weisifang.com'
+        return 'https://www.weisifang.com'
     //return 'https://test.thorui.cn'
     //return 'https://uat.thorui.cn'
     // return 'https://prod.thorui.cn'
