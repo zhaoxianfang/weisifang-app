@@ -67,7 +67,7 @@ export default {
     onLoad() {},
     methods: {
         loadList(obj) {
-        // console.log('需要加载数据：', obj)
+            console.log('需要加载数据：', obj)
 
             var _this = this
 
