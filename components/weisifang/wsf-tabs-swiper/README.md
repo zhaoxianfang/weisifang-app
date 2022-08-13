@@ -3,13 +3,17 @@
 ## demo
 ```
 <template>
-	<view class="container">
-		<wsf-tabs-swiper :tabs="tabs" @loadMore="loadList" :list="items" tabTitle='title'>
-			<template v-slot:item="{ data }">
-				<view style="height: 60px;background-color: #fff;margin: 10rpx;">接收插槽值 ： {{ data.name }}</view>
-			</template>
-		</wsf-tabs-swiper>
-	</view>
+  <view class="container">
+    <wsf-tabs-swiper :tabs="tabs" :list="items" tabTitle="title" :overlap="false" @loadMore="loadList">
+      <template v-slot:tab="{ tab }">
+        <view class="" style="height: 60px;background-color: #fff;margin: 10rpx;">接收当前激活的tab,传入时tabs里面的原始数据 ：{{ tab.id }}-{{ tab.title }}
+        </view>
+      </template>
+      <template v-slot:item="{ item }">
+        <view class="" style="height: 60px;background-color: #fff;margin: 10rpx;">接收插槽值,传入时items里面的原始数据 ： {{ item.name }}</view>
+      </template>
+    </wsf-tabs-swiper>
+  </view>
 </template>
 
 <script>
@@ -17,53 +21,56 @@
 export default {
     data() {
         return {
-            tabs: [
-                {
-                    id: 1,
-                    title: '军事1'
-                },
-                {
-                    id: 2,
-                    title: '军事2'
-                },
-                {
-                    id: 3,
-                    title: '军事3'
-                },
-                {
-                    id: 4,
-                    title: '军事4'
-                },
-                {
-                    id: 5,
-                    title: '军事5'
-                },
-                {
-                    id: 6,
-                    title: '军事6'
-                },
-                {
-                    id: 7,
-                    title: '军事7'
-                },
-                {
-                    id: 8,
-                    title: '军事8'
-                },
-                {
-                    id: 9,
-                    title: '军事9'
-                }
+            tabs: [{
+                id: 1,
+                title: '军事'
+            },
+            {
+                id: 2,
+                title: '科幻'
+            },
+            {
+                id: 3,
+                title: '战争'
+            },
+            {
+                id: 4,
+                title: '人文'
+            },
+            {
+                id: 5,
+                title: '地理'
+            },
+            {
+                id: 6,
+                title: '社会'
+            },
+            {
+                id: 7,
+                title: '家庭'
+            },
+            {
+                id: 8,
+                title: '育儿'
+            },
+            {
+                id: 9,
+                title: '科技'
+            },
+            {
+                id: 10,
+                title: '教育'
+            }
             ],
+            // 当前激活的tab 数据
             items: []
         }
     },
 
-    onLoad() {
-    },
+    onLoad() {},
     methods: {
         loadList(obj) {
-            // console.log('需要加载数据：', obj)
+        // console.log('需要加载数据：', obj)
 
             var _this = this
 
@@ -78,20 +85,20 @@ export default {
             }
             // 模拟延时3秒
             setTimeout(() => {
-							 // 通过更新 :list="items" 来设置 当前激活的tab 里面的列表内容
                 _this.items = tempList
-            }, 3000)
+            }, 300)
         }
     }
 }
 </script>
 
 <style>
-.container {
-	width: 100%;
-	padding-bottom: 30rpx;
-	height: 100vh;
-}
+  .container {
+    width: 100%;
+    padding-bottom: 30rpx;
+    height: 100vh;
+  }
 </style>
+
 
 ```

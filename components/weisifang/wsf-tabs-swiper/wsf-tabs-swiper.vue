@@ -1,36 +1,31 @@
 <template>
-	<view>
-		<view class="wrap">
-			<v-tabs fixed v-model="tabIndex" :tabs="topTabs" @change="tabChange" height="80rpx" fontSize="32rpx" padding="4rpx"></v-tabs>
+  <view>
+    <view class="wrap">
+      <v-tabs fixed v-model="tabIndex" :tabs="topTabs" @change="tabChange" height="80rpx" fontSize="32rpx"
+        padding="4rpx"></v-tabs>
 
-			<swiper class="swiper-box" :current="tabIndex" @change="swiperChange" :duration="300" @transition="transition" @animationfinish="animationfinish">
-				<swiper-item class="swiper-item" v-for="(swList, swIndex) in swiperData" :key="`swiper-${swIndex}`">
-					<scroll-view
-						scroll-y
-						style="height: 100%;width: 100%;"
-						refresher-enabled
-						:refresher-triggered="swList.refreshing"
-						refresher-background="#fafafa"
-						enable-back-to-top
-						:refresher-threshold="65"
-						:lower-threshold="120"
-						@scrolltolower="loadMore"
-						@refresherrestore="refresherrestore"
-						@refresherrefresh="onRefresh"
-					>
-						<view v-for="(item, itemIndex) in swList.data" :key="`swiper-item-${itemIndex}`">
-							<!-- 通过插槽传值 -->
-							<slot name="item" :data="item"></slot>
-						</view>
-						<view class="wsf-loading-more" v-if="swList.isLoading || !swList.hasMore">
-							<text class="wsf-loadmore-line" v-if="!swList.hasMore"></text>
-							<text class="wsf-loading-more-text">{{ swList.loadingText }}</text>
-						</view>
-					</scroll-view>
-				</swiper-item>
-			</swiper>
-		</view>
-	</view>
+      <swiper class="swiper-box" :current="tabIndex" @change="swiperChange" :duration="300" @transition="transition"
+        @animationfinish="animationfinish">
+        <swiper-item class="swiper-item" v-for="(swList, swIndex) in swiperData" :key="`swiper-${swIndex}`">
+          <scroll-view scroll-y style="height: 100%;width: 100%;" refresher-enabled
+            :refresher-triggered="swList.refreshing" refresher-background="#fafafa" enable-back-to-top
+            :refresher-threshold="65" :lower-threshold="120" @scrolltolower="loadMore"
+            @refresherrestore="refresherrestore" @refresherrefresh="onRefresh">
+            <!-- 通过插槽传值 当前激活的 tab -->
+            <slot name="tab" :tab="tabs[tabIndex]"></slot>
+            <view v-for="(item, itemIndex) in swList.data" :key="`swiper-item-${itemIndex}`">
+              <!-- 通过插槽传值 -->
+              <slot name="item" :item="item"></slot>
+            </view>
+            <view class="wsf-loading-more" v-if="swList.isLoading || !swList.hasMore">
+              <text class="wsf-loadmore-line" v-if="!swList.hasMore"></text>
+              <text class="wsf-loading-more-text">{{ swList.loadingText }}</text>
+            </view>
+          </scroll-view>
+        </swiper-item>
+      </swiper>
+    </view>
+  </view>
 </template>
 
 <script>
@@ -45,7 +40,7 @@ export default {
         // 顶部v-tabs 数据
         tabs: {
             type: Array,
-            default() {
+            default () {
                 return []
             }
         },
@@ -57,7 +52,7 @@ export default {
         // 加载当前激活tab 的数据
         list: {
             type: Array,
-            default() {
+            default () {
                 return []
             }
         },
@@ -76,13 +71,15 @@ export default {
         return {
             tabIndex: 0, // 初始激活的 tab index
             topTabs: ['默认'],
-            swiperData: []
+            swiperData: [],
+            debounceTime: null, // 防抖计时器
+            debounceOldArgs: [] // 防抖老参数
         }
     },
     created() {
         this.initTabs()
         this.initSwiper()
-        this.getList()
+        this.getList(false, true)
     },
     methods: {
         // 初始化 顶部 tabs 显示的标题数据
@@ -151,7 +148,7 @@ export default {
             // 防止 无新数据渲染 手动关闭状态
             setTimeout(() => {
                 activeTab.refreshing = false
-            }, 300)
+            }, 20)
         },
         // v-tabs 变化时候
         tabChange(index) {
@@ -164,14 +161,87 @@ export default {
                 this.switchTab(index)
             }
         },
+        /*
+       * 防抖 函数
+       * 
+       * fn: 回调函数
+       * delay：延迟执行时间
+       * resOrArgsCallback：回调函数，
+       *     会传递三个返回参数(isClear,resFnOrNewArgs,oldArgsOrNull)
+       *         isClear:(bool类型，true:有未执行的fn被清除 false:fn已被执行
+       *         resFnOrNewArgs: isClear为「true」时表示 最后一次fn的传递参数,isClear为「false」时表示 最后一次fn的执行结果
+       *         oldArgsOrNull: isClear为「true」时表示未被执行的fn的传递参数,,isClear为「false」时返回 null
+       * immdiate：是否无须等待，立即执行,默认为false
+       * 
+       * 使用：
+       *    立即执行：this.debounce(fn, 400,(isClear,resFnOrNewArgs,oldArgsOrNull) => { ... },true)(params)
+       *    正常调用：this.debounce(fn, 400,(isClear,resFnOrNewArgs,oldArgsOrNull) => { ... })(params)
+       *    取消执行 ：let debounceChange = this.debounce(...)(params); debounceChange.cancel()
+       */
+        debounce(fn, delay, resOrArgsCallback, immdiate = false) {
+            var _this = this
+            let isInvoke = false
+
+            function _debounce(...arg) {
+                if (_this.debounceTime) {
+                    clearTimeout(_this.debounceTime)
+                    if (resOrArgsCallback && typeof resOrArgsCallback === 'function') resOrArgsCallback(true, arg, _this
+                        .debounceOldArgs)
+                }
+                setTimeout(() => {
+                    _this.debounceOldArgs = arg
+                }, 80)
+                if (immdiate && !isInvoke) {
+                    const result = fn.apply(this, arg)
+                    if (resOrArgsCallback && typeof resOrArgsCallback === 'function') resOrArgsCallback(false, result, null)
+                    isInvoke = true
+                } else {
+                    _this.debounceTime = setTimeout(() => {
+                        const result = fn.apply(this, arg)
+                        if (resOrArgsCallback && typeof resOrArgsCallback === 'function') resOrArgsCallback(false, result,
+                            null)
+                        isInvoke = false
+                        _this.debounceTime = null
+                    }, delay)
+                }
+            }
+            _debounce.cancel = function() {
+                if (_this.debounceTime) clearTimeout(_this.debounceTime)
+                _this.debounceTime = null
+                isInvoke = false
+            }
+
+            return _debounce
+        },
         switchTab(index) {
             this.tabIndex = index
             let activeTab = this.swiperData[index]
+            // 关闭之前的加载/刷新状态
+            activeTab.isLoading = false
+            activeTab.refreshing = false
             if (activeTab.hasMore && activeTab.data.length < 1 && !activeTab.isLoading && !activeTab.refreshing) {
                 this.getList()
             }
         },
-        getList(refresh = false) {
+        getList(refresh = false, immdiate = false) {
+            var _this = this
+            // 防抖操作
+            this.debounce(this.reqData, 400, (isClear, resFnOrNewArgs, oldArgsOrNull) => {
+                if (isClear) {
+                    // 只关心 处理恢复请清除的swiper 下拉刷新状态
+                    let oldTabIndex = oldArgsOrNull[1]
+                    let oldTab = _this.swiperData[oldTabIndex]
+                    oldTab.refreshing = true
+                    setTimeout(() => {
+                        // 让被切换走的 swiper 刷新状态复位
+                        oldTab.refreshing = false
+                    }, 100)
+
+                }
+            }, immdiate)(refresh, this.tabIndex)
+        },
+        // 真正去通知父组件加载数据，「禁止」直接调用本方法，需要加载数据请调用 getList 方法，由getList 方法来调用
+        reqData(refresh) {
             let index = this.tabIndex
             let activeTab = this.swiperData[index]
             if (!activeTab.hasMore) {
@@ -201,20 +271,20 @@ export default {
             })
         },
         transition(e) {
-            // console.log('transition swiper-item 的位置发生改变时会触发 transition 事件，event.detail = {dx: dx, dy: dy}，支付宝小程序暂不支持dx, dy', e)
+        // console.log('transition swiper-item 的位置发生改变时会触发 transition 事件，event.detail = {dx: dx, dy: dy}，支付宝小程序暂不支持dx, dy', e)
         },
         animationfinish(e) {
-            // console.log('动画结束', e.detail.current)
+        // console.log('动画结束', e.detail.current)
         },
         onRefresh(e) {
-            // console.log('顶部刷新', e)
+        // console.log('顶部刷新', e, this.tabIndex)
             this.getList(true)
         },
         refresherrestore(e) {
-            console.log('下拉被复位', e, this.tabIndex)
+        // console.log('下拉被复位', e, this.tabIndex)
         },
         loadMore(e) {
-            // console.log('底部加载', e)
+        // console.log('底部加载', e)
             this.getList(false)
         }
     }
@@ -222,59 +292,59 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.wsf-loading-icon {
-	width: 20px;
-	height: 20px;
-	margin-right: 5px;
-	color: #999999;
-}
+  .wsf-loading-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    color: #999999;
+  }
 
-.wsf-loading-text {
-	margin-left: 2px;
-	font-size: 14px;
-	color: #999999;
-}
+  .wsf-loading-text {
+    margin-left: 2px;
+    font-size: 14px;
+    color: #999999;
+  }
 
-.wsf-loading-more {
-	align-items: center;
-	justify-content: center;
-	padding-top: 15px;
-	padding-bottom: 15px;
-	text-align: center;
-	position: relative;
-}
+  .wsf-loading-more {
+    align-items: center;
+    justify-content: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    text-align: center;
+    position: relative;
+  }
 
-.wsf-loadmore-line {
-	border-bottom-width: 1rpx;
-	border-bottom-style: solid;
-	border-bottom-color: #e5e5e5;
-	width: 320rpx;
-	position: absolute;
-	z-index: -1;
-}
+  .wsf-loadmore-line {
+    border-bottom-width: 1rpx;
+    border-bottom-style: solid;
+    border-bottom-color: #e5e5e5;
+    width: 320rpx;
+    position: absolute;
+    z-index: -1;
+  }
 
-.wsf-loading-more-text {
-	padding-left: 8rpx;
-	padding-right: 8rpx;
-	font-size: 28rpx;
-	line-height: 28rpx;
-	background-color: #fafafa;
-	text-align: center;
-	color: #999;
-}
+  .wsf-loading-more-text {
+    padding-left: 8rpx;
+    padding-right: 8rpx;
+    font-size: 28rpx;
+    line-height: 28rpx;
+    background-color: #fafafa;
+    text-align: center;
+    color: #999;
+  }
 
-.wrap {
-	display: flex;
-	flex-direction: column;
-	height: calc(100vh - var(--window-top));
-	width: 100%;
-}
+  .wrap {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--window-top));
+    width: 100%;
+  }
 
-.swiper-box {
-	flex: 1;
-}
+  .swiper-box {
+    flex: 1;
+  }
 
-.swiper-item {
-	height: 100%;
-}
+  .swiper-item {
+    height: 100%;
+  }
 </style>
