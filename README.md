@@ -2,6 +2,10 @@
 
 # App 学习
 
+## 权限说明
+
+[](https://blog.csdn.net/qq_45499633/article/details/124227154)
+[](https://blog.csdn.net/t252536tty/article/details/51250162)
 
 ## fontIcon 图标颜色统一规范
 tabbar : 
