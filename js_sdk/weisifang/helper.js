@@ -9,9 +9,8 @@ const helper = {
     checkAppUpgrade: (type = 0) => {
     // #ifdef APP-PLUS
         const system_info = uni.getSystemInfoSync()
-        let params = { os: system_info.platform //本机设备操作系统  （android || ios） 
-        }
-        if (params.os != 'ios' && params.os != 'android') false //如果不是安卓或ios 返回false
+        let params = { os: system_info.platform } //本机设备操作系统  （android || ios） 
+        if (params.os !== 'ios' && params.os !== 'android') false //如果不是安卓或ios 返回false
 
         //这里自行请求API获取版本信息 建议传入操作系统标识，返回本机对应的操作系统最新版本信息，也就是安卓的返回就是安卓的版本信息  ios返回就是ios的版本信息
 
