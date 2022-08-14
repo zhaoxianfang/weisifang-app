@@ -14,7 +14,7 @@
 				</view>
 				<view class="tui-line-cell tui-top28">
 					<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="smsCode" placeholder="请输入验证码"
+					<input placeholder-class="tui-phcolor" class="tui-input" name="password" placeholder="请输入验证码"
 						maxlength="6" />
 					<tui-button width="182rpx" height="56rpx" :size="24" :type="type" shape="circle" :plain="true"
 						:disabled="disabled" @click="btnSend">{{ btnText }}</tui-button>
@@ -47,7 +47,7 @@
 			};
 		},
 		methods: {
-			...mapMutations(['login']),
+			// ...mapMutations(['login']),
 			getRandom: function(u) {
 				let rnd = '';
 				u = u || 6;
@@ -98,42 +98,57 @@
 				}
 			},
 			formLogin: function(e) {
-				let loginCode = e.detail.value.smsCode;
+				let password = e.detail.value.password;
 				let mobile = e.detail.value.mobile;
 				let rules = [{
 						name: 'mobile',
 						rule: ['required', 'isMobile'],
 						msg: ['请输入手机号码', '请输入正确的手机号码']
-					},
-					{
-						name: 'loginCode',
-						rule: ['required', 'isSame:code'],
-						msg: ['请输入验证码', '验证码不正确']
+					},{
+						name: 'password',
+						rule: ['required'],
+						msg: ['请输入密码']
 					}
+					// {
+					// 	name: 'loginCode',
+					// 	rule: ['required', 'isSame:code'],
+					// 	msg: ['请输入验证码', '验证码不正确']
+					// }
 				];
 				//进行表单检查
 				let formData = {
 					mobile: mobile,
-					loginCode: loginCode,
-					code: this.code
+					password:password
+					// loginCode: loginCode,
+					// code: this.code
 				};
+				console.log('登录--',mobile,password)
 				let checkRes = form.validation(formData, rules);
 				if (checkRes) {
 					this.tui.toast(checkRes);
 					return;
 				}
 				let format = util.formatNumber(mobile);
-				uni.setStorageSync('thorui_mobile', format);
+				// uni.setStorageSync('thorui_mobile', format);
 				let state = {
-					mobile: format
+					mobile: format,
+					password:password
 				};
-				this.login(state);
-				this.tui.toast('登录成功', 2000, true);
-				setTimeout(() => {
-					uni.reLaunch({
-						url: '/pages/tabbar/my/my'
-					});
-				}, 200);
+				this.$store.dispatch('login',state).then(() => {
+            // this.$router.push({ path: this.redirect || '/' })
+            // this.loading = false
+						this.tui.toast('登录成功', 2000, true);
+          }).catch((err) => {
+						this.tui.toast(err.message);
+            // this.loading = false
+          })
+				// this.login(state);
+				
+				// setTimeout(() => {
+				// 	uni.reLaunch({
+				// 		url: '/pages/tabbar/index/index'
+				// 	});
+				// }, 200);
 			},
 			protocol: function() {
 				uni.navigateTo({

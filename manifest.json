@@ -7,6 +7,10 @@
 	"transformPx": false,
 	/* 5+App特有相关 */
 	"app-plus": {
+		// 设置全屏
+		// "fullscreen" : true,
+		"screenOrientation": ["portrait-primary"], //竖屏
+
 		// 设置手机状态栏不被遮挡
 		"statusbar": {
 			"immersed": false
@@ -172,22 +176,7 @@
 			}
 		},
 		"nvueCompiler": "uni-app",
-		"nativePlugins": {
-			"Ys-UniNotification": {
-				"__plugin_info__": {
-					"name": "极速通知防杀死",
-					"description": "在本地发送通知，Notification，不依赖推送，支持自定义图标，提示音等格式，可根据需求修改插件，增加防杀死几率",
-					"platforms": "Android",
-					"url": "https://ext.dcloud.net.cn/plugin?id=5959",
-					"android_package_name": "uni.UNIF89051B",
-					"ios_bundle_id": "",
-					"isCloud": true,
-					"bought": 1,
-					"pid": "5959",
-					"parameters": {}
-				}
-			}
-		}
+		"nativePlugins": {}
 	},
 	/* 快应用特有相关 */
 	"quickapp": {},

@@ -10,79 +10,8 @@ export default {
 
 		// app 辅助功能初始化
 		helper.init();
-
-		/* 5+环境升级提示 */
-		//app检测更新
-		let platform = plus.os.name.toLocaleLowerCase();
-		plus.runtime.getProperty(plus.runtime.appid, widgetInfo => {
-			that.tui
-				.request(
-					'/test/app/live',
-					'POST',
-					{
-						title: 'app onLaunch 保活测试',
-						platform: platform,
-						version: widgetInfo.version //资源版本号
-					},
-					false,
-					false,
-					true
-				)
-				.then(res => {
-					// console.log('返回', res)
-				})
-				.catch(e => {});
-
-			setInterval(() => {
-				that.tui
-					.request(
-						'/test/app/live',
-						'POST',
-						{
-							title: 'app onLaunch 保活测试 定时每半小时发送',
-							platform: platform,
-							version: widgetInfo.version //资源版本号
-						},
-						false,
-						false,
-						true
-					)
-					.then(res => {
-						console.log('返回', res);
-					})
-					.catch(e => {});
-			}, 1800000);
-
-			return false;
-			that.tui
-				.request(
-					'/config/getNewestVersion',
-					'POST',
-					{
-						platform: platform,
-						version: widgetInfo.version //资源版本号
-					},
-					false,
-					false,
-					true
-				)
-				.then(res => {
-					if (res.code === 200 && res.data && (res.data.updateUrl || res.data.partUpdateUrl)) {
-						let data = res.data;
-						that.tui.modal('检测到新版本', data.updateLog ? data.updateLog : '请您先更新再进行操作，若不及时更新可能导致部分功能无法正常使用。', false, res => {
-							if (data.hasPartUpdate === 0) {
-								//应用市场更新
-								plus.runtime.openURL(data.updateUrl);
-								plus.runtime.restart();
-							} else if (data.hasPartUpdate === 1) {
-								//资源更新（服务器端更新）
-								that.tui.href(`/pages/common/update/update?url=${data.partUpdateUrl}`);
-							}
-						});
-					}
-				})
-				.catch(e => {});
-		});
+		// 检测app 最新版本
+		helper.checkAppUpgrade(0);
 
 		// #endif
 
@@ -118,6 +47,13 @@ export default {
 				this.tui.modal('urlscheme', urlschemeContent, false, res => {});
 				plus.runtime.arguments = '';
 			}
+		}
+		if(!this.$store.state.user.isLogin){
+			// 未登录
+			console.log('请登录')
+			uni.navigateTo({
+				url: '/pages/common/login/login'
+			});
 		}
 		// #endif
 	},

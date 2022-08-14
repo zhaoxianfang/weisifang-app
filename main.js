@@ -1,19 +1,14 @@
 import App from './App'
+
+//数据管理中心
 import store from './store'
 import tui from './common/httpRequest'
 import helper from './js_sdk/weisifang/helper'
+// API 封装
+import api from './api'
 
 // #ifdef H5
 window.QQmap = null
-// #endif
-// #ifndef MP-TOUTIAO
-//网络监听
-setTimeout(() => {
-    uni.onNetworkStatusChange(function(res) {
-    //console.log(res.networkType);
-        store.commit('networkChange', { isConnected: res.isConnected })
-    })
-}, 100)
 // #endif
 
 // #ifndef VUE3
@@ -23,11 +18,12 @@ Vue.config.productionTip = false
 Vue.prototype.tui = tui
 Vue.prototype.helper = helper
 Vue.prototype.$store = store
+Vue.prototype.$api = api
 App.mpType = 'app'
 
 const app = new Vue({
-    store,
-    ...App
+	store,
+	...App
 })
 app.$mount()
 // #endif
@@ -35,9 +31,9 @@ app.$mount()
 // #ifdef VUE3
 import { createSSRApp } from 'vue'
 export function createApp() {
-    const app = createSSRApp(App)
-    app.use(store)
-    app.config.globalProperties.tui = tui
-    return { app }
+	const app = createSSRApp(App)
+	app.use(store)
+	app.config.globalProperties.tui = tui
+	return { app }
 }
 // #endif

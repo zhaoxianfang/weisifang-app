@@ -58,20 +58,6 @@
 			}
 		},
 		{
-			"path": "pages/common/album/album",
-			"style": {
-				// #ifdef APP-PLUS
-				"navigationStyle": "custom",
-				// #endif
-				"navigationBarTitleText": "我的相册",
-				"enablePullDownRefresh": false,
-				"app-plus": {
-					"popGesture": "none", // 禁用侧滑
-					"bounce": "none" // 禁用上下拖动页面
-				}
-			}
-		},
-		{
 			"path": "components/app-upgrade/views/app-upgrade",
 			"style": {
 				// #ifdef APP-PLUS
@@ -83,6 +69,12 @@
 					"webviewBGTransparent": true, //webview的背景是否透明//配合background属性防止跳转闪白
 					"popGesture": "none" //禁止侧滑关闭（ios）
 				}
+			}
+		},{
+			"path": "pages/common/login/login",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"enablePullDownRefresh": false
 			}
 		}
 	],

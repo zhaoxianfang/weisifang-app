@@ -64,7 +64,8 @@ export default {
 		};
 	},
 
-	onLoad() {},
+	onLoad() {
+	},
 	methods: {
 		loadList(obj) {
 			// console.log('需要加载数据：', obj)
