@@ -1,26 +1,35 @@
 <template>
 	<view class="container">
 		<view class="tui-box-upload">
-			<tui-upload :value="value" :limit="99" :size="8" :serverUrl="serverUrl" @complete="result" @remove="remove"></tui-upload>
+			<tui-upload :value="value" :header="header" fileKeyName='photo' :formData="formData" :limit="99" :size="8" :serverUrl="serverUrl" @complete="result" @remove="remove"></tui-upload>
 		</view>
 	</view>
 </template>
 
 <script>
+	import config from '@/common/config.js' // 倒入默认配置
 	export default {
 		data() {
 			return {
 				// 上传文件
 				imageData: [],
 				//上传接口地址
-				serverUrl: "https://api.thorui.cn/",
+				serverUrl: "",
 				 //初始化图片
 				value:[],
+				header:{
+					'Authorization': this.tui.getToken()
+				},
+				formData:{
+					id:null
+				}
 			}
 		},
 		onLoad(option) {
+			this.serverUrl = config.baseURL+'photo/items/upload'
 		  if (option) {
-			console.log(option)
+				console.log(option)
+				this.formData.id = option.id
 			// 设置标题
 			// uni.setNavigationBarTitle({
 			// 	title: '相册详情'
@@ -35,8 +44,9 @@
 			},
 			remove: function(e) {
 				//移除图片
-				console.log(e)
+				console.log('移除图片',e,e.file.id)
 				let index = e.index
+				this.$api.photo.del_photo_item(e.file.id)
 			}
 		}
 	}

@@ -121,71 +121,19 @@
 		},
 		data() {
 			return {
-				useZhimiAlbum:false, // 是否启用 智密相册 读取相册文件，如果启用，需要到 mainfest.json ->app原生插件 配置中查看是否 启用了 智密相册
 				//图片地址
 				imageList: [],
 				//上传状态：1-上传成功 2-上传中 3-上传失败
 				statusArr: [],
-				// album 选择相册的 组件地址，该地址需要在 pages.json 中注册
-				albumPageAddress:'pages/common/album/album'
+				sussFils:[] // 上传成功的图片信息
 			}
 		},
 		created() {
 			this.initImages()
-			if(this.useZhimiAlbum){
-				// #ifdef APP-PLUS
-				let that = this
-				// 监听文件选择 或照相机
-				uni.$on('albumCheckedImages',function(data){
-					// 逐个验证文件
-					let checkFiles = [];
-					for (let file of data) {
-						checkFiles.push( that.getFileInfo(file) );
-					}
-					let p = Promise.all(checkFiles).then(result => {
-						// 都成功
-						// plus.nativeUI.toast("都成功");
-						console.log('都成功');
-						
-						that.customCheckFiles(result)
-						const pages = getCurrentPages();
-						// 其实是 处理 chooseImage 时候 跳转 到 ... album/album 操作后 返回页面
-						if(pages[pages.length - 1]['route'] === that.albumPageAddress){
-							uni.navigateBack({
-								delta: 1
-							})
-						}
-					})
-					.catch(e => {
-						// 只要有一个异常
-						console.log('有异常',e);
-						plus.nativeUI.toast("选择文件时出错啦！");
-					});
-				})
-				uni.$on('albumLoadFail',function(isFail){
-					if(isFail){
-						uni.chooseImage({
-							count: that.limit - that.imageList.length,
-							sizeType: that.sizeType,
-							sourceType: that.sourceType,
-							success: function(e) {
-								that.customCheckFiles(e.tempFiles);
-							}
-						})
-					}
-				})
-				
-				// #endif
-			}
-		},
-		beforeUpdate(){
-			// console.log('数据发生变化');
-		},
-		updated(e){
-			// console.log('数据渲染完成',this.albumCheckedImages,e);
 		},
 		watch: {
 			value(val) {
+				console.log('监听到数据变化',val)
 				if (val) {
 					this.initImages()
 				}
@@ -200,7 +148,6 @@
 				return isShow
 			}
 		},
-		
 		methods: {
 			initImages() {
 				this.statusArr = [];
@@ -231,6 +178,7 @@
 				this.$emit('complete', {
 					status: status,
 					imgArr: this.imageList,
+					sussFils: this.sussFils,
 					params: this.params,
 					manual: manual
 				})
@@ -242,121 +190,72 @@
 				});
 			},
 			chooseImage: function() {
-				let loadZhimiAlbum = false;
-				if(this.useZhimiAlbum){
-					// #ifdef APP-PLUS
-					loadZhimiAlbum = true;
-					// 需要在 pages.json 中定义 智密组件 nvue 地址
-					uni.navigateTo({
-						url: '/'+this.albumPageAddress
-					})
-					// #endif
-					
-					// #ifndef APP-PLUS
-					loadZhimiAlbum = false
-					// #endif
-				}
-				
-				if(!loadZhimiAlbum){
-					let _this = this;
-					uni.chooseImage({
-						count: _this.limit - _this.imageList.length,
-						sizeType: _this.sizeType,
-						sourceType: _this.sourceType,
-						success: function(e) {
-							_this.customCheckFiles(e.tempFiles);
-						}
-					})
-				}
-			},
-			// zxf 获取文件大小和类型等
-			async getFileInfo(path){
-				var _this = this;
-				const fileType = path.substring(path.lastIndexOf('.') + 1)
-				
-				return new Promise(function(resolve, reject) {
-				    //异步操作
-					var _this = this;
-					const fileType = path.substring(path.lastIndexOf('.') + 1)
-					uni.getFileInfo({
-						filePath:path,
-						success:res=>{
-							res.path = path;
-							res.type = fileType;
-							resolve(res);
-						},
-						fail: (err) => {
-							console.log('文件读取失败',err)
-							reject('文件读取失败')
-						}
-					})
-				});
-			},
-			// zxf 自定义验证文件
-			customCheckFiles(flleList){
 				let _this = this;
-				let imageArr = [];
-				for (let i = 0; i < flleList.length; i++) {
-					let len = _this.imageList.length;
-					if (len >= _this.limit) {
-						_this.toast(`最多可上传${_this.limit}张图片`);
-						plus.nativeUI.toast(`最多可上传${_this.limit}张图片`);
-						break;
-					}
-					
-					//过滤图片类型
-					let path = flleList[i].path;
-				
-					if (_this.imageFormat.length > 0) {
-						let format = ""
-						// #ifdef H5
-						let type = flleList[i].type;
-						format = type.split('/')[1]
-						// #endif
-				
-						// #ifndef H5
-						format = path.split(".")[(path.split(".")).length - 1];
-						// #endif
-				
-						if (_this.imageFormat.indexOf(format) == -1) {
-							let text = `只能上传 ${_this.imageFormat.join(',')} 格式图片！`
-							_this.toast(text);
-							plus.nativeUI.toast(text);
-							continue;
+				uni.chooseImage({
+					count: _this.limit - _this.imageList.length,
+					sizeType: _this.sizeType,
+					sourceType: _this.sourceType,
+					success: function(e) {
+						let imageArr = [];
+						for (let i = 0; i < e.tempFiles.length; i++) {
+							let len = _this.imageList.length;
+							if (len >= _this.limit) {
+								_this.toast(`最多可上传${_this.limit}张图片`);
+								break;
+							}
+							//过滤图片类型
+							let path = e.tempFiles[i].path;
+
+							if (_this.imageFormat.length > 0) {
+								let format = ""
+								// #ifdef H5
+								let type = e.tempFiles[i].type;
+								format = type.split('/')[1]
+								// #endif
+
+								// #ifndef H5
+								format = path.split(".")[(path.split(".")).length - 1];
+								// #endif
+
+								if (_this.imageFormat.indexOf(format) == -1) {
+									let text = `只能上传 ${_this.imageFormat.join(',')} 格式图片！`
+									_this.toast(text);
+									continue;
+								}
+							}
+
+							//过滤超出大小限制图片
+							let size = e.tempFiles[i].size;
+
+							if (_this.size * 1024 * 1024 < size) {
+								let err = `单张图片大小不能超过：${_this.size}MB`
+								_this.toast(err);
+								continue;
+							}
+							imageArr.push(path)
+							_this.imageList.push(path)
+							_this.statusArr.push("2")
+						}
+						_this.change()
+
+						let start = _this.imageList.length - imageArr.length
+						for (let j = 0; j < imageArr.length; j++) {
+							let index = start + j
+							//服务器地址
+							if (_this.serverUrl) {
+								_this.uploadImage(index, imageArr[j]).then(() => {
+									_this.change()
+								}).catch(() => {
+									_this.change()
+								})
+							} else {
+								//无服务器地址则直接返回成功
+								_this.$set(_this.statusArr, index, "1")
+								_this.change()
+							}
 						}
 					}
-				
-					//过滤超出大小限制图片
-					let size = flleList[i].size;
-				
-					if (_this.size * 1024 * 1024 < size) {
-						let err = `单张图片大小不能超过：${_this.size}MB`
-						_this.toast(err);
-						plus.nativeUI.toast(err);
-						continue;
-					}
-					imageArr.push(path)
-					_this.imageList.push(path)
-					_this.statusArr.push("2")
-				}
-				_this.change()
-				
-				let start = _this.imageList.length - imageArr.length
-				for (let j = 0; j < imageArr.length; j++) {
-					let index = start + j
-					//服务器地址
-					if (_this.serverUrl) {
-						_this.uploadImage(index, imageArr[j]).then(() => {
-							_this.change()
-						}).catch(() => {
-							_this.change()
-						})
-					} else {
-						//无服务器地址则直接返回成功
-						_this.$set(_this.statusArr, index, "1")
-						_this.change()
-					}
-				}
+				})
 			},
 			uploadImage: function(index, url, serverUrl) {
 				let _this = this;
@@ -371,11 +270,13 @@
 							if (res.statusCode == 200) {
 								//返回结果 此处需要按接口实际返回进行修改
 								let d = JSON.parse(res.data.replace(/\ufeff/g, "") || "{}")
+								console.log('上传成功',d,res)
 								//判断code，以实际接口规范判断
-								if (d.code % 100 === 0) {
+								if (d.code === 200) {
 									// 上传成功 d.url 为上传后图片地址，以实际接口返回为准
 									d.url && (_this.imageList[index] = d.url)
 									_this.$set(_this.statusArr, index, d.url ? "1" : "3")
+									_this.$set(_this.sussFils, index, d)
 								} else {
 									// 上传失败
 									_this.$set(_this.statusArr, index, "3")
@@ -406,22 +307,28 @@
 						confirmText: "确定",
 						success(res) {
 							if (res.confirm) {
+								let fileItem = this.sussFils[index]
 								that.imageList.splice(index, 1)
 								that.statusArr.splice(index, 1)
+								that.sussFils.splice(index, 1)
 								that.$emit("remove", {
 									index: index,
-									params: that.params
+									params: that.params,
+									file:fileItem
 								})
 								that.change()
 							}
 						}
 					})
 				} else {
+					let fileItem = this.sussFils[index]
 					that.imageList.splice(index, 1)
 					that.statusArr.splice(index, 1)
+					that.sussFils.splice(index, 1)
 					that.$emit("remove", {
 						index: index,
-						params: that.params
+						params: that.params,
+						file:fileItem
 					})
 					that.change()
 				}

@@ -1,10 +1,19 @@
 <template>
 	<view class="container">
-		<view class="no-data">
+		<view class="no-data" v-if="imgList.length < 1">
 			<tui-no-data :fixed="false" imgUrl="/static/images/tabbar/null.png" btnText="添加照片" @click="addImages">
 				<text class="tui-color__black">该相册还没有添加任何照片~</text>
 			</tui-no-data>
 		</view>
+		
+		<block>
+			<view class="tui-ranking__list tui-justify__start" >
+				<view class="tui-ranking__item tui-item-mr__16" v-for="(item, key) in imgList" :key="key">
+					<image :src="item.url || '/static/images/photo/default.png'"></image>
+					<!-- <view class="tui-ranking__gtitle">{{ item.size }}</view> -->
+				</view>
+			</view>
+		</block>
 		
 		<tui-fab :left="0" :right="80" :bottom="80" :width="100" :height="100" bgColor="#5677fc" :btnList="btnList" @click="onClick" custom maskClosable><tui-icon name="setup" color="#fff"></tui-icon></tui-fab>
 	</view>
@@ -14,6 +23,8 @@
 	export default {
 		data() {
 			return {
+				photo_id:'',
+				imgList:[], // 照片列表
 				btnList: [{
 					bgColor: "#1589FF",
 					//图标/图片地址
@@ -61,27 +72,35 @@
 		},
 		onLoad(option) {
 		  if (option) {
-			console.log(option)
-			// 设置标题
-			uni.setNavigationBarTitle({
-				title: '相册详情'
-			});
-
-		    // this.name = option.name
-		    // this.uid = option.uid
-		    // if (option.list) {
-		    //   this.list = JSON.parse(decodeURIComponent(option.list));
-		    // }
+				this.photo_id = option.id
+				console.log(option)
+				// 设置标题
+				uni.setNavigationBarTitle({
+					title: option.name || '相册详情'
+				});
+				this.getList()
 		  }
 		},
 		onShow() {
-			
+			console.log(this.photo_id )
 		},
 		methods: {
+			getList(){
+				this.$api.photo.get_photo_item_list(this.photo_id).then(res => {
+					 console.log('照片列表',res);
+						if(res.data && res.data.length > 0){
+							this.imgList = res.data
+						}
+					})
+					.catch(e => {
+						console.log('出错啦', e);
+						this.tui.toast('出错啦')
+					});
+			},
 			addImages(){
 				this.tui.toast("添加照片")
 				uni.navigateTo({
-				    url: 'upload?id=99'
+				    url: 'upload?id='+this.photo_id
 				});
 			},
 			onClick(e) {
@@ -127,4 +146,50 @@
 	.no-data{
 		margin-top: 30%;
 	}
+	
+	/* 相册列表 */
+	.tui-ranking__list {
+		padding-left: 16px;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap; // flex 自动换行
+	}
+	
+	.tui-justify__start {
+		justify-content: flex-start !important;
+	}
+	
+	.tui-item-mr__16 {
+		margin-right: 16rpx;
+	}
+	
+	.tui-ranking__item {
+		width: 224rpx;
+		border-radius: 12rpx;
+		overflow: hidden;
+		background-color: #fff;
+		padding-bottom: 20rpx;
+		margin-bottom: 20rpx;
+		box-shadow: 0 3rpx 20rpx rgba(183, 183, 183, 0.1);
+	}
+	
+	.tui-ranking__item image {
+		width: 204rpx;
+		height: 224rpx;
+		padding: 10rpx;
+		display: block;
+	}
+	.tui-ranking__gtitle {
+		font-size: 24rpx;
+		line-height: 24rpx;
+		padding: 24rpx 12rpx 8rpx;
+		box-sizing: border-box;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	
+
 </style>

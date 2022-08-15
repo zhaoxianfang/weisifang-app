@@ -9,7 +9,8 @@ const user = {
     //是否登录 项目中改为真实登录信息判断，如token
     isLogin: uni.getStorageSync("api_token") ? true : false,
     //登录用户名
-    name: "请登录",
+    nickname: "请登录",
+		userinfo:{},
     //app版本
     version: "1.0.0"
   },
@@ -17,7 +18,19 @@ const user = {
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token
+			state.isLogin = true
 			uni.setStorageSync("api_token",token)
+    },
+		SET_USERINFO: (state, userinfo) => {
+      state.userinfo = userinfo
+      state.mobile = userinfo.mobile
+    },
+		LOGOUT: (state, info) => {
+			state.token = ''
+			state.nickname = '请登录'
+			state.isLogin = false
+      state.userinfo = {}
+			uni.removeStorageSync("api_token")
     },
   },
 
@@ -26,12 +39,16 @@ const user = {
 			console.log('登录--',userInfo)
       const { mobile, password } = userInfo
       return new Promise((resolve, reject) => {
-        api.login({ mobile: mobile.trim(), password: password }).then(response => {
+        api.user.login({ mobile: mobile.trim(), password: password }).then(response => {
 					console.log('登录返回',response)
 					tui.toast(response.message)
 					if(response.code !== 200){
 						reject(response)
 					}else{
+						let data = response.data
+						// 登录成功了
+						commit('SET_TOKEN', data.access_token)
+						commit('SET_USERINFO', data.user)
 						resolve(response)
 					}
           // const { data } = response
@@ -46,35 +63,9 @@ const user = {
         })
       })
     },
-    // 获取用户信息
-    GetUserInfo ({ commit, state }) {
-      return new Promise((resolve, reject) => {
-        getUser().then(res => {
-          const data = res.data
-          // if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
-          //   // 调用生成路由表
-          //   // commit('GenerateRoleRoutes', data.roles).then(() => {
-          //   // })
-          // } else {
-          //   reject('getUser: 角色信息获取错误 !')
-          // }
-          // 获取其他信息
-          commit('SET_APP_ID', data.app_id)
-          commit('SET_ORG_ID', data.org_id)
-          commit('SET_AVATAR', data.avatar)
-          commit('SET_MOBILE', data.mobile)
-          commit('SET_NICKNAME', data.nickname)
-          commit('SET_USERNAME', data.username)
-          commit('SET_UID', data.uid)
-          commit('SET_EMAIL', data.email)
-          commit('SET_GENDER', data.gender)
-          commit('SET_UNREAD_MSG_TOTAL', data.unread_msg_total)
-
-          resolve(res)
-        }).catch(error => {
-          reject(error)
-        })
-      })
+    // 退出
+    logout ({ commit, state }) {
+      commit('LOGOUT', true)
     },
     /**
      * 获取用户权限

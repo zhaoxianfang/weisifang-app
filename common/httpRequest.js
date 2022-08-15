@@ -94,7 +94,7 @@ const tui = {
 				tui.showLoading()
 			}
 		}
-
+		console.log('接口请求信息',tui.interfaceUrl() + url,postData)
 		return new Promise((resolve, reject) => {
 			uni.request({
 				url: tui.interfaceUrl() + url,
@@ -134,7 +134,7 @@ const tui = {
 			const uploadTask = uni.uploadFile({
 				url: tui.interfaceUrl() + url,
 				filePath: src,
-				name: 'imageFile',
+				name: 'photo',
 				header: { 'Authorization': tui.getToken() },
 				formData: {
 					// sizeArrayText:""
@@ -170,15 +170,15 @@ const tui = {
 	//设置用户信息
 	setUserInfo: function(mobile, token) {
 		//uni.setStorageSync("thorui_token", token)
-		uni.setStorageSync('thorui_mobile', mobile)
+		// uni.setStorageSync('thorui_mobile', mobile)
 	},
 	//获取token
 	getToken() {
-		return uni.getStorageSync('thorui_token')
+		return 'Bearer ' + uni.getStorageSync('api_token')
 	},
 	//判断是否登录
 	isLogin: function() {
-		return uni.getStorageSync('thorui_mobile') ? true : false
+		return uni.getStorageSync('api_token') ? true : false
 	},
 	//跳转页面，校验登录状态
 	href(url, isVerify) {

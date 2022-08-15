@@ -1,20 +1,23 @@
-import fetch from '../common/httpRequest'
+import fetch from '@/common/httpRequest'
+
+
+import app from './modules/app'
+import user from './modules/user'
+import photo from './modules/photo'
 
 /* 将所有接口统一起来便于维护 */
 var apiList = {
+	// 通用post请求
 	post(url,data){
 		return fetch.request(url, "POST", data)
 	},
+	// 通用get请求
 	get(url){
 		return fetch.request(url, "GET", {})
 	},
-	// 获取app 最新版本
-	app_latest_version(data){
-		return fetch.request("app/version", "POST", data)
-	},
-	login(data){
-		return fetch.request('users/auth/login', "POST", data)
-	},
+	app,
+	user,
+	photo,
 }
 
 // 默认全部导入

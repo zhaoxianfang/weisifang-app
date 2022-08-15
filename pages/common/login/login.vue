@@ -14,10 +14,10 @@
 				</view>
 				<view class="tui-line-cell tui-top28">
 					<tui-icon name="pwd" :size="20" color="#6d7a87"></tui-icon>
-					<input placeholder-class="tui-phcolor" class="tui-input" name="password" placeholder="请输入验证码"
-						maxlength="6" />
-					<tui-button width="182rpx" height="56rpx" :size="24" :type="type" shape="circle" :plain="true"
-						:disabled="disabled" @click="btnSend">{{ btnText }}</tui-button>
+					<input placeholder-class="tui-phcolor" v-model="password" class="tui-input" name="password" placeholder="请输入密码"
+						maxlength="60" />
+					<!-- <tui-button width="182rpx" height="56rpx" :size="24" :type="type" shape="circle" :plain="true"
+						:disabled="disabled" @click="btnSend">{{ btnText }}</tui-button> -->
 				</view>
 				<button class="tui-button-primary tui-btn-submit" hover-class="tui-button-hover"
 					form-type="submit">登录</button>
@@ -41,7 +41,8 @@
 			return {
 				disabled: false,
 				btnText: '获取验证码',
-				mobile: '',
+				mobile: '18388050779',
+				password:"zhaoxf001.",
 				type: 'primary',
 				code: ''
 			};
@@ -128,16 +129,20 @@
 					this.tui.toast(checkRes);
 					return;
 				}
-				let format = util.formatNumber(mobile);
+				// let format = util.formatNumber(mobile);
 				// uni.setStorageSync('thorui_mobile', format);
 				let state = {
-					mobile: format,
+					mobile: mobile,
 					password:password
 				};
 				this.$store.dispatch('login',state).then(() => {
             // this.$router.push({ path: this.redirect || '/' })
             // this.loading = false
 						this.tui.toast('登录成功', 2000, true);
+						// 关闭所有页面，跳转到首页
+						uni.reLaunch({
+							url: '/pages/tabbar/index/index'
+						});
           }).catch((err) => {
 						this.tui.toast(err.message);
             // this.loading = false

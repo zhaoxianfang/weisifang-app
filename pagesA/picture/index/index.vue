@@ -9,13 +9,13 @@
 		
 		<block>
 			<view class="tui-ranking__list tui-justify__start" >
-				<view class="tui-ranking__item tui-item-mr__16" @tap="openFolder" v-for="(item, key) in folderList" :key="key">
-					<image :src="item.img"></image>
-					<view class="tui-ranking__gtitle">{{ item.title }}</view>
-					<view class="tui-ranking__sub" v-if="!isManage">包含999张照片</view>
+				<view class="tui-ranking__item tui-item-mr__16" @click="openFolder(item)" v-for="(item, key) in folderList" :key="key">
+					<image :src="item.img || '/static/images/photo/default.png'"></image>
+					<view class="tui-ranking__gtitle">{{ item.name }}</view>
+					<!-- <view class="tui-ranking__sub" v-if="!isManage">包含xxx张照片</view> -->
 					<view class="tui-flex-box" v-if="isManage">
-						<tui-button margin="0 10rpx 6rpx 0" type="danger" plain shape="rightAngle" width="100rpx" height="50rpx" :size="24" @click="deleteFolder(item)">删除</tui-button>
-						<tui-button margin="0 10rpx 6rpx 0" type="green" plain shape="rightAngle" width="100rpx" height="50rpx" :size="24" @click="renameFolder(item)">改名</tui-button>
+						<!-- <tui-button margin="0 10rpx 6rpx 0" type="danger" plain shape="rightAngle" width="100rpx" height="50rpx" :size="24" @click="deleteFolder(item)">删除</tui-button> -->
+						<tui-button margin="0 10rpx 6rpx 0" type="green" plain shape="rightAngle" width="200rpx" height="50rpx" :size="24" @click="renameFolder(item)">修改名称</tui-button>
 					</view>
 				</view>
 			</view>
@@ -72,43 +72,18 @@ export default {
 			folderModal:false,
 			
 			// 相册列表
-			folderList: [
-				{
-					img: '/static/images/tabbar/default_img.png',
-					title: '我的相册一',
-					sales: 100000
-				},
-				{
-					img: '/static/images/tabbar/default_img.png',
-					title: '我的相册二',
-					sales: 98000
-				},
-				{
-					img: '/static/images/tabbar/default_img.png',
-					title: '我的相册三',
-					sales: 90000
-				},
-				{
-					img: '/static/images/tabbar/default_img.png',
-					title: '我的相册一',
-					sales: 100000
-				},
-				{
-					img: '/static/images/tabbar/default_img.png',
-					title: '我的相册二',
-					sales: 98000
-				},
-				{
-					img: '/static/images/tabbar/default_img.png',
-					title: '我的相册三',
-					sales: 90000
-				}
-			],
+			folderList: [],
+			// 	{
+			// 		img: '/static/images/tabbar/default_img.png',
+			// 		title: '我的相册一',
+			// 		sales: 100000
+			// 	},
+			// ],
 			// 管理相册
 			isManage:false , // 是否启用管理相册按钮
 			// 点击右上角的管理提示
 			clickManageTips: [{
-				title: '点此可编辑',
+				title: '点此编辑',
 				icon: 'setup'
 			}],
 			showDelete:false , // 提示删除
@@ -119,11 +94,12 @@ export default {
 		if(e.name == 'manage_folders'){
 			// 管理 相册
 			this.isManage = !this.isManage;
-			this.$refs.rtBubble.toggle();
+			// this.$refs.rtBubble.toggle();
 		}
 	},
 	onShow() {
 		this.isManage = false
+		this.getList()
 	},
 	mounted() {
 		this.$refs.rtBubble.toggle();
@@ -139,6 +115,19 @@ export default {
 		// #endif
 	},
 	methods: {
+		// 获取我的相册列表
+		getList(){
+			this.$api.photo.get_photo_list().then(res => {
+				 console.log('我的相册列表',res);
+					if(res.code == 200){
+						this.folderList = res.data
+					}
+				})
+				.catch(e => {
+					console.log('出错啦', e);
+					this.tui.toast('出错啦')
+				});
+		},
 		tabbarSwitch(e) {
 			//获取登录状态，此处默认未登录
 			if (e.verify) {
@@ -155,16 +144,41 @@ export default {
 		},
 		handleCreateddFolder() {
 			if (this.folder_name) {
-				this.tui.toast('您想创建一个相册：' + this.folder_name);
+				// this.tui.toast('操作相册：' + this.folder_name);
+				if(this.currentFolder.id){
+					this.$api.photo.edit_photos(this.currentFolder.id,{name:this.folder_name}).then(res => {
+					 console.log('res',res);
+						if(res.code == 200){
+							this.getList()
+						}
+					})
+					.catch(e => {
+						console.log('出错啦', e);
+						this.tui.toast('出错啦')
+					});
+				}else{
+					this.$api.photo.create_photos({name:this.folder_name}).then(res => {
+					 console.log('res',res);
+						if(res.code == 200){
+							this.getList()
+						}
+					})
+					.catch(e => {
+						console.log('出错啦', e);
+						this.tui.toast('出错啦')
+					});
+				}
+				
 			}
+			
 			this.hideFolder();
 		},
 		
 		// 打开相册
-		openFolder() {
+		openFolder(info) {
 			console.log('openFolder')
 			uni.navigateTo({
-			    url: 'detail?id=99'
+			    url: 'detail?id='+info.id+"&name="+info.name
 			});
 		},
 		deleteFolder(info){
@@ -172,8 +186,9 @@ export default {
 			this.showDelete = true
 		},
 		renameFolder(info){
+			console.log('info',info)
 			this.currentFolder = info
-			this.folder_name=info.title;
+			this.folder_name=info.name;
 			this.folderModal = true
 		},
 		hideDelete() {

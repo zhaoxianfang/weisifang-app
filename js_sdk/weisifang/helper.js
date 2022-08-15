@@ -215,7 +215,7 @@ const helper = {
 		//app检测更新
 		let platform = plus.os.name.toLocaleLowerCase();
 		plus.runtime.getProperty(plus.runtime.appid, widgetInfo => {
-			api.app_latest_version({
+			api.app.app_latest_version({
 					platform: platform,
 					version: widgetInfo.version //资源版本号
 				})

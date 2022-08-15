@@ -48,14 +48,15 @@ export default {
 				plus.runtime.arguments = '';
 			}
 		}
+		// #endif
 		if(!this.$store.state.user.isLogin){
 			// 未登录
 			console.log('请登录')
-			uni.navigateTo({
+			// 关闭所有页面，跳转到登录页面。
+			uni.reLaunch({
 				url: '/pages/common/login/login'
 			});
 		}
-		// #endif
 	},
 	onHide: function() {
 		//console.log('App Hide')
