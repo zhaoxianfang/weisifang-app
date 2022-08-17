@@ -6,15 +6,10 @@
 			</tui-no-data>
 		</view>
 		
-		<block>
-			<view class="tui-ranking__list tui-justify__start" >
-				<view class="tui-ranking__item tui-item-mr__16" v-for="(item, key) in imgList" :key="key">
-					<image :src="item.url || '/static/images/photo/default.png'"></image>
-					<!-- <view class="tui-ranking__gtitle">{{ item.size }}</view> -->
-				</view>
-			</view>
-		</block>
-		
+    <block v-else>
+      <wsf-choose-img src="url" :manage="managePhoto" :list="imgList" @closeImage="closeImage" @setCover="setCover"></wsf-choose-img>
+    </block>
+    
 		<tui-fab :left="0" :right="80" :bottom="80" :width="100" :height="100" bgColor="#5677fc" :btnList="btnList" @click="onClick" custom maskClosable><tui-icon name="setup" color="#fff"></tui-icon></tui-fab>
 	</view>
 </template>
@@ -23,6 +18,7 @@
 	export default {
 		data() {
 			return {
+        managePhoto:false,
 				photo_id:'',
 				imgList:[], // 照片列表
 				btnList: [{
@@ -40,20 +36,6 @@
 					//字体颜色
 					color: "#fff"
 				}, {
-					bgColor: "#DC381F",
-					//图标/图片地址
-					imgUrl: "/static/images/tabbar/delete_big.png",
-					//图片高度 rpx
-					imgHeight: 45,
-					//图片宽度 rpx
-					imgWidth: 45,
-					//名称
-					text: "删除图片",
-					//字体大小
-					fontSize: 34,
-					//字体颜色
-					color: "#fff"
-				}, {
 					bgColor: "#FFA500",
 					//图标/图片地址
 					imgUrl: "/static/images/tabbar/image_big.png",
@@ -62,7 +44,7 @@
 					//图片宽度 rpx
 					imgWidth: 45,
 					//名称
-					text: "设置封面",
+					text: "管理图片",
 					//字体大小
 					fontSize: 34,
 					//字体颜色
@@ -97,6 +79,13 @@
 						this.tui.toast('出错啦')
 					});
 			},
+      // 删除图片
+      closeImage(e){
+        console.log('closeImage',e)
+      },
+      setCover(e){
+        console.log('setCover',e)
+      },
 			addImages(){
 				this.tui.toast("添加照片")
 				uni.navigateTo({
@@ -105,31 +94,13 @@
 			},
 			onClick(e) {
 				let index = e.index
-				this.tui.toast("您点击了悬浮按钮"+index)
 				switch (index) {
 					case 0:
 						this.addImages();
 						break;
-					// case 1:
-					// 	// #ifdef MP || H5
-					// 	this.clipboard("https://www.thorui.cn/")
-					// 	// #endif
-					// 	//#ifdef APP-PLUS
-					// 	plus.share.sendWithSystem({
-					// 		content: "ThorUI组件库",
-					// 		href: 'https://www.thorui.cn/'
-					// 	}, function() {
-					// 		console.log('分享成功');
-					// 	}, function(e) {
-					// 		console.log('分享失败：' + JSON.stringify(e));
-					// 	});
-					// 	//#endif
-					// 	break;
-					// case 2:
-					// 	uni.previewImage({
-					// 		urls: ["https://thorui.cn/img/reward.jpg"]
-					// 	})
-					// 	break;
+					case 1:
+						this.managePhoto = !this.managePhoto
+						break;
 					default:
 						break;
 				}
@@ -146,50 +117,5 @@
 	.no-data{
 		margin-top: 30%;
 	}
-	
-	/* 相册列表 */
-	.tui-ranking__list {
-		padding-left: 16px;
-		width: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		flex-wrap: wrap; // flex 自动换行
-	}
-	
-	.tui-justify__start {
-		justify-content: flex-start !important;
-	}
-	
-	.tui-item-mr__16 {
-		margin-right: 16rpx;
-	}
-	
-	.tui-ranking__item {
-		width: 224rpx;
-		border-radius: 12rpx;
-		overflow: hidden;
-		background-color: #fff;
-		padding-bottom: 20rpx;
-		margin-bottom: 20rpx;
-		box-shadow: 0 3rpx 20rpx rgba(183, 183, 183, 0.1);
-	}
-	
-	.tui-ranking__item image {
-		width: 204rpx;
-		height: 224rpx;
-		padding: 10rpx;
-		display: block;
-	}
-	.tui-ranking__gtitle {
-		font-size: 24rpx;
-		line-height: 24rpx;
-		padding: 24rpx 12rpx 8rpx;
-		box-sizing: border-box;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-	
 
 </style>

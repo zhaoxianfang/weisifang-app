@@ -107,17 +107,7 @@
 				"enablePullDownRefresh": false,
 				"app-plus": {
 					// #ifdef APP-PLUS
-					"titleNView": {
-						"padding-right": "12px",
-						"buttons": [{
-							"name": "manage_folders",
-							"color": "#ffffff",
-							"fontSize": "35rpx",
-							"float": "right",
-							"text": "管理",
-							"width": "45px"
-						}]
-					},
+					"titleNView": false,
 					// #endif
 					"bounce": "vertical"
 				}

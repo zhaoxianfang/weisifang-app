@@ -218,20 +218,6 @@
                     "parameters" : {}
                 }
             },
-            "Ba-Shortcut-Badge" : {
-                "__plugin_info__" : {
-                    "name" : "应用未读角标插件 Ba-Shortcut-Badge",
-                    "description" : "应用未读角标插件，支持自动叠加、手动设置、清空；支持市面上大部分机型",
-                    "platforms" : "Android",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=8850",
-                    "android_package_name" : "com.weisifang",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 1,
-                    "pid" : "8850",
-                    "parameters" : {}
-                }
-            },
             "Fvv-UniTTS" : {
                 "__plugin_info__" : {
                     "name" : "安卓语音合成 Fvv-UniTTS",
@@ -243,20 +229,6 @@
                     "isCloud" : true,
                     "bought" : 1,
                     "pid" : "2461",
-                    "parameters" : {}
-                }
-            },
-            "Seal-OfficeOnline" : {
-                "__plugin_info__" : {
-                    "name" : "跨平台Office文档、图片在线预览，视频播放原生插件",
-                    "description" : "支持Android和IOS，支持Office文档，常用图片和视频格式",
-                    "platforms" : "Android,iOS",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=3226",
-                    "android_package_name" : "com.weisifang",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 1,
-                    "pid" : "3226",
                     "parameters" : {}
                 }
             },

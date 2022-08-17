@@ -1,6 +1,5 @@
 <template>
 	<view class="container">
-		<t-rt-popup :itemList="clickManageTips" ref="rtBubble"></t-rt-popup>
 		<view class="no-data" v-if="folderList.length < 1">
 			<tui-no-data :fixed="false" imgUrl="/static/images/tabbar/null.png"  btnText="新建相册"  @click="folderModal = true">
 				<text class="tui-color__black">您还没有添加任何相册~</text>
@@ -9,7 +8,7 @@
 		
 		<block>
 			<view class="tui-ranking__list tui-justify__start" >
-				<view class="tui-ranking__item tui-item-mr__16" @click="openFolder(item)" v-for="(item, key) in folderList" :key="key">
+				<view class="tui-ranking__item tui-item-mr__16" @tap="openFolder(item)" v-for="(item, key) in folderList" :key="key">
 					<image :src="item.img || '/static/images/photo/default.png'"></image>
 					<view class="tui-ranking__gtitle">{{ item.name }}</view>
 					<!-- <view class="tui-ranking__sub" v-if="!isManage">包含xxx张照片</view> -->
@@ -32,19 +31,16 @@
 			</view>
 		</tui-modal>
 		
-		<view class="tui-btn-addfolder" @click="folderModal = true">+</view>
 		<tui-modal :show="showDelete" @click="handleClickDelete" @cancel="hideDelete" title="提示" :content="`确定删除相册( ${currentFolder.title} ) 吗？`"></tui-modal>
 		
+    <tui-fab :left="0" :right="80" :bottom="120" :width="100" :height="100" bgColor="#5677fc" :btnList="btnList" @click="onClick" custom maskClosable><tui-icon name="setup" color="#fff"></tui-icon></tui-fab>
+    
 		<tui-tabbar :current="current" @click="tabbarSwitch"  backdropFilter :backgroundColor="backgroundColor" :tabBar="tabBar" color="#646464" selectedColor="#5677FC"></tui-tabbar>
 	</view>
 </template>
 
 <script>
-import tRtPopup from '@/components/views/t-rt-popup/t-rt-popup';
 export default {
-	components: {
-		tRtPopup
-	},
 	data() {
 		return {
 			current: 0,
@@ -81,21 +77,40 @@ export default {
 			// ],
 			// 管理相册
 			isManage:false , // 是否启用管理相册按钮
-			// 点击右上角的管理提示
-			clickManageTips: [{
-				title: '点此编辑',
-				icon: 'setup'
-			}],
+			
 			showDelete:false , // 提示删除
 			currentFolder:{}, // 当前选中的相册文件夹
+      
+      btnList: [{
+      	bgColor: "#1589FF",
+      	//图标/图片地址
+      	imgUrl: "/static/images/tabbar/plus_big.png",
+      	//图片高度 rpx
+      	imgHeight: 45,
+      	//图片宽度 rpx
+      	imgWidth: 45,
+      	//名称
+      	text: "添加相册",
+      	//字体大小
+      	fontSize: 34,
+      	//字体颜色
+      	color: "#fff"
+      }, {
+      	bgColor: "#FFA500",
+      	//图标/图片地址
+      	imgUrl: "/static/images/tabbar/image_big.png",
+      	//图片高度 rpx
+      	imgHeight: 45,
+      	//图片宽度 rpx
+      	imgWidth: 45,
+      	//名称
+      	text: "管理相册",
+      	//字体大小
+      	fontSize: 34,
+      	//字体颜色
+      	color: "#fff"
+      }]
 		};
-	},
-	onNavigationBarButtonTap(e) {
-		if(e.name == 'manage_folders'){
-			// 管理 相册
-			this.isManage = !this.isManage;
-			// this.$refs.rtBubble.toggle();
-		}
 	},
 	onShow() {
 		this.isManage = false
@@ -128,6 +143,19 @@ export default {
 					this.tui.toast('出错啦')
 				});
 		},
+    onClick(e) {
+    	let index = e.index
+    	switch (index) {
+    		case 0:
+    			this.folderModal = true
+    			break;
+    		case 1:
+    			this.isManage = !this.isManage;
+    			break;
+    		default:
+    			break;
+    	}
+    },
 		tabbarSwitch(e) {
 			//获取登录状态，此处默认未登录
 			if (e.verify) {
@@ -294,22 +322,7 @@ export default {
 	.no-data{
 		margin-top: 30%;
 	}
-	/* 上传图标 */
-	.tui-btn-addfolder {
-		width: 88rpx;
-		height: 88rpx;
-		font-size: 80rpx;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-radius: 50%;
-		background-color: #5677FC;
-		color: #fff;
-		position: fixed;
-		bottom: 160rpx;
-		right: 30rpx;
-		z-index: 9999;
-	}
+	
 	/* 管理相册 */
 	.tui-flex-box {
 		width: 100%;

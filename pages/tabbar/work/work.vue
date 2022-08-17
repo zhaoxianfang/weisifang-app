@@ -19,8 +19,6 @@
 
 <script>
 import notice from '@/js_sdk/weisifang/notice.js';
-// https://ext.dcloud.net.cn/plugin?id=8850
-const shortCutBadge = uni.requireNativePlugin('Ba-Shortcut-Badge')
 export default {
 	data() {
 		return {
@@ -107,18 +105,7 @@ export default {
 			// 	text:'消息内容',
 			// 	bigText:'君不见黄河之水天上来，奔流到海不复回。君不见高堂明镜奔白发，朝如青丝暮成雪。',
 			// })
-		},
-    setCount() {//手动设置未读角标数
-        shortCutBadge.applyCount({
-            'badgeCount': 10
-        });
-    },
-    addCount() {//自动叠加
-        shortCutBadge.applyCount();
-    },
-    clearCount() {//清空
-        shortCutBadge.clearCount();
-    },
+		}
 	}
 };
 </script>
