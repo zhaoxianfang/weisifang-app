@@ -51,7 +51,8 @@
             return {
               coverIndex:'', // 封面图index
               imgList:[],
-              previewUrls:[]
+              previewUrls:[],
+              isCloseHandle:false
             }
         },
         watch: {
@@ -60,9 +61,15 @@
             //       console.log('list change',val)
             //         this.addImg(val)
             //     },
-            //     deep: true
+            //     deep: false
             // },
             list(val, oldval) {
+              if(this.isCloseHandle){
+                // 删除 imgList数据时候会触发此处更新。进行拦截
+                this.isCloseHandle = false
+                return false
+              }
+              console.log('change list',val)
               this.addImg(val)
             },
             manage(val, oldval) {
@@ -98,6 +105,7 @@
             },
             // 删除某个图片
             close(index) {
+              this.isCloseHandle = true
                 var item = this.imgList[index]
                 this.imgList.splice(index, 1);
                 this.previewUrls.splice(index, 1);

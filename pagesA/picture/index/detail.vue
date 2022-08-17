@@ -77,7 +77,7 @@
 		methods: {
 			getList(){
 				this.$api.photo.get_photo_item_list(this.photo_id).then(res => {
-					 // console.log('照片列表',res);
+					 console.log('照片列表',res);
 						if(res.data && res.data.length > 0){
 							this.photoList = res.data
 						}
