@@ -21,6 +21,9 @@ var apiList = {
 	get_photo_item_list(id){
 		return fetch.request('photo/items/list/'+id, "POST", {})
 	},
+  set_cover_img(photo_id,item_id){
+		return fetch.request('photo/cover/'+photo_id+'/'+item_id, "POST", {})
+	},
 }
 
 // 默认全部导入

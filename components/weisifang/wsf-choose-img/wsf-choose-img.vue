@@ -5,8 +5,8 @@
                 <view class="uni-uploader__file" style="position: relative;">
                     <image mode="aspectFill" class="uni-uploader__img" :src="src?image[src]:image" @tap="preview(index)"></image>
                     <block v-if="manage">
-                      <view v-if="index" class="set-capital" style="background: #0A98D5;" @tap="setCapital(index)">设为封面图</view>
-                      <view v-else class="set-capital">封面图</view>
+                      <view v-if="coverIndex === index" class="set-capital">封面图</view>
+                      <view v-else class="set-capital" style="background: #0A98D5;" @tap="setCapital(index)">设为封面图</view>
                       <view class="close-view" @click="close(index)">删除</view>
                     </block>
                 </view>
@@ -17,7 +17,7 @@
 <script type="text/javascript">
     export default {
         name: 'image-choose',
-        emits: ['setCover','closeImage'],
+        emits: ['setCover','closeImage','hasRefresh'],
         props: {
             // list 中展示的字段对象，例如:[{src:12.jpg}]则为src,[12.jpg,13.jpg,14.jpg]则不传或传空
             src: {
@@ -39,10 +39,17 @@
                 type: Boolean,
                 default: false
             },
+            // 是否刷新图片
+            refresh: {
+                //监听变化
+                type: Boolean,
+                default: false
+            },
         },
 
         data() {
             return {
+              coverIndex:'', // 封面图index
               imgList:[],
               previewUrls:[]
             }
@@ -58,6 +65,11 @@
                 handler(val, oldval) {
                 },
                 deep: true
+            },
+            refresh: {
+                handler(val, oldval) {
+                },
+                deep: true
             }
         },
         created() {
@@ -66,7 +78,12 @@
         methods: {
             addImg(data=[]){
               // 底部加载
-              this.imgList = this.imgList.concat(data)
+              if(this.refresh){
+                this.imgList = data
+                this.$emit("hasRefresh", false);
+              }else{
+                this.imgList = this.imgList.concat(data)
+              }
               let previewUrls = [];
               for (let item of this.imgList) {
                 this.previewUrls.push(this.src.length>0 ?item[this.src]:item)
@@ -91,11 +108,8 @@
             },
             // 设置主图/封面图
             setCapital(i, name) {
-                var imgList=this.imgList;
-                var item = imgList[i]
-                imgList[0]= imgList.splice(i,1,imgList[0])[0];
-                this.previewUrls[0]= this.previewUrls.splice(i,1,this.previewUrls[0])[0];
-                
+                var item=this.imgList[i];
+                this.coverIndex = i
                 this.$emit("setCover", item);
             }
         }

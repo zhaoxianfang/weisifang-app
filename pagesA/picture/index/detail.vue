@@ -7,7 +7,7 @@
 		</view>
 		
     <block v-else>
-      <wsf-choose-img src="url" :manage="managePhoto" :list="imgList" @closeImage="closeImage" @setCover="setCover"></wsf-choose-img>
+      <wsf-choose-img src="url" :manage="managePhoto" :list="imgList" :refresh="refresh" @hasRefresh="hasRefresh" @closeImage="closeImage" @setCover="setCover"></wsf-choose-img>
     </block>
     
 		<tui-fab :left="0" :right="80" :bottom="80" :width="100" :height="100" bgColor="#5677fc" :btnList="btnList" @click="onClick" custom maskClosable><tui-icon name="setup" color="#fff"></tui-icon></tui-fab>
@@ -19,6 +19,7 @@
 		data() {
 			return {
         managePhoto:false,
+        refresh:false,
 				photo_id:'',
 				imgList:[], // 照片列表
 				btnList: [{
@@ -60,16 +61,23 @@
 				uni.setNavigationBarTitle({
 					title: option.name || '相册详情'
 				});
-				this.getList()
 		  }
 		},
 		onShow() {
 			console.log(this.photo_id )
+      this.refresh = true;
+      this.imgList = [];
+      this.getList()
+      if(this.managePhoto){
+        this.btnList[1].text = '完成管理'
+      }else{
+        this.btnList[1].text = '管理图片'
+      }
 		},
 		methods: {
 			getList(){
 				this.$api.photo.get_photo_item_list(this.photo_id).then(res => {
-					 console.log('照片列表',res);
+					 // console.log('照片列表',res);
 						if(res.data && res.data.length > 0){
 							this.imgList = res.data
 						}
@@ -82,9 +90,11 @@
       // 删除图片
       closeImage(e){
         console.log('closeImage',e)
+        this.$api.photo.del_photo_item(e.id)
       },
       setCover(e){
-        console.log('setCover',e)
+        console.log('setCover',this.photo_id,e.id)
+        this.$api.photo.set_cover_img(this.photo_id,e.id)
       },
 			addImages(){
 				this.tui.toast("添加照片")
@@ -100,11 +110,20 @@
 						break;
 					case 1:
 						this.managePhoto = !this.managePhoto
+            if(this.managePhoto){
+              this.btnList[1].text = '完成管理'
+            }else{
+              this.btnList[1].text = '管理图片'
+            }
 						break;
 					default:
 						break;
 				}
-			}
+			},
+      // 收到组件通知已经初始化过刷新操作了，重置为不刷新「追加」
+      hasRefresh(e){
+        this.refresh = false
+      }
 		}
 	}
 </script>
@@ -117,5 +136,7 @@
 	.no-data{
 		margin-top: 30%;
 	}
-
+  img{
+    background-image:url('@/static/images/photo/default.png'));
+  }
 </style>

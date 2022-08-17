@@ -9,7 +9,7 @@
 		<block>
 			<view class="tui-ranking__list tui-justify__start" >
 				<view class="tui-ranking__item tui-item-mr__16" @tap="openFolder(item)" v-for="(item, key) in folderList" :key="key">
-					<image :src="item.img || '/static/images/photo/default.png'"></image>
+					<image :src="item.cover || '/static/images/photo/default.png'"></image>
 					<view class="tui-ranking__gtitle">{{ item.name }}</view>
 					<!-- <view class="tui-ranking__sub" v-if="!isManage">包含xxx张照片</view> -->
 					<view class="tui-flex-box" v-if="isManage">
@@ -33,7 +33,7 @@
 		
 		<tui-modal :show="showDelete" @click="handleClickDelete" @cancel="hideDelete" title="提示" :content="`确定删除相册( ${currentFolder.title} ) 吗？`"></tui-modal>
 		
-    <tui-fab :left="0" :right="80" :bottom="120" :width="100" :height="100" bgColor="#5677fc" :btnList="btnList" @click="onClick" custom maskClosable><tui-icon name="setup" color="#fff"></tui-icon></tui-fab>
+    <tui-fab :left="0" :right="60" :bottom="140" :width="100" :height="100" bgColor="#5677fc" :btnList="btnList" @click="onClick" custom maskClosable><tui-icon name="setup" color="#fff"></tui-icon></tui-fab>
     
 		<tui-tabbar :current="current" @click="tabbarSwitch"  backdropFilter :backgroundColor="backgroundColor" :tabBar="tabBar" color="#646464" selectedColor="#5677FC"></tui-tabbar>
 	</view>
@@ -117,7 +117,6 @@ export default {
 		this.getList()
 	},
 	mounted() {
-		this.$refs.rtBubble.toggle();
 	},
 	onLoad() {
 		// #ifdef H5
@@ -330,4 +329,7 @@ export default {
 		align-items: center;
 		flex-wrap: wrap;
 	}
+  img{
+    background-image:url('/static/images/photo/default.png'));
+  }
 </style>
