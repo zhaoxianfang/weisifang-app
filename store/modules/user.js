@@ -10,7 +10,7 @@ const user = {
     isLogin: uni.getStorageSync("api_token") ? true : false,
     //登录用户名
     nickname: "请登录",
-		userinfo:{},
+		userinfo:uni.getStorageSync("user_info") || {},
     //app版本
     version: "1.0.0"
   },
@@ -24,6 +24,7 @@ const user = {
 		SET_USERINFO: (state, userinfo) => {
       state.userinfo = userinfo
       state.mobile = userinfo.mobile
+			uni.setStorageSync("user_info",userinfo)
     },
 		LOGOUT: (state, info) => {
 			state.token = ''
@@ -31,6 +32,7 @@ const user = {
 			state.isLogin = false
       state.userinfo = {}
 			uni.removeStorageSync("api_token")
+			uni.removeStorageSync("user_info")
     },
   },
 
@@ -65,6 +67,7 @@ const user = {
     },
     // 退出
     logout ({ commit, state }) {
+			console.log('退出')
       commit('LOGOUT', true)
     },
     /**

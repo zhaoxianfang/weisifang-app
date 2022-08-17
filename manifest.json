@@ -204,20 +204,6 @@
                     "parameters" : {}
                 }
             },
-            "Ba-Autoboot" : {
-                "__plugin_info__" : {
-                    "name" : "应用开机自启插件 Ba-Autoboot",
-                    "description" : "uniapp开机自启插件 Ba-Autoboot，主要用安卓平板、电视、窗口屏、广告屏、机顶盒等等，手机的话不能保证所有。",
-                    "platforms" : "Android",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=8877",
-                    "android_package_name" : "com.weisifang",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 1,
-                    "pid" : "8877",
-                    "parameters" : {}
-                }
-            },
             "Fvv-UniTTS" : {
                 "__plugin_info__" : {
                     "name" : "安卓语音合成 Fvv-UniTTS",
@@ -260,17 +246,31 @@
                     "parameters" : {}
                 }
             },
-            "wmf-BootUp" : {
+            "me-record" : {
                 "__plugin_info__" : {
-                    "name" : "开机自启",
-                    "description" : "Android开机自启动，支持Android广告屏，机顶盒等。开机自启功能无关cpu架构",
+                    "name" : "android录屏原生插件",
+                    "description" : "可配置录屏是否录制声音, 支持动态禁止和允许录屏, 录屏文件自动保存到相册",
                     "platforms" : "Android",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=3957",
-                    "android_package_name" : "",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=7066",
+                    "android_package_name" : "com.weisifang",
                     "ios_bundle_id" : "",
                     "isCloud" : true,
                     "bought" : 1,
-                    "pid" : "3957",
+                    "pid" : "7066",
+                    "parameters" : {}
+                }
+            },
+            "nrb-tts-plugin" : {
+                "__plugin_info__" : {
+                    "name" : "语音合成TTS",
+                    "description" : "原生语音合成TTS",
+                    "platforms" : "Android,iOS",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=4133",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "4133",
                     "parameters" : {}
                 }
             }

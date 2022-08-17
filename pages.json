@@ -28,32 +28,22 @@
 		}, {
 			"path": "pages/tabbar/my/my",
 			"style": {
-				// #ifdef H5
-				"titleNView": false,
+				// #ifdef MP-ALIPAY
+				"navigationBarTitleText": "",
 				// #endif
-				"backgroundColorTop": "#5677FC",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black",
+				"enablePullDownRefresh": true,
+				"onReachBottomDistance": 50,
+				"navigationStyle": "custom",
 				"app-plus": {
-					// #ifdef APP-PLUS
-					"titleNView": {
-						"padding-right": "12px",
-						"buttons": [{
-							"float": "right",
-							"width": "36px",
-							"type": "share"
-						}]
-					},
-					// #endif 
-					"bounce": "vertical",
-					"subNVues": [{
-						"id": "share",
-						"path": "components/views/app-plus/tui-share/tui-share",
-						"type": "popup",
-						"style": {
-							"position": "dock",
-							"height": "500rpx",
-							"bottom": 0
-						}
-					}]
+					"titleNView": false,
+					"bounce": "vertical"
+				},
+				"mp-alipay": {
+					"allowsBounceVertical": "YES",
+					"transparentTitle": "always",
+					"titlePenetrate": "YES"
 				}
 			}
 		},

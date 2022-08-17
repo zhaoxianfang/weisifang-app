@@ -137,6 +137,7 @@
 		margin-top: 30%;
 	}
   img{
-    background-image:url('@/static/images/photo/default.png'));
+    /* background-image:url('@/static/images/photo/default.png')); */
+		 background: #ccc url(/static/images/photo/default.png) top left no-repeat; 
   }
 </style>
