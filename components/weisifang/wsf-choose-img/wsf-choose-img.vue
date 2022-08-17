@@ -55,21 +55,19 @@
             }
         },
         watch: {
-            list: {
-                handler(val, oldval) {
-                    this.addImg(val)
-                },
-                deep: true
+            // list: {
+            //     handler(val, oldval) {
+            //       console.log('list change',val)
+            //         this.addImg(val)
+            //     },
+            //     deep: true
+            // },
+            list(val, oldval) {
+              this.addImg(val)
             },
-            manage: {
-                handler(val, oldval) {
-                },
-                deep: true
+            manage(val, oldval) {
             },
-            refresh: {
-                handler(val, oldval) {
-                },
-                deep: true
+            refresh(val, oldval) {
             }
         },
         created() {
@@ -99,11 +97,10 @@
               })
             },
             // 删除某个图片
-            close(e) {
-                var imgList = this.imgList;
-                var item = imgList[e]
-                imgList.splice(e, 1);
-                this.previewUrls.splice(e, 1);
+            close(index) {
+                var item = this.imgList[index]
+                this.imgList.splice(index, 1);
+                this.previewUrls.splice(index, 1);
                 this.$emit("closeImage", item);
             },
             // 设置主图/封面图

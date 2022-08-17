@@ -1,13 +1,13 @@
 <template>
 	<view class="container">
-		<view class="no-data" v-if="imgList.length < 1">
+		<view class="no-data" v-if="photoList.length < 1">
 			<tui-no-data :fixed="false" imgUrl="/static/images/tabbar/null.png" btnText="添加照片" @click="addImages">
 				<text class="tui-color__black">该相册还没有添加任何照片~</text>
 			</tui-no-data>
 		</view>
 		
     <block v-else>
-      <wsf-choose-img src="url" :manage="managePhoto" :list="imgList" :refresh="refresh" @hasRefresh="hasRefresh" @closeImage="closeImage" @setCover="setCover"></wsf-choose-img>
+      <wsf-choose-img src="url" :manage="managePhoto" :list="photoList" :refresh="refresh" @hasRefresh="hasRefresh" @closeImage="closeImage" @setCover="setCover"></wsf-choose-img>
     </block>
     
 		<tui-fab :left="0" :right="80" :bottom="80" :width="100" :height="100" bgColor="#5677fc" :btnList="btnList" @click="onClick" custom maskClosable><tui-icon name="setup" color="#fff"></tui-icon></tui-fab>
@@ -21,7 +21,7 @@
         managePhoto:false,
         refresh:false,
 				photo_id:'',
-				imgList:[], // 照片列表
+				photoList:[], // 照片列表
 				btnList: [{
 					bgColor: "#1589FF",
 					//图标/图片地址
@@ -66,7 +66,7 @@
 		onShow() {
 			console.log(this.photo_id )
       this.refresh = true;
-      this.imgList = [];
+      this.photoList = [];
       this.getList()
       if(this.managePhoto){
         this.btnList[1].text = '完成管理'
@@ -79,7 +79,7 @@
 				this.$api.photo.get_photo_item_list(this.photo_id).then(res => {
 					 // console.log('照片列表',res);
 						if(res.data && res.data.length > 0){
-							this.imgList = res.data
+							this.photoList = res.data
 						}
 					})
 					.catch(e => {
