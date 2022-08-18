@@ -232,34 +232,6 @@
                     "parameters" : {}
                 }
             },
-            "push-live" : {
-                "__plugin_info__" : {
-                    "name" : "安卓保活插件（限制 防杀）含前台服务，后台运行，白名单，定时任务等",
-                    "description" : "如果你的应用希望能够一直在后台运行而不被系统自动杀死的话，可以尝试一下。群485147231(已满) 598812409",
-                    "platforms" : "Android",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=2930",
-                    "android_package_name" : "com.weisifang",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 1,
-                    "pid" : "2930",
-                    "parameters" : {}
-                }
-            },
-            "me-record" : {
-                "__plugin_info__" : {
-                    "name" : "android录屏原生插件",
-                    "description" : "可配置录屏是否录制声音, 支持动态禁止和允许录屏, 录屏文件自动保存到相册",
-                    "platforms" : "Android",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=7066",
-                    "android_package_name" : "com.weisifang",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 1,
-                    "pid" : "7066",
-                    "parameters" : {}
-                }
-            },
             "nrb-tts-plugin" : {
                 "__plugin_info__" : {
                     "name" : "语音合成TTS",
