@@ -207,6 +207,7 @@ export default {
                 
                 var out_path = plus.io.convertLocalFileSystemURL('_downloads/image_edit.png')
                 console.log('out_path',out_path)
+                console.log('img_path', img_path, res)
                   imageEditor.imageEdit({
                       'path': img_path,//原始图片路径
                       'outputPath': out_path,//保存图片路径

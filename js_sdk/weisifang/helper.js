@@ -17,8 +17,8 @@ const helper = {
 		plus.screen.lockOrientation('portrait-primary') //锁定竖屏
 		plus.navigator.setFullscreen(false); // 设置应用全屏显示！ 
 
-		// 判断通知权限
-		this.judgeIosPermissionPush()
+		// 判断通知权限 移到 notice 里面去触发
+		// this.judgeIosPermissionPush()
 		this.clickToBack()
 		this.checkWhiteList()
 
@@ -107,16 +107,16 @@ const helper = {
 	requestPermission() {
 		plus.android.requestPermissions(
 			[
-				// 'android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS',
+				'android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS',
 				// 'android.permission.WAKE_LOCK', //唤醒锁定 允许程序在手机屏幕关闭后后台进程仍然运行
-				// 'android.permission.WRITE_EXTERNAL_STORAGE', // 写入外部存储 允许程序写入外部存储,如SD卡上写文件
+				'android.permission.WRITE_EXTERNAL_STORAGE', // 写入外部存储 允许程序写入外部存储,如SD卡上写文件
 				// 'android.permission.RECEIVE_BOOT_COMPLETED', // 开机自动允许 允许程序开机自动运行
 				// 'android.intent.action.BOOT_COMPLETED',
 				// 'android.permission.DEVICE_POWER' // 电源管理
 				// 'android.permission.ACCESS_FINE_LOCATION', // 位置权限
 				// 'android.permission.ACCESS_COARSE_LOCATION', // 模糊位置权限(蓝牙\ble依赖)</button>
 				// 'android.permission.CAMERA', // 摄像头权限</button>
-				// 'android.permission.READ_EXTERNAL_STORAGE', // 外部存储(含相册)读取权限</button>
+				'android.permission.READ_EXTERNAL_STORAGE', // 外部存储(含相册)读取权限</button>
 				// 'android.permission.RECORD_AUDIO', // 麦克风权限</button>
 				// 'android.permission.READ_CONTACTS', // 通讯录读取权限</button>
 				// 'android.permission.WRITE_CONTACTS', // 通讯录写入权限</button>
