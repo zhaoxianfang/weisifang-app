@@ -10,7 +10,8 @@ import api from '@/api/index.js'
 
 const helper = {
 	debounceTime: null, // 防抖计时器
-	debounceOldArgs: [], // 防抖老参数
+	debounceOldArgs: [], // 防抖动上次传入的参数
+  download:download,
 	init() {
 		// #ifdef APP-PLUS
 		plus.screen.lockOrientation('portrait-primary') //锁定竖屏

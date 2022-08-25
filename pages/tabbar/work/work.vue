@@ -18,11 +18,13 @@
 </template>
 
 <script>
-  const tts = uni.requireNativePlugin("nrb-tts-plugin")
-  const FvvUniTTS = uni.requireNativePlugin("Fvv-UniTTS")
-  const FileShare= uni.requireNativePlugin('life-FileShare');// 文件分享
-  
-  import download from '@/js_sdk/weisifang/download.js'
+const tts = uni.requireNativePlugin("nrb-tts-plugin")
+const FvvUniTTS = uni.requireNativePlugin("Fvv-UniTTS")
+// const FileShare= uni.requireNativePlugin('life-FileShare');// 文件分享 和 Seal-OfficeOnline 冲突
+var testModule = uni.requireNativePlugin("Seal-OfficeOnline")
+const imageEditor = uni.requireNativePlugin('Ba-ImageEditor') // 无法保存图片
+
+import download from '@/js_sdk/weisifang/download.js'
   
 import notice from '@/js_sdk/weisifang/notice.js';
 export default {
@@ -74,7 +76,7 @@ export default {
 				},
 				{
 					name: 'weather',
-					label: '天气-share',
+					label: '天气-share-office',
 					color: '#8a5966',
 					size: 30,
           type:'share'
@@ -88,9 +90,10 @@ export default {
 				},
 				{
 					name: 'more-fill',
-					label: '更多',
+					label: '更多-editimg',
 					color: '#999',
-					size: 30
+					size: 30,
+          type:'editimg'
 				}
 			]
 		};
@@ -165,13 +168,23 @@ export default {
       }
       if(e.type=='share'){
         // download.downloadFile('https://weisifang.com/static/system/logo/logo-sm.png')
-        FileShare.render({
-          type:"",//QQ为QQ，微信为WX，系统默认是SYSTEM，不填写默认SYSTEM
-          // filePath:plus.io.convertLocalFileSystemURL(d.filename),
-          filePath:'/storage/emulated/0/Android/data/com.weisifang/downloads/image/logo-sm.png',
-          }, result => {
-            console.log('share result',result)
-          })
+        // FileShare.render({
+        //   type:"",//QQ为QQ，微信为WX，系统默认是SYSTEM，不填写默认SYSTEM
+        //   // filePath:plus.io.convertLocalFileSystemURL(d.filename),
+        //   filePath:'/storage/emulated/0/Android/data/com.weisifang/downloads/image/logo-sm.png',
+        //   }, result => {
+        //     console.log('share result',result)
+        //   })
+          // 方式一：直接在openFile接口中传递在线url
+          testModule.openFile({
+              url: 'http://silianpan.cn/upload/2022/01/01/1.docx', // 同时支持在线和本地文档，三种参数传递方式，具体查看文档说明
+              isTopBar: true, // 是否显示顶栏，默认为：true（显示）
+              title: 'Office文档在线预览', // 顶栏标题，默认为：APP名称
+              topBarBgColor: '#3394EC', // 顶栏背景颜色，默认为：#177cb0（靛青）
+              isBackArrow: true, // 是否显示返回按钮，默认为：true（显示）
+              isDeleteFile: true, // 退出是否删除缓存的文件，默认为true（删除缓存文件）
+              waterMarkText: '你好，世界\n准备好了吗？时刻准备着', // 水印文本
+          });
       }
       if(e.type=='notice'){
         
@@ -180,6 +193,54 @@ export default {
           	text:'消息内容',
           	bigText:'君不见黄河之水天上来，奔流到海不复回。君不见高堂明镜奔白发，朝如青丝暮成雪。',
           })
+        
+      }
+      if(e.type=='editimg'){
+        // 无法保存图片
+        uni.chooseImage({
+            count: 1, //默认9
+            sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album'], //从相册选择
+            success: function(res) {
+                //注：uni.chooseImage返回的地址为：“file://+路径”格式，需要转一下，如下
+                var img_path = res.tempFilePaths[0].replace("file://", "");
+                
+                var out_path = plus.io.convertLocalFileSystemURL('_downloads/image_edit.png')
+                console.log('out_path',out_path)
+                  imageEditor.imageEdit({
+                      'path': img_path,//原始图片路径
+                      'outputPath': out_path,//保存图片路径
+                      // 'outputPath': '/storage/emulated/0/Pictures/BaImageEditor/tietu123.png',//保存图片路径
+                      // 'outputPath': '_downloads/image_edit.png',//保存图片路径
+                  },
+                  (ret) => {
+                      console.log(ret)
+                      if (ret.outputPath && ret.isImageEdit) {
+                        console.log('isImageEdit ')
+                          // this.path = ret.outputPath;
+                          // 获取到图片本地地址后再保存图片到相册（因为此方法不支持远程地址）
+                          uni.saveImageToPhotosAlbum({
+                            filePath: ret.outputPath,
+                            success: () => {
+                              uni.showToast({
+                                title: "保存成功！",
+                              });
+                              // 再删除保存文件
+                              this.helper.download.delFile(ret.outputPath)
+                            },
+                            fail: () => {
+                              uni.showToast({
+                                title: "保存失败",
+                              });
+                            },
+                          });
+                      }
+                  });
+            }
+        });
+        // //获取 SD卡绝对路径
+        // var sd_path = plus.io.convertLocalFileSystemURL('_www/static/images/tabbar/work_active.png')
+        
         
       }
 			
