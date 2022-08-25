@@ -53,16 +53,16 @@ const helper = {
 			main.moveTaskToBack(false)
 		}
 		//重写toast方法如果内容为 ‘再次返回退出应用’ 就隐藏应用，其他正常toast
-		plus.nativeUI.toast = (function(str) {
-			if (str == '再次返回退出应用') {
-				plus.runtime.quit()
-			} else {
-				uni.showToast({
-					title: '再次返回退出应用',
-					icon: 'none'
-				})
-			}
-		})
+		// plus.nativeUI.toast = (function(str) {
+		// 	if (str == '再次返回退出应用') {
+		// 		plus.runtime.quit()
+		// 	} else {
+		// 		uni.showToast({
+		// 			title: '再次返回退出应用',
+		// 			icon: 'none'
+		// 		})
+		// 	}
+		// })
 	},
 	// 判断是否在白名单中
 	checkWhiteList() {

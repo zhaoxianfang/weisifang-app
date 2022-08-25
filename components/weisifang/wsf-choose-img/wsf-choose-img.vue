@@ -97,7 +97,7 @@
             // 预览
             preview(index){
               uni.previewImage({
-                current:1,
+                current: index || 1,
                 urls:this.previewUrls,
                 indicator:'number',
                 loop:true
@@ -174,5 +174,9 @@
   transform: scale(0.8);
   position: absolute;
   line-height:24px;
+}
+img,.uni-uploader__img{
+  /* background-image:url('@/static/images/photo/default.png')); */
+   background: #f2f2f2 url('@/static/images/photo/default_img.png') top left no-repeat;
 }
 </style>
