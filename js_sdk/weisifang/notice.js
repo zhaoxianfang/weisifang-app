@@ -56,23 +56,26 @@ const notice = {
 			// channelPriority: 4, //通知渠道的提示方式，默认是4,  1. 无声音，无弹出，text可折叠  2.text始终显示，不可折叠  3.有声音  4.有弹窗 5.做全屏提示的，如来电提醒就是这个
 			// // 可选，在不支持渠道的系统上使用，默认为1, 可选值为-2到2,也是5个值，基本对应渠道的那5个值，具体可以自己测试
 			// priority : 1 ,
-			badgeNumber: 1, // 可选，app图标的角标数量
+			badgeNumber: 1, // 可选，app图标的角标数量 桌面图标的角标
 			isVibration: true, // 使用默认震动
 			sound: noticePath, // 自定义提示音，参数为音频文件路径
 			vibrationPattern: [1000, 2000, 3000, 4000],
 			lightColorArr: [255, 255, 0, 0], // 呼吸灯
 			// isShowWhen: false,// 可选，通知上面是否显示时间，默认是显示的，所以如果不想显示的话，只用设置为false即可
 			// when: 1629435337521, // 可选，通知上面的时间，格式是时间戳，单位是毫秒
+      autoCancel: true, // 点击后自动取消
+      clickStr: '789' ,///点击通知需要回调的字符串
+      // clickStr:(new Date()).getTime(),///点击通知需要回调的字符串
 		})
-		// console.log('测试发送数据', notificationContent)
+		console.log('测试发送数据', notificationContent)
 
 		// 弹出将app添加到电池优化白名单提示框，此功能可在一定程度上防止app被系统后台杀死
 		uniNotification.addBatteryIgnore()
 
-		let res = uniNotification.postNotification(notificationContent, btnIndex => {
+		let res = uniNotification.postNotification(notificationContent, res => {
 			// 点击多媒体按钮的回调
 			// 特别注意，每次回调里，需要重新发送多媒体通知，否则下次的点击会接收不到回调
-			console.log('点击了第' + btnIndex + '个按钮')
+			console.log('点击了第x个按钮/回调',res)
 			callFn && callFn('click', btnIndex)
 		})
 

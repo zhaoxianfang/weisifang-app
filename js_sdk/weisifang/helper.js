@@ -5,9 +5,7 @@ isIos = (plus.os.name === 'iOS')
 
 import download from '@/js_sdk/weisifang/download.js'
 import api from '@/api/index.js'
-const pushLive = uni.requireNativePlugin('push-live');
-// 定时器 （还是建议setInterval代替，黑屏可能不会执行）
-var globalEvent = uni.requireNativePlugin('globalEvent');
+
 // #endif
 
 const helper = {
@@ -26,46 +24,11 @@ const helper = {
 		this.requestPermission()
 		// 测试下载文件
 		// download.downloadFile('https://weisifang.com/static/system/logo/logo-sm.png')
-    setTimeout(() => {
-        this.keeplive()
-    }, 10000);
+    // setTimeout(() => {
+    //     this.keeplive()
+    // }, 10000);
 		// #endif
 	},
-  keeplive(){
-    let obj = {
-        title: "威四方",
-        content: "正在后台运行",
-        mode: 1  //0省电模式 1流氓模式
-    }
-    //
-    pushLive.startService(obj, function(res) {
-        console.log('启动保活服务',res)
-    });
-    //设置定时任务触发时间 单位秒 60秒
-    pushLive.startPollingTask(60);
-    // 申请电池优化（提高保活几率）
-    pushLive.requestIgnoreBatteryOptimizations(function(res) {
-        console.log('申请电池优化',res)
-    });
-    // 申请加入白名单
-    // pushLive.gotoWhiteListSetting()
-    // 申请配置后台运行 申请加入白名单 自启动（先初始化启动服务）
-    pushLive.gotoBackstage_WhiteList_autStart()
-    // 检测是否限制后台运行
-    pushLive.isIgnoringBatteryOptimizations(function(res) {
-        console.log('检测是否限制后台运行',res)
-    })
-    globalEvent.addEventListener('doJobEvent', function() {
-        console.log("---------")
-        // 定时器回调
-        // 执行你的定时逻辑
-        //uni.request({.....})
-         setInterval(function(){
-           console.log("定时器")
-              api.app.test_live({'name':"test setInterval live"})
-          },300000)
-    });
-  },
   test_live(){
     api.app.test_live({'name':"test setInterval live"})
   },

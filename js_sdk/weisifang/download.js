@@ -89,7 +89,7 @@ const download = {
 	setFileFromLocal(relativePath) {
 		//获取 SD卡绝对路径
 		var sd_path = plus.io.convertLocalFileSystemURL(relativePath)
-		// console.log('文件路径', sd_path)
+		console.log('文件路径', sd_path)
 	},
 	/*联网下载图片*/
 	// relativePath 参数仅支持 以"_downloads/"、"_doc/"、"_documents/" 开头
