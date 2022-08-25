@@ -27,6 +27,39 @@
 				</view>
 			</view>
 		</form>
+		
+		<!-- #ifdef APP-PLUS -->
+		<view class="tui-applets__vip" @tap="showLogin">
+			<tui-icon name="shield" color="#07c160" :size="44" unit="rpx"></tui-icon>
+			<text>其他方式登录</text>
+		</view>
+		<!-- #endif -->
+		
+		<!-- #ifdef APP-PLUS -->
+		<!--底部分享弹窗-->
+		<tui-bottom-popup backgroundColor="#f6f6f6"  :zIndex="1002" :maskZIndex="1001" :show="popupShow" @close="showLogin">
+			<view class="tui-share">
+				<view class="tui-share-title">第三方登录</view>
+				<scroll-view scroll-x style="padding-right:20rpx" class="tui-mt">
+					<view class="tui-share-top">
+						<view class="tui-share-item" :class="[otherLoginType.length-1===index?'tui-item-last':'']" v-for="(item,index) in otherLoginType"
+						 :key="index" @tap="chooseLoginType(item)">
+							<view class="tui-share-icon" hover-class="tui-hover" :hover-stay-time="150">
+								<tui-icon :name="item.icon" :color="item.color" :size="item.size?item.size:36"></tui-icon>
+							</view>
+							<view class="tui-share-text">{{item.name}}</view>
+						</view>
+						<view class="tui-empty">!</view>
+					</view>
+		
+				</scroll-view>
+		
+				<view class="tui-btn-cancle" @tap="showLogin">取消</view>
+			</view>
+		</tui-bottom-popup>
+		<!--底部分享弹窗-->
+		<!-- #endif -->
+		
 	</view>
 </template>
 
@@ -44,7 +77,36 @@
 				mobile: '18388050779',
 				password:"zhaoxf001.",
 				type: 'primary',
-				code: ''
+				code: '',
+				
+				popupShow: false,
+				otherLoginType: [{
+					name: "QQ",
+					value:'qq',
+					icon: "qq",
+					color: "#07BDFD",
+					size: 34
+				}, {
+					name: "微信",
+					value:'wechat',
+					icon: "wechat",
+					color: "#80D640"
+				}, {
+					name: "支付宝",
+					value:'alipay',
+					icon: "alipay",
+					color: "#00AAEE"
+				}, {
+					name: "新浪微博",
+					value:'sina',
+					icon: "sina",
+					color: "#F9C718"
+				}, {
+					name: "钉钉",
+					value:'dingtalk',
+					icon: "dingtalk",
+					color: "#2DA0F1"
+				}]
 			};
 		},
 		methods: {
@@ -159,6 +221,21 @@
 				uni.navigateTo({
 					url: '/pages/doc/protocol/protocol'
 				});
+			},
+			showLogin(){
+				this.popupShow = !this.popupShow
+			},
+			chooseLoginType(item){
+				if(item.value === 'qq'){
+					uni.login({
+					  provider: 'qq',
+					  success: function (loginRes) {
+					    console.log('qq 登录 success',loginRes,loginRes.authResult);
+					  }
+					});
+				}else{
+					this.tui.toast('暂未开通该登录方式')
+				}
 			}
 		}
 	};
@@ -270,4 +347,104 @@
 	.tui-protocol-red {
 		color: #f54f46;
 	}
+	.tui-applets__vip{
+		width: 100%;
+		position: fixed;
+		bottom: 20px;
+		/* #ifdef H5 */
+		bottom: 70px;
+		padding-bottom: env(safe-area-inset-bottom);
+		/* #endif */
+		z-index: 10;
+		font-size: 28rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: #586c94;
+	}
+	.tui-applets__vip text{
+		padding-left: 10rpx;
+	}
+	
+	/* #ifdef APP-PLUS */
+	/* 底部弹出层 开始 */
+	.tui-share {
+		background: #e8e8e8;
+		position: relative;
+	}
+	
+	.tui-share-title {
+		font-size: 26rpx;
+		color: #7E7E7E;
+		text-align: center;
+		line-height: 26rpx;
+		padding: 20rpx 0 50rpx 0;
+	}
+	
+	.tui-share-top,
+	.tui-share-bottom {
+		min-width: 101%;
+		padding: 0 20rpx 0 30rpx;
+		white-space: nowrap;
+	}
+	
+	.tui-mt {
+		margin-top: 30rpx;
+		padding-bottom: 150rpx;
+	}
+	
+	.tui-share-item {
+		width: 126rpx;
+		display: inline-block;
+		margin-right: 24rpx;
+		text-align: center;
+	}
+	
+	.tui-item-last {
+		margin: 0;
+	}
+	
+	.tui-empty {
+		display: inline-block;
+		width: 30rpx;
+		visibility: hidden;
+	}
+	
+	.tui-share-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: #fafafa;
+		height: 126rpx;
+		width: 126rpx;
+		border-radius: 32rpx;
+	}
+	
+	.tui-share-text {
+		font-size: 24rpx;
+		color: #7E7E7E;
+		line-height: 24rpx;
+		padding: 20rpx 0;
+		white-space: nowrap;
+	}
+	
+	.tui-btn-cancle {
+		width: 100%;
+		height: 100rpx;
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		background: #f6f6f6;
+		font-size: 36rpx;
+		color: #3e3e3e;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	
+	.tui-hover {
+		background: rgba(0, 0, 0, 0.2)
+	}
+		/* 底部弹出层 结束 */
+		/* #endif */
 </style>
