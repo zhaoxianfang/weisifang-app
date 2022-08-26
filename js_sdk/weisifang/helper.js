@@ -10,14 +10,15 @@ import api from '@/api/index.js'
 
 const helper = {
 	debounceTime: null, // 防抖计时器
-	debounceOldArgs: [], // 防抖老参数
+	debounceOldArgs: [], // 防抖动上次传入的参数
+  download:download,
 	init() {
 		// #ifdef APP-PLUS
 		plus.screen.lockOrientation('portrait-primary') //锁定竖屏
 		plus.navigator.setFullscreen(false); // 设置应用全屏显示！ 
 
-		// 判断通知权限
-		this.judgeIosPermissionPush()
+		// 判断通知权限 移到 notice 里面去触发
+		// this.judgeIosPermissionPush()
 		this.clickToBack()
 		this.checkWhiteList()
 
@@ -53,16 +54,16 @@ const helper = {
 			main.moveTaskToBack(false)
 		}
 		//重写toast方法如果内容为 ‘再次返回退出应用’ 就隐藏应用，其他正常toast
-		plus.nativeUI.toast = (function(str) {
-			if (str == '再次返回退出应用') {
-				plus.runtime.quit()
-			} else {
-				uni.showToast({
-					title: '再次返回退出应用',
-					icon: 'none'
-				})
-			}
-		})
+		// plus.nativeUI.toast = (function(str) {
+		// 	if (str == '再次返回退出应用') {
+		// 		plus.runtime.quit()
+		// 	} else {
+		// 		uni.showToast({
+		// 			title: '再次返回退出应用',
+		// 			icon: 'none'
+		// 		})
+		// 	}
+		// })
 	},
 	// 判断是否在白名单中
 	checkWhiteList() {
@@ -106,16 +107,16 @@ const helper = {
 	requestPermission() {
 		plus.android.requestPermissions(
 			[
-				// 'android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS',
+				'android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS',
 				// 'android.permission.WAKE_LOCK', //唤醒锁定 允许程序在手机屏幕关闭后后台进程仍然运行
-				// 'android.permission.WRITE_EXTERNAL_STORAGE', // 写入外部存储 允许程序写入外部存储,如SD卡上写文件
+				'android.permission.WRITE_EXTERNAL_STORAGE', // 写入外部存储 允许程序写入外部存储,如SD卡上写文件
 				// 'android.permission.RECEIVE_BOOT_COMPLETED', // 开机自动允许 允许程序开机自动运行
 				// 'android.intent.action.BOOT_COMPLETED',
 				// 'android.permission.DEVICE_POWER' // 电源管理
 				// 'android.permission.ACCESS_FINE_LOCATION', // 位置权限
 				// 'android.permission.ACCESS_COARSE_LOCATION', // 模糊位置权限(蓝牙\ble依赖)</button>
 				// 'android.permission.CAMERA', // 摄像头权限</button>
-				// 'android.permission.READ_EXTERNAL_STORAGE', // 外部存储(含相册)读取权限</button>
+				'android.permission.READ_EXTERNAL_STORAGE', // 外部存储(含相册)读取权限</button>
 				// 'android.permission.RECORD_AUDIO', // 麦克风权限</button>
 				// 'android.permission.READ_CONTACTS', // 通讯录读取权限</button>
 				// 'android.permission.WRITE_CONTACTS', // 通讯录写入权限</button>

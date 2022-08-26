@@ -13,7 +13,6 @@ export default {
 		// 检测app 最新版本
 		helper.checkAppUpgrade(0);
 
-    helper.test_live()
 		// #endif
 
 		// #ifdef MP-WEIXIN

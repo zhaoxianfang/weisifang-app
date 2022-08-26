@@ -2,6 +2,7 @@
 // https://ext.dcloud.net.cn/plugin?id=5959
 
 // #ifdef APP-PLUS
+import helper from './helper.js'
 let defaultContent = {
 	title: '您有一条新的消息',
 	text: '消息内容',
@@ -19,6 +20,8 @@ const notice = {
 		// #ifdef APP-PLUS
 		// 如需本地打包使用本插件，可联系作者打包本地包，本地包需要帮顶包名，qq: 1320024819  微信： m1320024819
 
+    // 判断是否开启通知权限
+    helper.judgeIosPermissionPush()
 		// 初始化通知内容
 		obj = obj || {}
 		options = options || {}
