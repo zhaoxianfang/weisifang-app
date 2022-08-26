@@ -94,7 +94,6 @@ const tui = {
 				tui.showLoading()
 			}
 		}
-		console.log('接口请求信息',tui.interfaceUrl() + url,postData)
 		return new Promise((resolve, reject) => {
 			uni.request({
 				url: tui.interfaceUrl() + url,

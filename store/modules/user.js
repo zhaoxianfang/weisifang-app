@@ -65,6 +65,27 @@ const user = {
         })
       })
     },
+		qq_login({ commit }, qqAppTokenInfo) {
+		  return new Promise((resolve, reject) => {
+		    api.user.qq_login(qqAppTokenInfo).then(response => {
+					console.log('登录返回',response)
+					tui.toast(response.message)
+					if(response.code !== 200){
+						reject(response)
+					}else{
+						let data = response.data
+						// 登录成功了
+						commit('SET_TOKEN', data.access_token)
+						commit('SET_USERINFO', data.user)
+						resolve(response)
+					}
+		    }).catch(error => {
+					console.log(error)
+					tui.toast('出错啦')
+		      reject(error)
+		    })
+		  })
+		},
     // 退出
     logout ({ commit, state }) {
 			console.log('退出')

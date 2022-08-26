@@ -74,8 +74,8 @@
 			return {
 				disabled: false,
 				btnText: '获取验证码',
-				mobile: '18388050779',
-				password:"zhaoxf001.",
+				mobile: '',
+				password:"",
 				type: 'primary',
 				code: '',
 				
@@ -226,11 +226,33 @@
 				this.popupShow = !this.popupShow
 			},
 			chooseLoginType(item){
+				var that = this;
 				if(item.value === 'qq'){
 					uni.login({
 					  provider: 'qq',
 					  success: function (loginRes) {
 					    console.log('qq 登录 success',loginRes,loginRes.authResult);
+							
+							that.$store.dispatch('qq_login',loginRes.authResult).then(() => {
+							    // this.$router.push({ path: this.redirect || '/' })
+							    // this.loading = false
+									that.tui.toast('登录成功', 2000, true);
+									// 关闭所有页面，跳转到首页
+									uni.reLaunch({
+										url: '/pages/tabbar/index/index'
+									});
+							  }).catch((err) => {
+									that.tui.toast(err.message);
+							    // this.loading = false
+							  })
+								
+							// that.$api.user.qq_login(loginRes.authResult).then(res => {
+							// 	console.log('api返回',res)
+							// })
+							// .catch(e => {
+							// 	console.log('出错啦', e);
+							// 	that.tui.toast('登录失败')
+							// });
 					  }
 					});
 				}else{
