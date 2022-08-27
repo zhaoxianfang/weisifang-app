@@ -23,6 +23,8 @@ const tts = uni.requireNativePlugin("nrb-tts-plugin")
 const FvvUniTTS = uni.requireNativePlugin("Fvv-UniTTS")
 const officeViewModule = uni.requireNativePlugin("Seal-OfficeOnline")
 const imageEditor = uni.requireNativePlugin('Ba-ImageEditor')
+// 已经安装的应用列表
+import wxy from '@/js_sdk/weisifang/wxy-android.js';
 // #endif
 import download from '@/js_sdk/weisifang/download.js'
   
@@ -89,6 +91,13 @@ export default {
 					size: 30,
           type:'notice'
 				},
+        {
+        	name: 'gps',
+        	label: '已安装的app',
+        	color: '#8a5966',
+        	size: 30,
+          type:'app_list'
+        },
 				{
 					name: 'more-fill',
 					label: '更多-editimg',
@@ -297,6 +306,21 @@ export default {
         // var sd_path = plus.io.convertLocalFileSystemURL('_www/static/images/tabbar/work_active.png')
         
         
+      }
+      if(e.type == 'app_list'){
+        
+        let appArr=[];
+        uni.showLoading({
+        	title: '获取中',
+        	mask: true,
+        	success:(res)=>{
+        		appArr = wxy.getApplication();
+            console.log('已经安装的应用列表',appArr)
+        		// this.num = appArr.length;
+        		// this.appArr = appArr;
+        		uni.hideLoading();					
+        	}
+        });			
       }
       // #endif
 			
