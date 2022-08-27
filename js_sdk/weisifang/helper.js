@@ -1,9 +1,9 @@
 var isIos = false
+import download from '@/js_sdk/weisifang/download.js'
 // #ifdef APP-PLUS
 import { checkUpdate } from '../../components/app-upgrade/js/app-update-check.js'
 isIos = (plus.os.name === 'iOS')
 
-import download from '@/js_sdk/weisifang/download.js'
 import api from '@/api/index.js'
 
 // #endif
@@ -20,7 +20,7 @@ const helper = {
 		// 判断通知权限 移到 notice 里面去触发
 		// this.judgeIosPermissionPush()
 		this.clickToBack()
-		this.checkWhiteList()
+		// this.checkWhiteList()
 
 		this.requestPermission()
 		// 测试下载文件
@@ -80,8 +80,9 @@ const helper = {
 			var Uri = plus.android.importClass('android.net.Uri')
 			var Settings = plus.android.importClass('android.provider.Settings')
 			var packageURI = Uri.parse('package:' + packName)
-			var intents = plus.android.newObject('android.content.Intent', Settings
-				.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, packageURI) // 电池  
+			var intents = plus.android.newObject('android.content.Intent', Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, packageURI) // 电池  优化，是否允许在后台运行
+			// var intents = plus.android.newObject('android.content.Intent', Settings.BOOT_COMPLETED, packageURI) // 开机启动 直接进入卸载了？？？
+			// var intents = plus.android.newObject('android.content.Intent', Settings.ACTION_DEVICE_POWER, packageURI) //  直接进入卸载了？？？
 			main.startActivity(intents)
 			// console.log('调起end')
 		} catch {
@@ -108,11 +109,11 @@ const helper = {
 		plus.android.requestPermissions(
 			[
 				'android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS',
-				// 'android.permission.WAKE_LOCK', //唤醒锁定 允许程序在手机屏幕关闭后后台进程仍然运行
+				'android.permission.WAKE_LOCK', //唤醒锁定 允许程序在手机屏幕关闭后后台进程仍然运行
 				'android.permission.WRITE_EXTERNAL_STORAGE', // 写入外部存储 允许程序写入外部存储,如SD卡上写文件
-				// 'android.permission.RECEIVE_BOOT_COMPLETED', // 开机自动允许 允许程序开机自动运行
-				// 'android.intent.action.BOOT_COMPLETED',
-				// 'android.permission.DEVICE_POWER' // 电源管理
+				'android.permission.RECEIVE_BOOT_COMPLETED', // 开机自动允许 允许程序开机自动运行
+				// 'android.intent.action.BOOT_COMPLETED', //开机启动 默认被拒绝
+				// 'android.permission.DEVICE_POWER', // 电源管理 默认被拒绝
 				// 'android.permission.ACCESS_FINE_LOCATION', // 位置权限
 				// 'android.permission.ACCESS_COARSE_LOCATION', // 模糊位置权限(蓝牙\ble依赖)</button>
 				// 'android.permission.CAMERA', // 摄像头权限</button>

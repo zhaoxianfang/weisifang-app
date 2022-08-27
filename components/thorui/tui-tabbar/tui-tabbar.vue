@@ -250,6 +250,7 @@ export default {
 	position: absolute;
 	left: 50%;
 	bottom: 10rpx;
+  width: 100%;
 	transform: scale(0.8) translateX(-50%);
 	transform-origin: 0 100%;
 }

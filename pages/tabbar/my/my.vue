@@ -22,7 +22,7 @@
 				<image :src="user.userinfo.cover" class="tui-avatar" @tap="href(3)"></image>
 				<view class="tui-info">
 					<view class="tui-nickname">
-						{{user.userinfo.nickname}}
+						{{user.userinfo.nickname || '请登录'}}
 						<image src="/static/images/mall/my/icon_vip_3x.png" class="tui-img-vip"></image>
 					</view>
 					<view class="tui-explain">这家伙很懒…</view>

@@ -1,0 +1,15 @@
+{
+    "id": "Jis-Drawer",
+    "displayName": "仿企业微信抽屉",
+    "version": "1.0.0",
+    "description": "仿企业微信抽屉",
+    "keywords": [
+        "仿企业微信抽屉"
+    ],
+    "dcloudext": {
+        "category": [
+            "前端组件",
+            "通用组件"
+        ]
+    }
+}

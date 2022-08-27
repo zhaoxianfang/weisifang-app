@@ -3,6 +3,17 @@ const download = {
 	// 下载文件 到本应用 的 downloads 文件夹下，loadUrl：文件地址;
 	downloadFile(loadUrl) {
 		let that = this
+    // #ifdef H5
+    uni.downloadFile({
+    	url: loadUrl,
+    	success: (res) => {
+    		if (res.statusCode === 200) {
+    			console.log('下载成功');
+    		}
+    	}
+    });
+    // #endif
+    // #ifdef APP-PLUS
 		//图片下载成功 默认保存在本地相对路径的"_downloads"文件夹里面, 如"_downloads/logo.jpg"
 		var filename = loadUrl.substring(loadUrl.lastIndexOf('/') + 1, loadUrl.length)
 		var download_path_dir = '_downloads/' + this.getFileType(loadUrl)
@@ -22,6 +33,7 @@ const download = {
 				that.setFileFromNet(loadUrl, relativePath)
 			})
 		})
+    // #endif
 	},
 	// 创建文件夹
 	createDir(path, callback) {

@@ -114,6 +114,18 @@
 				"navigationBarTitleText": "上传图片",
 				"enablePullDownRefresh": false
 			}
+		}, {
+			"path": "docs/index/index",
+			"style": {
+				"navigationBarTitleText": "文档",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "calendar/index/index",
+			"style": {
+				"navigationBarTitleText": "备忘录",
+				"enablePullDownRefresh": false
+			}
 		}]
 	}, {
 		"root": "pagesB",

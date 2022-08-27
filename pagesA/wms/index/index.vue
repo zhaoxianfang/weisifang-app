@@ -1,13 +1,12 @@
 <template>
 	<view class="container">
 		<view class="header">
-			<view class="title">Tabbar</view>
-			<view class="sub-title">类似uni-app原生tabbar组件，可用于自定义tabbar</view>
-			<view class="sub-title">库存根据 tab 切换仓库，以及管理员可在tab 右侧编辑仓库</view>
+			<view class="title">WMS仓库管理系统</view>
+			<view class="sub-title">WMS仓库管理系统</view>
+			<view class="sub-title">WMS仓库管理系统</view>
 		</view>
 		
 		<view style="height: 300px;"></view>
-		<image src="/static/images/my/mine_bg_3x.png" class="tui-image" mode="widthFix"></image>
 
 		<tui-tabbar :current="current" @click="tabbarSwitch" isFixed hump :backgroundColor="backgroundColor" :tabBar="tabBar" color="#646464" selectedColor="#5677FC"></tui-tabbar>
 	</view>
@@ -33,7 +32,7 @@ export default {
 				},
 				{
 					pagePath: '',
-					text: '出入库',
+					text: '出/入库',
 					iconPath: '/static/images/tabbar/scan_gray.png',
 					hump: true,
 					selectedIconPath: '/static/images/tabbar/scan_active.png'

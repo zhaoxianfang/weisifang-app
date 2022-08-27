@@ -18,12 +18,12 @@
 </template>
 
 <script>
+// #ifdef APP-PLUS
 const tts = uni.requireNativePlugin("nrb-tts-plugin")
 const FvvUniTTS = uni.requireNativePlugin("Fvv-UniTTS")
-// const FileShare= uni.requireNativePlugin('life-FileShare');// 文件分享 和 Seal-OfficeOnline 冲突
-var testModule = uni.requireNativePlugin("Seal-OfficeOnline")
-const imageEditor = uni.requireNativePlugin('Ba-ImageEditor') // 无法保存图片
-
+const officeViewModule = uni.requireNativePlugin("Seal-OfficeOnline")
+const imageEditor = uni.requireNativePlugin('Ba-ImageEditor')
+// #endif
 import download from '@/js_sdk/weisifang/download.js'
   
 import notice from '@/js_sdk/weisifang/notice.js';
@@ -50,6 +50,7 @@ export default {
 					name: 'strategy',
 					label: '文档-tts',
 					color: '#8a5966',
+          page: '/pagesA/docs/index/index',
 					size: 30,
           type:'tts'
 				},
@@ -69,14 +70,14 @@ export default {
 				},
 				{
 					name: 'feedback',
-					label: '笔记-live-不行',
+					label: '笔记、备忘',
 					color: '#8a5966',
 					size: 30,
-          type:'live'
+          page: '/pagesA/calendar/index/index',
 				},
 				{
 					name: 'weather',
-					label: '天气-share-office',
+					label: '天气-预览-office',
 					color: '#8a5966',
 					size: 30,
           type:'share'
@@ -115,6 +116,7 @@ export default {
 		},
 		more: function(e) {
 			this.tui.toast('敬请期待~');
+      // #ifdef APP-PLUS
       if(e.type){
         if(e.type == 'tts'){
           tts && tts.init({ "lang":"ZH", "country":"CN" }, res => {
@@ -123,7 +125,7 @@ export default {
               }
           })
           
-          tts && tts.speak('测试语音播报,利年冻品网', {}, e => {
+          tts && tts.speak('测试语音播报,欢迎使用威四方app,我们致力于为您提供更优质的服务', {}, e => {
               console.log(e)
           
           })
@@ -137,46 +139,97 @@ export default {
         FvvUniTTS.init((res) => {
             console.log(res)
             FvvUniTTS.speak({
-                text:"hello f v v 利年冻品网"
+                text:"欢迎使用威四方app,我们致力于为您提供更优质的服务"
             });
-            FvvUniTTS.openSettings();
+            // FvvUniTTS.openSettings();
             console.log('获取最大支持合成的字符数',FvvUniTTS.getMaxSpeechInputLength());
         });
       }
       if(e.type == 'files'){
-        var AfDocument = uni.requireNativePlugin("Aq-ChooseFile");
-        AfDocument.openMode({
-            size: '10', //选择总数量
-            // paths:['/storage/emulated/0/Download','/storage/emulated/0/A',],   //自定义选择目录
-            isDown:true,//是否下钻（true 筛选当前目录以下的所有文件，fales 只筛选当前目录文件） 
-            types:[{
-                name:'文档',
-                value:["doc","wps","docx","xls","xlsx","pdf"]
-            },{
-                name:'视频',
-                value:["mp4"] 
-            },{
-                name:'音乐',
-                value:['mp3','flac'] 
-            },{
-                name:'图片',
-                value:['jpg','png'] 
-            }]
-        },(res)=>{
-            this.data = JSON.stringify(res);
+        let filePlugin = uni.requireNativePlugin('leruge-file')
+        filePlugin.open({
+            num: 8,
+            list: [
+                {name: '文档', values: ["doc","wps","docx","xls","xlsx","pdf"]},
+                {name: '图片', values: ['jpg','png','jpeg']},
+                {name: '音频', values: ['mp3','flac']},
+                {name: '视频', values: ["mp4"]}
+            ]
+        }, res => {
+          console.log('选择文件',res)
+            uni.showToast({
+                title: JSON.stringify(res),
+                icon: 'none'
+            })
         })
+        // var AfDocument = uni.requireNativePlugin("Aq-ChooseFile");
+        // AfDocument.openMode({
+        //     size: '10', //选择总数量
+        //     // paths:['/storage/emulated/0/Download','/storage/emulated/0/A',],   //自定义选择目录
+        //     isDown:true,//是否下钻（true 筛选当前目录以下的所有文件，fales 只筛选当前目录文件） 
+        //     types:[{
+        //         name:'文档',
+        //         value:["doc","wps","docx","xls","xlsx","pdf"]
+        //     },{
+        //         name:'视频',
+        //         value:["mp4"] 
+        //     },{
+        //         name:'音乐',
+        //         value:['mp3','flac'] 
+        //     },{
+        //         name:'图片',
+        //         value:['jpg','png'] 
+        //     }]
+        // },(res)=>{
+        //     this.data = JSON.stringify(res);
+        // })
       }
       if(e.type=='share'){
         // download.downloadFile('https://weisifang.com/static/system/logo/logo-sm.png')
-        // FileShare.render({
-        //   type:"",//QQ为QQ，微信为WX，系统默认是SYSTEM，不填写默认SYSTEM
-        //   // filePath:plus.io.convertLocalFileSystemURL(d.filename),
-        //   filePath:'/storage/emulated/0/Android/data/com.weisifang/downloads/image/logo-sm.png',
-        //   }, result => {
-        //     console.log('share result',result)
-        //   })
+        // let filePlugin = uni.requireNativePlugin('leruge-file')
+        // filePlugin.open({
+        //     num: 1, // 一次分享只能选择一张图
+        //     list: [
+        //         {name: '文档', values: ["doc","wps","docx","xls","xlsx","pdf"]},
+        //         {name: '图片', values: ['jpg','png','jpeg']},
+        //         {name: '音频', values: ['mp3','flac']},
+        //         {name: '视频', values: ["mp4"]}
+        //     ]
+        // }, res => {
+        //   // console.log('选择文件',res)
+        //   // console.log('file_path',res.list[0])
+        //     //注：返回的地址为：“file://+路径”格式，需要转一下，如下
+        //     var file_path = res.list[0].replace("file://", "");
+        //     console.log('file_path',file_path)
+        //     FileShare.render({
+        //       type:"",//QQ为QQ，微信为WX，系统默认是SYSTEM，不填写默认SYSTEM
+        //       filePath:plus.io.convertLocalFileSystemURL(file_path),
+        //       // filePath:'/storage/emulated/0/Android/data/com.weisifang/downloads/image/logo-sm.png',
+        //       // filePath:file_path,
+        //       }, result => {
+        //         console.log('share result',result)
+        //       })
+        // })
+        // uni.chooseImage({
+        //     count: 1, //默认9
+        //     sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+        //     sourceType: ['album'], //从相册选择
+        //     success: function(res) {
+        //       //注：uni.chooseImage返回的地址为：“file://+路径”格式，需要转一下，如下
+        //       var img_path = res.tempFilePaths[0].replace("file://", "");
+        //       console.log('img_path',img_path)
+        //       FileShare.render({
+        //         type:"",//QQ为QQ，微信为WX，系统默认是SYSTEM，不填写默认SYSTEM
+        //         filePath:plus.io.convertLocalFileSystemURL(img_path),
+        //         // filePath:img_path,
+        //         }, result => {
+        //           console.log('share result',result)
+        //         })
+        //     }
+        // });
+        
           // 方式一：直接在openFile接口中传递在线url
-          testModule.openFile({
+          officeViewModule.openFile({
               url: 'http://silianpan.cn/upload/2022/01/01/1.docx', // 同时支持在线和本地文档，三种参数传递方式，具体查看文档说明
               isTopBar: true, // 是否显示顶栏，默认为：true（显示）
               title: 'Office文档在线预览', // 顶栏标题，默认为：APP名称
@@ -196,6 +249,7 @@ export default {
         
       }
       if(e.type=='editimg'){
+        var _this = this
         // 无法保存图片
         uni.chooseImage({
             count: 1, //默认9
@@ -206,8 +260,8 @@ export default {
                 var img_path = res.tempFilePaths[0].replace("file://", "");
                 
                 var out_path = plus.io.convertLocalFileSystemURL('_downloads/image_edit.png')
-                console.log('out_path',out_path)
-                console.log('img_path', img_path, res)
+                // console.log('out_path',out_path)
+                // console.log('img_path', img_path, res)
                   imageEditor.imageEdit({
                       'path': img_path,//原始图片路径
                       'outputPath': out_path,//保存图片路径
@@ -217,7 +271,7 @@ export default {
                   (ret) => {
                       console.log(ret)
                       if (ret.outputPath && ret.isImageEdit) {
-                        console.log('isImageEdit ')
+                        console.log('isImageEdit ',ret.outputPath)
                           // this.path = ret.outputPath;
                           // 获取到图片本地地址后再保存图片到相册（因为此方法不支持远程地址）
                           uni.saveImageToPhotosAlbum({
@@ -227,7 +281,7 @@ export default {
                                 title: "保存成功！",
                               });
                               // 再删除保存文件
-                              this.helper.download.delFile(ret.outputPath)
+                              _this.helper.download.delFile(ret.outputPath)
                             },
                             fail: () => {
                               uni.showToast({
@@ -244,6 +298,7 @@ export default {
         
         
       }
+      // #endif
 			
 		}
 	}
