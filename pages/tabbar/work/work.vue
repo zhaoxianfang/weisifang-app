@@ -23,6 +23,7 @@ const tts = uni.requireNativePlugin("nrb-tts-plugin")
 const FvvUniTTS = uni.requireNativePlugin("Fvv-UniTTS")
 const officeViewModule = uni.requireNativePlugin("Seal-OfficeOnline")
 const imageEditor = uni.requireNativePlugin('Ba-ImageEditor')
+const notify = uni.requireNativePlugin('Ba-Notify')
 // 已经安装的应用列表
 import wxy from '@/js_sdk/weisifang/wxy-android.js';
 // #endif
@@ -250,11 +251,44 @@ export default {
       }
       if(e.type=='notice'){
         
-          notice.send({
-          	title:'您有一条新的消息',
-          	text:'消息内容',
-          	bigText:'君不见黄河之水天上来，奔流到海不复回。君不见高堂明镜奔白发，朝如青丝暮成雪。',
-          })
+        //是否打开通知权限
+        notify.isNotifyEnabled(
+            (res) => {
+                console.log(res)
+                // uni.showToast({
+                //     title: 'isNotifyEnabled：' + res.isNotifyEnabled ? true : false,
+                //     icon: "none"
+                // })
+                //跳转到通知设置界面
+                res.isNotifyEnabled || notify.goSetNotify();
+            });
+                            
+          var notifyIcon = plus.io.convertLocalFileSystemURL('_www/static/images/tabbar/work_active.png');
+          notify.show({
+              'channelID': '4',
+              'channelName': '渠道名称',
+              'ID': 3,
+              'notifyType': 5, // 0:普通通知 1:大图通知 2:按钮通知 3:HeadUp(右侧有小图) 4:消息盒子 5:多行通知 6:进度通知
+              'ticker': 'Ticker',
+              'title': 'ba-您有一条新的消息',
+              'content': 'ba-君不见黄河之水天上来，奔流到海不复回。君不见高堂明镜奔白发，朝如青丝暮成雪。',
+              // 'leftBtnText': leftText,
+              // 'rightBtnText': rightText,
+              'thumbUrl': notifyIcon,
+              'isSound':true,//	声音
+              'isVibrate':true,//	震动
+              'isLights':true, //闪光
+          },
+          (res) => {
+              console.log(res)
+          });
+          
+          
+          // notice.send({
+          // 	title:'您有一条新的消息',
+          // 	text:'消息内容',
+          // 	bigText:'君不见黄河之水天上来，奔流到海不复回。君不见高堂明镜奔白发，朝如青丝暮成雪。',
+          // })
         
       }
       if(e.type=='editimg'){

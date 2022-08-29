@@ -261,6 +261,20 @@
                     "pid" : "3226",
                     "parameters" : {}
                 }
+            },
+            "Ba-Notify" : {
+                "__plugin_info__" : {
+                    "name" : "应用消息通知插件 Ba-Notify",
+                    "description" : "Ba-Notify 是一款功能全面的uniapp消息通知插件，可在状态栏显示各种样式的消息通知。包含普通、大图、多行、进度、按钮等通知；支持检查、设置、清通知；支持根据渠道和ID，分类管管理",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=9231",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "9231",
+                    "parameters" : {}
+                }
             }
         }
     },
