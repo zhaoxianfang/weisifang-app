@@ -15,7 +15,7 @@ let defaultOptions = {
 }
 // #endif
 
-const notice = {
+const notify = {
 	send: (obj, options, callFn) => {
 		// #ifdef APP-PLUS
 		// 如需本地打包使用本插件，可联系作者打包本地包，本地包需要帮顶包名，qq: 1320024819  微信： m1320024819
@@ -320,4 +320,4 @@ const notice = {
 		// #endif
 	}
 }
-export default notice
+export default notify

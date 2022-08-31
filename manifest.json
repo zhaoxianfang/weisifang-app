@@ -72,7 +72,7 @@
                     "<uses-permission android:name=\"android.permission.INTERNET\"/>",
                     "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>",
                     "<uses-permission android:name=\"android.permission.MOUNT_UNMOUNT_FILESYSTEMS\"/>",
-                    "<uses-permission android:name=\"android.permission.READ_CONTACTS\"/>",
+                    "<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\"/>",
                     "<uses-permission android:name=\"android.permission.READ_FRAME_BUFFER\"/>",
                     "<uses-permission android:name=\"android.permission.READ_LOGS\"/>",
                     "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>",
@@ -89,10 +89,7 @@
                     "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>",
                     "<uses-permission android:name=\"android.permission.WRITE_SMS\"/>",
                     "<uses-permission android:name=\"android.permission.BLUETOOTH\"/>",
-                    "<uses-permission android:name=\"android.permission.BLUETOOTH_ADMIN\"/>",
-                    "<uses-permission android:name=\"android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS\"/>",
-                    "<uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\"/>",
-                    "<uses-permission android:name=\"android.permission.MANAGE_EXTERNAL_STORAGE\"/>"
+                    "<uses-permission android:name=\"android.permission.BLUETOOTH_ADMIN\"/>"
                 ],
                 "abiFilters" : [ "armeabi-v7a", "arm64-v8a", "x86" ],
                 "schemes" : "wsf,weisifang",
@@ -234,20 +231,6 @@
                     "parameters" : {}
                 }
             },
-            "leruge-file" : {
-                "__plugin_info__" : {
-                    "name" : "文件选择，分页，自定义筛选类型，多选",
-                    "description" : "文件选择，苹果版本稍后开发，支持安卓5-12，自定义筛选，多选，解决卡顿问题，使用了分页",
-                    "platforms" : "Android",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=7276",
-                    "android_package_name" : "com.weisifang",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 1,
-                    "pid" : "7276",
-                    "parameters" : {}
-                }
-            },
             "Seal-OfficeOnline" : {
                 "__plugin_info__" : {
                     "name" : "跨平台Office文档、图片在线预览，视频播放原生插件",
@@ -262,17 +245,59 @@
                     "parameters" : {}
                 }
             },
-            "Ba-Notify" : {
+            "Ba-MediaPicker" : {
                 "__plugin_info__" : {
-                    "name" : "应用消息通知插件 Ba-Notify",
-                    "description" : "Ba-Notify 是一款功能全面的uniapp消息通知插件，可在状态栏显示各种样式的消息通知。包含普通、大图、多行、进度、按钮等通知；支持检查、设置、清通知；支持根据渠道和ID，分类管管理",
+                    "name" : "图片选择插件（支持视频、音频） Ba-MediaPicker",
+                    "description" : "Ba-MediaPicker 是一款功能强大的uniapp图片、音视频选择插件，可自定义配置，支持单选、多选，支持已选择项回显，支持图片压缩、裁剪，支持预览大图、视频、音频等等。",
                     "platforms" : "Android",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=9231",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=9033",
                     "android_package_name" : "com.weisifang",
                     "ios_bundle_id" : "",
                     "isCloud" : true,
                     "bought" : 1,
-                    "pid" : "9231",
+                    "pid" : "9033",
+                    "parameters" : {}
+                }
+            },
+            "guang-ocrmodule" : {
+                "__plugin_info__" : {
+                    "name" : "离线OCR文字识别",
+                    "description" : "离线ocr识别插件，不需要联网，不需要连接任何在线API，直接在安卓手机端进行文字识别",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=8492",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "8492",
+                    "parameters" : {}
+                }
+            },
+            "me-record" : {
+                "__plugin_info__" : {
+                    "name" : "android录屏原生插件",
+                    "description" : "可配置录屏是否录制声音, 支持动态禁止和允许录屏, 录屏文件自动保存到相册",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=7066",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "7066",
+                    "parameters" : {}
+                }
+            },
+            "Ba-FilePicker" : {
+                "__plugin_info__" : {
+                    "name" : "文件选择插件 Ba-FilePicker",
+                    "description" : "Ba-FilePicker 是一款功能强大、界面整洁美观的uniapp文件选择插件，支持层级浏览文件目录选择、根据文件类型筛选选择两种方式（效果如图），支持单选、多选、数量限制，支持根据名称、时间、大",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=9161",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "9161",
                     "parameters" : {}
                 }
             }

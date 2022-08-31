@@ -23,16 +23,18 @@ const tts = uni.requireNativePlugin("nrb-tts-plugin")
 const FvvUniTTS = uni.requireNativePlugin("Fvv-UniTTS")
 const officeViewModule = uni.requireNativePlugin("Seal-OfficeOnline")
 const imageEditor = uni.requireNativePlugin('Ba-ImageEditor')
-const notify = uni.requireNativePlugin('Ba-Notify')
+ const mediaPicker = uni.requireNativePlugin('Ba-MediaPicker') // 图文选择
+ const filePicker = uni.requireNativePlugin('Ba-FilePicker') // 文件选择
 // 已经安装的应用列表
 import wxy from '@/js_sdk/weisifang/wxy-android.js';
 // #endif
 import download from '@/js_sdk/weisifang/download.js'
   
-import notice from '@/js_sdk/weisifang/notice.js';
+import notify from '@/js_sdk/weisifang/notify.js';
 export default {
 	data() {
 		return {
+      baSelectedList:[], // ba 图片文件选择返回值
 			gridColumn: 2,
 			dataList: [
 				{
@@ -66,10 +68,10 @@ export default {
 				},
 				{
 					name: 'tool',
-					label: '音乐-files',
+					label: '音乐-图片选择',
 					color: '#8a5966',
 					size: 30,
-          type:'files'
+          type:'img'
 				},
 				{
 					name: 'feedback',
@@ -87,10 +89,10 @@ export default {
 				},
 				{
 					name: 'gps',
-					label: '附近-notice',
+					label: '附近-notify',
 					color: '#8a5966',
 					size: 30,
-          type:'notice'
+          type:'notify'
 				},
         {
         	name: 'gps',
@@ -99,13 +101,27 @@ export default {
         	size: 30,
           type:'app_list'
         },
+        {
+        	name: 'gps',
+        	label: 'OCR',
+        	color: '#8a5966',
+          page: '/pagesA/ocr/index/index',
+        	size: 30
+        },
 				{
 					name: 'more-fill',
-					label: '更多-editimg',
+					label: '文件选择',
 					color: '#999',
 					size: 30,
+          type:'files'
+				},
+        {
+        	name: 'more-fill',
+        	label: 'editimg',
+        	color: '#999',
+        	size: 30,
           type:'editimg'
-				}
+        }
 			]
 		};
 	},
@@ -155,44 +171,54 @@ export default {
             console.log('获取最大支持合成的字符数',FvvUniTTS.getMaxSpeechInputLength());
         });
       }
+      if(e.type == 'img'){
+        // 图片视频选择
+        mediaPicker.selectPicture({
+            'onlyCamera': false, // 是否仅拍照
+            'mediaType': 0, // 选择媒体类型 0:所有 1:图片 2:视频 3:音频
+            'single': false, // 是否单选
+            'singleBack': false, // 单选模式直接返回
+            'max': 9, // 多选最大选择数
+            'maxVideo': 1, // 多选最大选择数（视频）
+            'compress': false, // 是否压缩
+            'crop': false, // 是否裁剪
+            'cropScale': 0, // 裁剪比例 0(默认) 1(1:1) 2(3:4) 3(3:2) 4(16:9)
+            'cropRound': false, // 是否裁剪圆形
+            'gif': false, // 是否显示gif图片
+            'language': 0, // 语言 0简体中文 1繁体中文 2英语 3韩语 4德语 5法语 6日语 7越语 8西班牙语 9葡萄牙语 10阿拉伯语 11俄语
+            'slide': true, // 滑动选择
+            'isCamera': true, // 显示拍摄、拍照、录音
+            'isDisplayTimeAxis': false, // 显示资源时间轴
+            'isOriginalControl': false, // 是否开启原图功能
+            'isOpenClickSound': false, // 是否开启点击声音
+            'isMaxSelectEnabledMask': false, // 是否显示蒙层(达到最大可选数量，默认false,弹窗提示)
+            'selectedList': this.baSelectedList,//已选择项回显，注意：需传选择回调返回的data数组
+            'position': 0,//初始显示第几项（已选择预览时使用）
+        },
+        (ret) => {//回调参数
+            console.log('文件选择',ret);
+            if (ret.data) {
+                ret.data.forEach(item => {
+                    //文件名： item.fileName
+                    //初始路径： item.path
+                    //绝对路径： item.realPath
+                    //压缩文件路径： item.compressPath
+                    //...等等，参照：回调函数表
+                })
+            }
+        });
+      }
       if(e.type == 'files'){
-        let filePlugin = uni.requireNativePlugin('leruge-file')
-        filePlugin.open({
-            num: 8,
-            list: [
-                {name: '文档', values: ["doc","wps","docx","xls","xlsx","pdf"]},
-                {name: '图片', values: ['jpg','png','jpeg']},
-                {name: '音频', values: ['mp3','flac']},
-                {name: '视频', values: ["mp4"]}
-            ]
-        }, res => {
-          console.log('选择文件',res)
-            uni.showToast({
-                title: JSON.stringify(res),
-                icon: 'none'
-            })
-        })
-        // var AfDocument = uni.requireNativePlugin("Aq-ChooseFile");
-        // AfDocument.openMode({
-        //     size: '10', //选择总数量
-        //     // paths:['/storage/emulated/0/Download','/storage/emulated/0/A',],   //自定义选择目录
-        //     isDown:true,//是否下钻（true 筛选当前目录以下的所有文件，fales 只筛选当前目录文件） 
-        //     types:[{
-        //         name:'文档',
-        //         value:["doc","wps","docx","xls","xlsx","pdf"]
-        //     },{
-        //         name:'视频',
-        //         value:["mp4"] 
-        //     },{
-        //         name:'音乐',
-        //         value:['mp3','flac'] 
-        //     },{
-        //         name:'图片',
-        //         value:['jpg','png'] 
-        //     }]
-        // },(res)=>{
-        //     this.data = JSON.stringify(res);
-        // })
+        filePicker.selectFile({
+            'selectType': 1, // 选择类型：默认为0（ 0：浏览文件目录 1：文件分类）
+            'maxCount': 9,
+            'filetypes':'png,jpg,gif,mp3,mp4,txt,doc,apk,zip' // 文件类型，多个英文","隔开
+        },(ret) => {
+            console.log(ret)
+            if (ret.data) {
+                this.selectedList = ret.data;
+            }
+        });
       }
       if(e.type=='share'){
         // download.downloadFile('https://weisifang.com/static/system/logo/logo-sm.png')
@@ -249,46 +275,12 @@ export default {
               waterMarkText: '你好，世界\n准备好了吗？时刻准备着', // 水印文本
           });
       }
-      if(e.type=='notice'){
-        
-        //是否打开通知权限
-        notify.isNotifyEnabled(
-            (res) => {
-                console.log(res)
-                // uni.showToast({
-                //     title: 'isNotifyEnabled：' + res.isNotifyEnabled ? true : false,
-                //     icon: "none"
-                // })
-                //跳转到通知设置界面
-                res.isNotifyEnabled || notify.goSetNotify();
-            });
-                            
-          var notifyIcon = plus.io.convertLocalFileSystemURL('_www/static/images/tabbar/work_active.png');
-          notify.show({
-              'channelID': '4',
-              'channelName': '渠道名称',
-              'ID': 3,
-              'notifyType': 5, // 0:普通通知 1:大图通知 2:按钮通知 3:HeadUp(右侧有小图) 4:消息盒子 5:多行通知 6:进度通知
-              'ticker': 'Ticker',
-              'title': 'ba-您有一条新的消息',
-              'content': 'ba-君不见黄河之水天上来，奔流到海不复回。君不见高堂明镜奔白发，朝如青丝暮成雪。',
-              // 'leftBtnText': leftText,
-              // 'rightBtnText': rightText,
-              'thumbUrl': notifyIcon,
-              'isSound':true,//	声音
-              'isVibrate':true,//	震动
-              'isLights':true, //闪光
-          },
-          (res) => {
-              console.log(res)
-          });
-          
-          
-          // notice.send({
-          // 	title:'您有一条新的消息',
-          // 	text:'消息内容',
-          // 	bigText:'君不见黄河之水天上来，奔流到海不复回。君不见高堂明镜奔白发，朝如青丝暮成雪。',
-          // })
+      if(e.type=='notify'){
+          notify.send({
+          	title:'您有一条新的消息',
+          	text:'消息内容',
+          	bigText:'君不见黄河之水天上来，奔流到海不复回。君不见高堂明镜奔白发，朝如青丝暮成雪。',
+          })
         
       }
       if(e.type=='editimg'){
