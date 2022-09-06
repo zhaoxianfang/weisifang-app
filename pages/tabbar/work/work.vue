@@ -98,7 +98,7 @@ export default {
         	name: 'gps',
         	label: '已安装的app',
         	color: '#8a5966',
-        	size: 30,
+        	size: 28,
           type:'app_list'
         },
         {

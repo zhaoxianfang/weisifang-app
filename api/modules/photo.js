@@ -8,7 +8,7 @@ var apiList = {
 	},
 	// 新建相册
 	create_photos(data){
-		return fetch.request('photo/list', "POST", data)
+		return fetch.request('photo/create', "POST", data)
 	},
 	// 修改相册名称
 	edit_photos(id,data){

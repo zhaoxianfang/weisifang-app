@@ -66,6 +66,18 @@
 				"navigationBarTitleText": "登录",
 				"enablePullDownRefresh": false
 			}
+		},{
+			"path": "pages/common/login/register",
+			"style": {
+				"navigationBarTitleText": "注册",
+				"enablePullDownRefresh": false
+			}
+		},{
+			"path": "pages/common/login/forget",
+			"style": {
+				"navigationBarTitleText": "忘记密码",
+				"enablePullDownRefresh": false
+			}
 		}
 	],
 	"preloadRule": {

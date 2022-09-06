@@ -48,6 +48,14 @@ export default {
 				plus.runtime.arguments = '';
 			}
 		}
+		// ba-natify 插件
+		if (args) {
+		    // if(args.4){//判断是否为通知传来的消息
+		    //     //这里写你的处理逻辑
+		    //     //args参数见“点击事件参数”
+		    // }
+		    console.log(args);  
+		}
 		// #endif
 		if(!this.$store.state.user.isLogin){
 			// 未登录
@@ -57,14 +65,7 @@ export default {
 				url: '/pages/common/login/login'
 			});
 		}
-    // ba-natify 插件
-    if (args) {
-        // if(args.4){//判断是否为通知传来的消息
-        //     //这里写你的处理逻辑
-        //     //args参数见“点击事件参数”
-        // }
-        console.log(args);  
-    }
+    
 	},
 	onHide: function() {
 		//console.log('App Hide')

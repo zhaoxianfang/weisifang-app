@@ -170,7 +170,7 @@ export default {
 			this.folderModal = false;
 		},
 		handleCreateddFolder() {
-			if (this.folder_name) {
+			if (this.folder_name.length > 1) {
 				// this.tui.toast('操作相册：' + this.folder_name);
 				if(this.currentFolder.id){
 					this.$api.photo.edit_photos(this.currentFolder.id,{name:this.folder_name}).then(res => {
