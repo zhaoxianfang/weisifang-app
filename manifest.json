@@ -45,7 +45,8 @@
             "Messaging" : {},
             "OAuth" : {},
             "Maps" : {},
-            "Push" : {}
+            "Push" : {},
+            "Share" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
@@ -135,6 +136,12 @@
                 "ad" : {},
                 "push" : {
                     "unipush" : null
+                },
+                "share" : {
+                    "qq" : {
+                        "appid" : "101985870",
+                        "UniversalLinks" : "https://www.weisifang.com/qq_conn/101985870/"
+                    }
                 }
             },
             "icons" : {
@@ -231,20 +238,6 @@
                     "parameters" : {}
                 }
             },
-            "Seal-OfficeOnline" : {
-                "__plugin_info__" : {
-                    "name" : "跨平台Office文档、图片在线预览，视频播放原生插件",
-                    "description" : "支持Android和IOS，支持Office文档，常用图片和视频格式",
-                    "platforms" : "Android,iOS",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=3226",
-                    "android_package_name" : "com.weisifang",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 1,
-                    "pid" : "3226",
-                    "parameters" : {}
-                }
-            },
             "Ba-MediaPicker" : {
                 "__plugin_info__" : {
                     "name" : "图片选择插件（支持视频、音频） Ba-MediaPicker",
@@ -259,34 +252,6 @@
                     "parameters" : {}
                 }
             },
-            "guang-ocrmodule" : {
-                "__plugin_info__" : {
-                    "name" : "离线OCR文字识别",
-                    "description" : "离线ocr识别插件，不需要联网，不需要连接任何在线API，直接在安卓手机端进行文字识别",
-                    "platforms" : "Android",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=8492",
-                    "android_package_name" : "com.weisifang",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 1,
-                    "pid" : "8492",
-                    "parameters" : {}
-                }
-            },
-            "me-record" : {
-                "__plugin_info__" : {
-                    "name" : "android录屏原生插件",
-                    "description" : "可配置录屏是否录制声音, 支持动态禁止和允许录屏, 录屏文件自动保存到相册",
-                    "platforms" : "Android",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=7066",
-                    "android_package_name" : "com.weisifang",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 1,
-                    "pid" : "7066",
-                    "parameters" : {}
-                }
-            },
             "Ba-FilePicker" : {
                 "__plugin_info__" : {
                     "name" : "文件选择插件 Ba-FilePicker",
@@ -298,6 +263,20 @@
                     "isCloud" : true,
                     "bought" : 1,
                     "pid" : "9161",
+                    "parameters" : {}
+                }
+            },
+            "Ba-FloatWindow" : {
+                "__plugin_info__" : {
+                    "name" : "悬浮窗（在其他应用上层显示） Ba-FloatWindow",
+                    "description" : "Ba-FloatWindow 是一款在其他应用上层显示的悬浮窗插件。支持多种场景；支持拖动；支持多个。",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=9432",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "9432",
                     "parameters" : {}
                 }
             }

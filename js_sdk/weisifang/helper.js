@@ -1,5 +1,7 @@
 var isIos = false
 import download from '@/js_sdk/weisifang/download.js'
+import files from '@/js_sdk/weisifang/files.js'
+import permissions from '@/js_sdk/weisifang/permissions.js'
 // #ifdef APP-PLUS
 import { checkUpdate } from '../../components/app-upgrade/js/app-update-check.js'
 isIos = (plus.os.name === 'iOS')
@@ -12,6 +14,8 @@ const helper = {
 	debounceTime: null, // 防抖计时器
 	debounceOldArgs: [], // 防抖动上次传入的参数
   download:download,
+  files:files,
+  permissions:permissions,
 	init() {
 		// #ifdef APP-PLUS
 		plus.screen.lockOrientation('portrait-primary') //锁定竖屏
@@ -314,10 +318,51 @@ const helper = {
 		var main = plus.android.runtimeMainActivity() //获取activity
 		var Intent = plus.android.importClass('android.content.Intent')
 		var Settings = plus.android.importClass('android.provider.Settings')
-		var intent = new Intent(Settings
-			.ACTION_SOUND_SETTINGS) //可设置http://ask.dcloud.net.cn/question/14732这里所有Action字段
+		var intent = new Intent(Settings.ACTION_SOUND_SETTINGS) //可设置http://ask.dcloud.net.cn/question/14732这里所有Action字段
 		main.startActivity(intent)
 	},
+  // navite.js 检测悬浮窗权限并且打开设置
+  check_overlays(callbackFn){
+    const isIos = uni.getSystemInfoSync().platform == 'ios' 
+      const android_overlays = (callbackFn) => {  
+        var main = plus.android.runtimeMainActivity()  
+        var pkName = main.getPackageName()  
+        var Settings = plus.android.importClass('android.provider.Settings')  
+        var Uri = plus.android.importClass('android.net.Uri')  
+        var Build = plus.android.importClass('android.os.Build')  
+        var Intent = plus.android.importClass('android.content.Intent')  
+        var intent = new Intent( 'android.settings.action.MANAGE_OVERLAY_PERMISSION',  Uri.parse('package:' + pkName)  )  
+        // main.startActivityForResult(intent, 5004);
+        if (!Settings.canDrawOverlays(main)) {
+          // 检测悬浮窗
+          uni.showModal({
+            title: '温馨提示',  
+            content: '请先打开「悬浮窗」权限！',
+            showCancel: false,
+            success: function(res) {  
+              if (res.confirm) {
+                // main.startActivityForResult(intent, 5004) // 转跳到悬浮窗设置  
+                
+                // const main = plus.android.runtimeMainActivity();
+                let intentChild = plus.android.newObject('android.content.Intent', 'android.settings.APPLICATION_DETAILS_SETTINGS');
+                let uriChild = plus.android.invoke('android.net.Uri', 'fromParts', 'package', main.getPackageName(), null);
+                plus.android.invoke(intentChild, 'setData', uriChild);
+                main.startActivity(intentChild);
+              }  
+            }  
+          })
+        }else{
+          callbackFn && callbackFn()
+        }
+      }  
+      const ios_overlays = (callbackFn) => {  
+        // 有空再写
+        // var UIApplication = plus.ios.import("UIApplication");  
+        // var app = UIApplication.sharedApplication();  
+        // var enabledTypes  = 0;  
+      }  
+      return !isIos ? android_overlays(callbackFn) : ios_overlays(callbackFn)  
+  },
 	// app 检测版本更新
 	//获取线上APP版本信息  参数type 0自动检查  1手动检查（手动检查时，之前取消更新的版本也会提示出来）
 	checkAppUpgrade: (type = 0) => {

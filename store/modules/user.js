@@ -68,7 +68,7 @@ const user = {
 		qq_login({ commit }, qqAppTokenInfo) {
 		  return new Promise((resolve, reject) => {
 		    api.user.qq_login(qqAppTokenInfo).then(response => {
-					console.log('登录返回',response)
+					// console.log('登录返回',response)
 					tui.toast(response.message)
 					if(response.code !== 200){
 						reject(response)

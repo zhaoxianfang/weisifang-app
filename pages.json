@@ -138,12 +138,6 @@
 				"navigationBarTitleText": "备忘录",
 				"enablePullDownRefresh": false
 			}
-		}, {
-			"path": "ocr/index/index",
-			"style": {
-				"navigationBarTitleText": "OCR识别",
-				"enablePullDownRefresh": false
-			}
 		}
   ]
 	}, {

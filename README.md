@@ -28,3 +28,6 @@ life-FileShare（安卓ios分享任意类型文件） 和 Seal-OfficeOnline （�
 life-FileShare（安卓ios分享任意类型文件）到微信 只能分享 文件，不能分享图和音视频
 
 所以 选择 （跨平台Office文档、图片在线预览，视频播放原生插件） 放弃（安卓ios分享任意类型文件）
+
+Seal-OfficeOnline 和 life-FileShare 冲突
+Seal-OfficeOnline 和 imageedit 冲突
