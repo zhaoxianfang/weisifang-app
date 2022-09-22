@@ -44,8 +44,10 @@ export default {
 			// 处理args参数，如直达到某新页面等
 			if (args.substring(0, 6) === 'wsf://' || args.substring(0, 12) === 'weisifang://') {
 				var urlschemeContent = args.substring(0, 6) === 'wsf://' ? args.slice(6) : args.slice(12);
-				this.tui.modal('urlscheme', urlschemeContent, false, res => {});
 				plus.runtime.arguments = '';
+        if(urlschemeContent.length > 0){
+          this.tui.modal('urlscheme', urlschemeContent, false, res => {});
+        }
 			}
 		}
 		// ba-natify 插件

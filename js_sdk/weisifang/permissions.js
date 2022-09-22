@@ -260,15 +260,35 @@ const permissions = {
   openAppSetting() {
   	try {
   		let os = plus.os.name;
-  		if ('Android' == os) {
-  			const main = plus.android.runtimeMainActivity();
-  			let intent = plus.android.newObject('android.content.Intent', 'android.settings.APPLICATION_DETAILS_SETTINGS');
-  			let uri = plus.android.invoke('android.net.Uri', 'fromParts', 'package', main.getPackageName(), null);
-  			plus.android.invoke(intent, 'setData', uri);
-  			main.startActivity(intent);
-  		} else {
-  			//unsupport, nothing to do.
-  		}
+      if ('Android' == os) {
+        const main = plus.android.runtimeMainActivity();
+        let intent = plus.android.newObject('android.content.Intent', 'android.settings.APPLICATION_DETAILS_SETTINGS');
+        let uri = plus.android.invoke('android.net.Uri', 'fromParts', 'package', main.getPackageName(), null);
+        plus.android.invoke(intent, 'setData', uri);
+        main.startActivity(intent);
+        
+        // console.log(plus.device.vendor);
+        // var Intent = plus.android.importClass('android.content.Intent')
+        // var Settings = plus.android.importClass('android.provider.Settings')
+        // var Uri = plus.android.importClass('android.net.Uri')
+        // var mainActivity = plus.android.runtimeMainActivity()
+        // var intent = new Intent()
+        // intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        // var uri = Uri.fromParts('package', mainActivity.getPackageName(), null)
+        // intent.setData(uri)
+        // mainActivity.startActivity(intent)
+      }else{
+        var UIApplication = plus.ios.import('UIApplication')
+        var application2 = UIApplication.sharedApplication()
+        var NSURL2 = plus.ios.import('NSURL')
+        // var setting2 = NSURL2.URLWithString("prefs:root=LOCATION_SERVICES");		
+        var setting2 = NSURL2.URLWithString('app-settings:')
+        application2.openURL(setting2)
+              
+        plus.ios.deleteObject(setting2)
+        plus.ios.deleteObject(NSURL2)
+        plus.ios.deleteObject(application2)
+      }
   	} catch (e) {
   		console.error('error @openAppSetting!!');
   	}
@@ -302,8 +322,166 @@ const permissions = {
   	} catch (e) {
   		console.error('error @openApp!!');
   	}
+  },
+  // navite.js 检测悬浮窗权限并且打开设置
+  check_overlays(callbackFn){
+    const isIos = uni.getSystemInfoSync().platform == 'ios' 
+      const android_overlays = (callbackFn) => {  
+        var main = plus.android.runtimeMainActivity()  
+        var pkName = main.getPackageName()  
+        var Settings = plus.android.importClass('android.provider.Settings')  
+        var Uri = plus.android.importClass('android.net.Uri')  
+        var Build = plus.android.importClass('android.os.Build')  
+        var Intent = plus.android.importClass('android.content.Intent')  
+        var intent = new Intent( 'android.settings.action.MANAGE_OVERLAY_PERMISSION',  Uri.parse('package:' + pkName)  )  
+        // main.startActivityForResult(intent, 5004);
+        if (!Settings.canDrawOverlays(main)) {
+          // 检测悬浮窗
+          uni.showModal({
+            title: '温馨提示',  
+            content: '请先打开「悬浮窗」权限！',
+            showCancel: false,
+            success: function(res) {  
+              if (res.confirm) {
+                // main.startActivityForResult(intent, 5004) // 转跳到悬浮窗设置  
+                
+                // const main = plus.android.runtimeMainActivity();
+                let intentChild = plus.android.newObject('android.content.Intent', 'android.settings.APPLICATION_DETAILS_SETTINGS');
+                let uriChild = plus.android.invoke('android.net.Uri', 'fromParts', 'package', main.getPackageName(), null);
+                plus.android.invoke(intentChild, 'setData', uriChild);
+                main.startActivity(intentChild);
+              }  
+            }  
+          })
+        }else{
+          callbackFn && callbackFn()
+        }
+      }  
+      const ios_overlays = (callbackFn) => {  
+        // 有空再写
+        // var UIApplication = plus.ios.import("UIApplication");  
+        // var app = UIApplication.sharedApplication();  
+        // var enabledTypes  = 0;  
+      }  
+      return !isIos ? android_overlays(callbackFn) : ios_overlays(callbackFn)  
+  },
+  // 判断是否在白名单中
+  checkWhiteList() {
+  	// 白名单  
+  	var main = plus.android.runtimeMainActivity()
+  	var packName = main.getPackageName()
+  	var Context = plus.android.importClass('android.content.Context')
+  	var PowerManager = plus.android.importClass('android.os.PowerManager')
+  	// 获取电源类
+  	var pm = main.getSystemService(Context.POWER_SERVICE)
+  	let inWhiteList = pm.isIgnoringBatteryOptimizations(packName)
+  	console.log('是否在白名单：', inWhiteList) //是否白名单  
+  	try {
+  		var Uri = plus.android.importClass('android.net.Uri')
+  		var Settings = plus.android.importClass('android.provider.Settings')
+  		var packageURI = Uri.parse('package:' + packName)
+  		var intents = plus.android.newObject('android.content.Intent', Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, packageURI) // 电池  优化，是否允许在后台运行
+  		main.startActivity(intents)
+  		// console.log('调起end')
+  	} catch {
+  		console.log('白名单调起失败')
+  	}
+  	// if (pm.isIgnoringBatteryOptimizations(packName)) {
+  	//     console.log(11)
+  	// } else {
+  //     uni.showModal({
+  //         title: '提示',
+  //         content: '请开启自启动权限和省电策略设置无限制!',
+  //         success: function(res) {
+  //             if (res.confirm) {
+  //                 Settings.openAppSetting()
+  //             } else if (res.cancel) {
+  //                 console.log('用户点击取消')
+  //             }
+  //         }
+  //     })
+  	// }
+  },
+  // 判断推送权限是否开启
+  judgeIosPermissionPush() {
+  	if (isIos) { //ios
+  		var result = false
+  		var UIApplication = plus.ios.import('UIApplication')
+  		var app = UIApplication.sharedApplication()
+  		var enabledTypes = 0
+  		if (app.currentUserNotificationSettings) {
+  			var settings = app.currentUserNotificationSettings()
+  			enabledTypes = settings.plusGetAttribute('types')
+  			console.log('enabledTypes1:' + enabledTypes)
+  			if (enabledTypes === 0) {
+  				// gotoAppPermissionSetting()
+  				console.log('推送权限没有开启')
+  			} else {
+  				result = true
+  				console.log('已经开启推送功能!')
+  			}
+  			plus.ios.deleteObject(settings)
+  		} else {
+  			enabledTypes = app.enabledRemoteNotificationTypes()
+  			if (enabledTypes === 0) {
+  				// gotoAppPermissionSetting()
+  				console.log('推送权限没有开启!')
+  			} else {
+  				result = true
+  				console.log('已经开启推送功能!')
+  			}
+  			console.log('enabledTypes2:' + enabledTypes)
+  		}
+  		plus.ios.deleteObject(app)
+  		plus.ios.deleteObject(UIApplication)
+  		return result
+  	} else { //android
+  		var result = false
+  		var main = plus.android.runtimeMainActivity()
+  		var pkName = main.getPackageName()
+  		var uid = main.getApplicationInfo().plusGetAttribute('uid')
+  		var NotificationManagerCompat = plus.android.importClass('androidx.core.app.NotificationManagerCompat')
+  		//("android.support.v4.app.NotificationManagerCompat");
+  		var areNotificationsEnabled = NotificationManagerCompat.from(main)
+  		// 未开通‘允许通知’权限，则弹窗提醒开通，并点击确认后，跳转到系统设置页面进行设置  
+  		if (!areNotificationsEnabled.areNotificationsEnabled()) {
+  			uni.showModal({
+  				title: '通知权限开启提醒',
+  				content: '您还没有开启通知权限，无法接受到消息通知，请前往设置！',
+  				showCancel: false,
+  				confirmText: '去设置',
+  				success: function(res) {
+  					if (res.confirm) {
+  						var Intent = plus.android.importClass('android.content.Intent')
+  						var Build = plus.android.importClass('android.os.Build')
+  						//android 8.0引导  
+  						if (Build.VERSION.SDK_INT >= 26) {
+  							var intent = new Intent('android.settings.APP_NOTIFICATION_SETTINGS')
+  							intent.putExtra('android.provider.extra.APP_PACKAGE', pkName)
+  						} else if (Build.VERSION.SDK_INT >= 21) { //android 5.0-7.0  
+  							var intent = new Intent('android.settings.APP_NOTIFICATION_SETTINGS')
+  							intent.putExtra('app_package', pkName)
+  							intent.putExtra('app_uid', uid)
+  						} else { //(<21)其他--跳转到该应用管理的详情页
+  							var Settings = plus.android.importClass('android.provider.Settings')
+  							var Uri = plus.android.importClass('android.net.Uri')
+  							var intent = new Intent()
+  							intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+  							var uri = Uri.fromParts('package', main.getPackageName(), null)
+  							intent.setData(uri)
+  						}
+  						// 跳转到该应用的系统通知设置页  
+  						main.startActivity(intent)
+  						return result
+  					}
+  				}
+  			})
+  		} else {
+  			result = true
+  			return result
+  		}
+  	}
   }
-  
   // #endif
 }
 export default permissions

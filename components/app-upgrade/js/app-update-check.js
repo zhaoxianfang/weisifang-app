@@ -8,21 +8,22 @@ export function checkUpdate(update_info, type = 0) {
 		plus.runtime.getProperty(plus.runtime.appid, async (inf) => {
 			// console.log('当前版本', inf.version);
 			// console.log('最新版本', update_info.version);
-			let need_update = await compareVersion(inf.version, update_info
-			.version); // 检查是否需要升级（对比版本号）
+			let need_update = await compareVersion(inf.version, update_info.version); // 检查是否需要升级（对比版本号）
 			if (!need_update) {
-				return reolve({
-					msg: "已经是最新版本了"
-				})
+				// return reolve({
+				// 	msg: "已经是最新版本了"
+				// })
+        return false
 			} //不需要更新
 
 			//需要更新，判断是不是静默更新
 			if (/\.wgt$/.test(update_info.now_url) && update_info.silent == 1) {
 				console.log("静默更新");
 				if (type == 1) {
-					return reolve({
-						msg: "已经是最新版本了"
-					})
+					// return reolve({
+					// 	msg: "已经是最新版本了"
+					// })
+          return false
 				}
 				startSilentUpdate(update_info.now_url); //开始静默更新
 				return reolve({
@@ -35,8 +36,7 @@ export function checkUpdate(update_info, type = 0) {
 			let update_ignore_version = uni.getStorageSync("update_ignore") || "0.0.0";
 
 			// console.log("强制更新", update_info.force);
-			if (type === 0 && update_ignore_version == update_info.version && update_info.force ===
-				0) {
+			if (type === 0 && update_ignore_version == update_info.version && update_info.force === 0) {
 				console.log("之前取消过这个版本，就不再提示了");
 				return reolve({
 					msg: ''

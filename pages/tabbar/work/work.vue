@@ -19,8 +19,6 @@
 
 <script>
 // #ifdef APP-PLUS
-const tts = uni.requireNativePlugin("nrb-tts-plugin")
-const FvvUniTTS = uni.requireNativePlugin("Fvv-UniTTS")
 // const officeViewModule = uni.requireNativePlugin("Seal-OfficeOnline")
 const imageEditor = uni.requireNativePlugin('Ba-ImageEditor')
 const mediaPicker = uni.requireNativePlugin('Ba-MediaPicker') // 图文选择
@@ -54,18 +52,16 @@ export default {
 				},
 				{
 					name: 'strategy',
-					label: '文档-tts',
+					label: '文档',
 					color: '#8a5966',
           page: '/pagesA/docs/index/index',
-					size: 30,
-          type:'tts'
+					size: 30
 				},
 				{
 					name: 'addressbook',
-					label: '通讯录-fvv-tts',
+					label: '通讯录',
 					color: '#8a5966',
-					size: 30,
-          type:'fvv-tts'
+					size: 30
 				},
 				{
 					name: 'tool',
@@ -141,7 +137,7 @@ export default {
       duration: 500,
       desktopShow: true,
       tag: "weisifang_default", // 为该弹窗设置标识，以做区分，用于多个
-      iconPath: "ba_float_win_icon", // 默认 ba_float_win_icon
+      iconPath: "ba_float_win_icon", // 默认 ba_float_win_icon | custom
       // 悬浮框参数 end
              
     };
@@ -189,34 +185,7 @@ export default {
 		more: function(e) {
 			this.tui.toast('敬请期待~');
       // #ifdef APP-PLUS
-      if(e.type){
-        if(e.type == 'tts'){
-          tts && tts.init({ "lang":"ZH", "country":"CN" }, res => {
-              if(res.success == 0){
-                  console.log('初始化TTS成功')
-              }
-          })
-          
-          tts && tts.speak('测试语音播报,欢迎使用威四方app,我们致力于为您提供更优质的服务', {}, e => {
-              console.log(e)
-          
-          })
-          
-          //停止播放
-          // tts && tts.stop()
-        }
-      }
-      if(e.type=='fvv-tts'){
-        // 初始化
-        FvvUniTTS.init((res) => {
-            console.log(res)
-            FvvUniTTS.speak({
-                text:"欢迎使用威四方app,我们致力于为您提供更优质的服务"
-            });
-            // FvvUniTTS.openSettings();
-            console.log('获取最大支持合成的字符数',FvvUniTTS.getMaxSpeechInputLength());
-        });
-      }
+      
       if(e.type == 'img'){
         // 图片视频选择
         mediaPicker.selectPicture({
@@ -292,52 +261,44 @@ export default {
       }
       if(e.type=='editimg'){
         var _this = this
-        // 无法保存图片
-        uni.chooseImage({
-            count: 1, //默认9
-            sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-            sourceType: ['album'], //从相册选择
-            success: function(res) {
-                //注：uni.chooseImage返回的地址为：“file://+路径”格式，需要转一下，如下
-                var img_path = res.tempFilePaths[0].replace("file://", "");
-                
-                var out_path = plus.io.convertLocalFileSystemURL('_downloads/image_edit.png')
-                // console.log('out_path',out_path)
-                // console.log('img_path', img_path, res)
-                  imageEditor.imageEdit({
-                      'path': img_path,//原始图片路径
-                      'outputPath': out_path,//保存图片路径
-                      // 'outputPath': '/storage/emulated/0/Pictures/BaImageEditor/tietu123.png',//保存图片路径
-                      // 'outputPath': '_downloads/image_edit.png',//保存图片路径
-                  },
-                  (ret) => {
-                      console.log(ret)
-                      if (ret.outputPath && ret.isImageEdit) {
-                        console.log('isImageEdit ',ret.outputPath)
-                          // this.path = ret.outputPath;
-                          // 获取到图片本地地址后再保存图片到相册（因为此方法不支持远程地址）
-                          uni.saveImageToPhotosAlbum({
-                            filePath: ret.outputPath,
-                            success: () => {
-                              uni.showToast({
-                                title: "保存成功！",
-                              });
-                              // 再删除保存文件
-                              _this.helper.download.delFile(ret.outputPath)
-                            },
-                            fail: () => {
-                              uni.showToast({
-                                title: "保存失败",
-                              });
-                            },
-                          });
-                      }
-                  });
-            }
-        });
-        // //获取 SD卡绝对路径
-        // var sd_path = plus.io.convertLocalFileSystemURL('_www/static/images/tabbar/work_active.png')
-        
+        this.helper.files.chooseFile({'mediaType': 1,'max': 1},function(file){
+          if(file === false){
+            console.log('选择文件出错啦 ')
+            return false
+          }
+          var img_path = file[0].realPath
+          var out_path = plus.io.convertLocalFileSystemURL('_downloads/image_edit.png')
+            imageEditor.imageEdit({
+                'path': img_path,//原始图片路径
+                'outputPath': out_path,//保存图片路径
+                // 'outputPath': '/storage/emulated/0/Pictures/BaImageEditor/tietu123.png',//保存图片路径
+                // 'outputPath': '_downloads/image_edit.png',//保存图片路径
+            },
+            (ret) => {
+                if (ret.outputPath && ret.isImageEdit) {
+                  console.log('isImageEdit ',ret.outputPath)
+                    // this.path = ret.outputPath;
+                    // 获取到图片本地地址后再保存图片到相册（因为此方法不支持远程地址）
+                    uni.saveImageToPhotosAlbum({
+                      filePath: ret.outputPath,
+                      success: () => {
+                        uni.showToast({
+                          title: "保存成功！",
+                        });
+                        // 再删除保存文件
+                        _this.helper.download.delFile(ret.outputPath)
+                      },
+                      fail: () => {
+                        uni.showToast({
+                          title: "保存失败",
+                        });
+                      },
+                    });
+                }
+            });
+            
+          
+        })
         
       }
       if(e.type == 'app_list'){
@@ -367,12 +328,16 @@ export default {
                 if(res.code){
                   console.log('点击',res);
                     //点击事件
+                    
+                    // 唤醒app
+                    _this.helper.utils.openApp()
+                    
                 }
-                uni.showToast({
-                    title: res.msg,
-                    icon: "none",
-                    duration: 3000
-                })
+                // uni.showToast({
+                //     title: res.msg,
+                //     icon: "none",
+                //     duration: 3000
+                // })
             });
             //隐藏
             // floatWindow.hideIcon({
@@ -382,61 +347,28 @@ export default {
       }
       if(e.type == 'share'){
         // 图片视频选择
-        mediaPicker.selectPicture({
-            'onlyCamera': false, // 是否仅拍照
-            'mediaType': 1, // 选择媒体类型 0:所有 1:图片 2:视频 3:音频
-            'single': true, // 是否单选
-            'singleBack': false, // 单选模式直接返回
-            'max': 9, // 多选最大选择数
-            'maxVideo': 1, // 多选最大选择数（视频）
-            'compress': false, // 是否压缩
-            'crop': true, // 是否裁剪
-            'cropScale': 0, // 裁剪比例 0(默认) 1(1:1) 2(3:4) 3(3:2) 4(16:9)
-            'cropRound': true, // 是否裁剪圆形
-            'gif': false, // 是否显示gif图片
-            'language': 0, // 语言 0简体中文 1繁体中文 2英语 3韩语 4德语 5法语 6日语 7越语 8西班牙语 9葡萄牙语 10阿拉伯语 11俄语
-            'slide': true, // 滑动选择
-            'isCamera': false, // 显示拍摄、拍照、录音
-            'isDisplayTimeAxis': false, // 显示资源时间轴
-            'isOriginalControl': true, // 是否开启原图功能
-            'isOpenClickSound': true, // 是否开启点击声音
-            'isMaxSelectEnabledMask': true, // 是否显示蒙层(达到最大可选数量，默认false,弹窗提示)
-            'selectedList': this.baSelectedList,//已选择项回显，注意：需传选择回调返回的data数组
-            'position': 0,//初始显示第几项（已选择预览时使用）
-        },
-        (ret) => {//回调参数
-            console.log('文件选择',ret);
-            if (ret.data) {
-                ret.data.forEach(item => {
-                    //文件名： item.fileName
-                    //初始路径： item.path
-                    //绝对路径： item.realPath
-                    //压缩文件路径： item.compressPath
-                    //...等等，参照：回调函数表
-                    console.log('文件选择 item',item);
-                    
-                    // 分享
-                    uni.shareWithSystem({
-                      type:'image', // 分享类型，只支持text，image，默认为text
-                      summary: '我正在使用威四方相册，你也赶紧来试试吧~', // 分享的文字内容
-                      // href: 'https://weisifang.com', // 分享链接，ios端分享到微信时必填此字段
-                      imageUrl: item.realPath, // 分享图片，仅支持本地路径
-                      success(res){
-                        // 分享完成，请注意此时不一定是成功分享
-                        console.log('分享完成，请注意此时不一定是成功分享',res)
-                      },
-                      fail(err){
-                        // 分享失败
-                        console.log('分享失败',err)
-                      },
-                      complete(res){
-                        // 成功或失败都调用
-                        console.log('成功或失败都调用',res)
-                      }
-                    })
-                })
+        this.helper.files.chooseFile({'mediaType': 1,'max': 1},function(file){
+          console.log('选择',file[0])
+          // 分享
+          uni.shareWithSystem({
+            type:'image', // 分享类型，只支持text，image，默认为text
+            summary: '我正在使用威四方相册，你也赶紧来试试吧~', // 分享的文字内容
+            // href: 'https://weisifang.com', // 分享链接，ios端分享到微信时必填此字段
+            imageUrl: file[0].realPath, // 分享图片，仅支持本地路径
+            success(res){
+              // 分享完成，请注意此时不一定是成功分享
+              console.log('分享完成，请注意此时不一定是成功分享',res)
+            },
+            fail(err){
+              // 分享失败
+              console.log('分享失败',err)
+            },
+            complete(res){
+              // 成功或失败都调用
+              console.log('成功或失败都调用',res)
             }
-        });
+          })
+        })
       }
       // #endif
 			

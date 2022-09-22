@@ -10,7 +10,9 @@
         // 设置全屏
         // "fullscreen" : true,
         "screenOrientation" : [ "portrait-primary" ], //竖屏
-
+        "softinput" : {
+            "mode" : "adjustPan" // 禁止软键盘顶起菜单
+        },
         // 设置手机状态栏不被遮挡
         "statusbar" : {
             "immersed" : false
@@ -193,34 +195,6 @@
                     "isCloud" : true,
                     "bought" : 1,
                     "pid" : "5959",
-                    "parameters" : {}
-                }
-            },
-            "Fvv-UniTTS" : {
-                "__plugin_info__" : {
-                    "name" : "安卓语音合成 Fvv-UniTTS",
-                    "description" : "安卓平台的tts引擎语音合成",
-                    "platforms" : "Android",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=2461",
-                    "android_package_name" : "com.weisifang",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 1,
-                    "pid" : "2461",
-                    "parameters" : {}
-                }
-            },
-            "nrb-tts-plugin" : {
-                "__plugin_info__" : {
-                    "name" : "语音合成TTS",
-                    "description" : "原生语音合成TTS",
-                    "platforms" : "Android,iOS",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=4133",
-                    "android_package_name" : "com.weisifang",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 1,
-                    "pid" : "4133",
                     "parameters" : {}
                 }
             },

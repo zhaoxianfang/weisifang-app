@@ -146,36 +146,125 @@ function broadCast(pname, action, data = {}) {
 function getApplication() {
 	// NativeJS实现代码
 	try {
-		const os = plus.os.name;
-		if ('Android' == os) {
-			const main = plus.android.runtimeMainActivity();
-			let pManager = plus.android.invoke(main, 'getPackageManager');
-			let pInfo = plus.android.invoke(pManager, 'getInstalledPackages', 0);
-			let total = plus.android.invoke(pInfo, 'size');
-			let packName = '';
-			let appName = '';
-			let obj = null;
-			let appArr = new Array();
-			// 遍历获取包名和应用名称
-			for (let i = 0; i < total; i++) {
-				// 获取包名
-				packName = plus.android.getAttribute(plus.android.invoke(pInfo, 'get', i), 'packageName');
-				// 获取包名对应的应用名
-				obj = plus.android.invoke(pManager, 'getApplicationInfo', packName, 0);
-				appName = plus.android.invoke(pManager, 'getApplicationLabel', obj);
-				// console.log(packName, appName);
-				obj = {};
-				obj.packName = packName;
-				obj.appName = appName;
-				// console.log(obj);
-				appArr.push(obj);
-			}
-			return appArr;
-		} else {
-			//unsupport, nothing to do.
-		}
+		// const os = plus.os.name;
+		// if ('Android' == os) {
+		// 	const main = plus.android.runtimeMainActivity();
+		// 	let pManager = plus.android.invoke(main, 'getPackageManager');
+		// 	let pInfo = plus.android.invoke(pManager, 'getInstalledPackages', 0);
+		// 	let total = plus.android.invoke(pInfo, 'size');
+		// 	let packName = '';
+		// 	let appName = '';
+		// 	let obj = null;
+		// 	let appArr = new Array();
+		// 	// 遍历获取包名和应用名称
+		// 	for (let i = 0; i < total; i++) {
+		// 		// 获取包名
+		// 		packName = plus.android.getAttribute(plus.android.invoke(pInfo, 'get', i), 'packageName');
+		// 		// 获取包名对应的应用名
+		// 		obj = plus.android.invoke(pManager, 'getApplicationInfo', packName, 0);
+		// 		appName = plus.android.invoke(pManager, 'getApplicationLabel', obj);
+		// 		// console.log(packName, appName);
+		// 		obj = {};
+		// 		obj.packName = packName;
+		// 		obj.appName = appName;
+		// 		// console.log(obj);
+		// 		appArr.push(obj);
+		// 	}
+		// 	return appArr;
+		// } else {
+		// 	//unsupport, nothing to do.
+		// }
+    
+    // 方法二
+    // plus.android.importClass('java.util.ArrayList');  
+    //     plus.android.importClass('android.content.pm.PackageInfo');    
+    //     plus.android.importClass('android.content.pm.PackageManager');  
+    //     var ApplicationInfo = plus.android.importClass('android.content.pm.ApplicationInfo');  
+    //     var MainActivity = plus.android.runtimeMainActivity();    
+    //     var PackageManager = MainActivity.getPackageManager();    
+    //     var pinfo = plus.android.invoke(PackageManager, 'getInstalledPackages', 0)    
+    //     if (pinfo != null) {  
+    //         var apklist = []  
+    //         for (var i = 0; i < pinfo.size(); i++) {    
+    //             var pkginfo = pinfo.get(i);
+    //             var issysapk = ((pkginfo.plusGetAttribute("applicationInfo").plusGetAttribute("flags") & ApplicationInfo.FLAG_SYSTEM) != 0) ? true : false  
+    //             if(issysapk == false){  
+    //                 const apkinfo = {  
+    //                     appName:pkginfo.plusGetAttribute("applicationInfo").loadLabel(PackageManager).toString(),  
+    //                     packageName:pkginfo.plusGetAttribute("packageName"),  
+    //                     versionName:pkginfo.plusGetAttribute("versionName"),  
+    //                     versionCode:pkginfo.plusGetAttribute("versionCode"),
+    //                     appIco:pkginfo.plusGetAttribute("applicationInfo").loadIcon(PackageManager)
+    //                 }
+    //                 apklist.push(apkinfo)  
+    //             }  
+    
+    //         }  
+    //         //this.appList = apklist  
+    //         //打印出所有的APP名称，包名，版本  
+    //         console.log(JSON.stringify(apklist))  
+    //     }  
+    
+    plus.android.importClass('android.graphics.drawable.BitmapDrawable');
+    var BitmapFactory = plus.android.importClass("android.graphics.BitmapFactory");
+    var Base64 = plus.android.importClass("android.util.Base64");
+    var Bitmap = plus.android.importClass('android.graphics.Bitmap');
+    var ByteArrayOutputStream = plus.android.importClass("java.io.ByteArrayOutputStream");
+    var Canvas = plus.android.importClass('android.graphics.Canvas');
+    plus.android.importClass('java.util.ArrayList');
+    plus.android.importClass('android.content.pm.PackageInfo');
+    plus.android.importClass('android.content.pm.PackageManager');
+    var ApplicationInfo = plus.android.importClass('android.content.pm.ApplicationInfo');
+    var MainActivity = plus.android.runtimeMainActivity();
+    var PackageManager = MainActivity.getPackageManager();
+    var pinfo = plus.android.invoke(PackageManager, 'getInstalledPackages', 0)  
+    var apklist = []  
+    if (pinfo != null) {
+      
+      for (var i = 0; i < pinfo.size(); i++) {
+        //PackageInfo{4b45699f9d com.tencent.mobileqq}
+        var pkginfo = pinfo.get(i);
+        var issysapk = ((pkginfo.plusGetAttribute("applicationInfo").plusGetAttribute("flags") & ApplicationInfo.FLAG_SYSTEM) != 0) ? true : false
+        if (issysapk == false) {
+            const apkinfo = {
+              appName: pkginfo.plusGetAttribute("applicationInfo").loadLabel(PackageManager).toString(),
+              packageName: pkginfo.plusGetAttribute("packageName"),
+              versionName: pkginfo.plusGetAttribute("versionName"),
+              versionCode: pkginfo.plusGetAttribute("versionCode"),
+              appIco:pkginfo.plusGetAttribute("applicationInfo").loadIcon(PackageManager)
+            };
+            var bimp=null;
+            try{
+              bimp=apkinfo.appIco.getBitmap();
+            }catch(e){
+              bimp = Bitmap.createBitmap(apkinfo.appIco.getIntrinsicWidth(), apkinfo.appIco.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+              var canvas = new Canvas(bimp);
+              apkinfo.appIco.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+              apkinfo.appIco.draw(canvas);
+            }
+            var baos = new ByteArrayOutputStream();
+            // 压缩 0-100
+            // bimp.compress(Bitmap.CompressFormat.PNG, 20, baos);
+            bimp.compress(Bitmap.CompressFormat.JPEG, 20, baos);
+            baos.flush();
+            baos.close();
+            var bitmapBytes = baos.toByteArray();
+            // var result = "data:image/png;base64,"+Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+            var result = "data:image/jpg;base64,"+Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+            if(apkinfo.packageName =='com.weisifang'){
+              
+              console.log(apkinfo.appIco.getIntrinsicWidth(),apkinfo.appIco.getIntrinsicHeight(), canvas.getWidth(), canvas.getHeight())
+              console.log('icon==========',result)
+            }
+            apkinfo.appIcon=result;
+            apklist.push(apkinfo);
+        };
+      };
+    };
+    return apklist
+    // console.log(JSON.stringify(apklist))  
 	} catch (e) {
-		console.error('error @getApplication!!');
+		console.error('error @getApplication!!',e);
 	}
 }
 
