@@ -153,10 +153,10 @@ const permissions = {
       'DEVICE_INFO_SETTINGS': 'android.settings.DEVICE_INFO_SETTINGS',
       'NOTIFICATION_SETTINGS': 'android.settings.NOTIFICATION_SETTINGS',
       'battery': 'android.settings.BATTERY_SAVER_SETTINGS”', // 显示节电设置
-      'ignore_battery': 'android.settings.IGNORE_BATTERY_OPTIMIZATION_SETTINGS”', // 显示屏幕以控制哪些应用可以忽略电池优化
+      'ignore_battery': 'android.settings.IGNORE_BATTERY_OPTIMIZATION_SETTINGS', // 显示屏幕以控制哪些应用可以忽略电池优化
       'storage': 'android.settings.INTERNAL_STORAGE_SETTINGS”', // 显示内部存储的设置
-      'req_ignore_battery': 'android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS”', // 要求用户允许应用忽略电池优化(白名单)[需要]
-      'per_req_ignore_battery': 'android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS”', // 
+      'req_ignore_battery': 'android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS', // 要求用户允许应用忽略电池优化(白名单)[需要]
+      'per_req_ignore_battery': 'android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS', // 
       'window': 'android.permission.SYSTEM_ALERT_WINDOW', //  悬浮框权限窗口
       'open': this.openSetting,
       'openAppSetting': this.openAppSetting,
@@ -169,7 +169,7 @@ const permissions = {
   // 判断权限
   requestPermission() {
   	plus.android.requestPermissions([
-  			
+  			'android.intent.action.BOOT_COMPLETED'
   		],
   		function(resultObj) {
   			for (var i = 0; i < resultObj.granted.length; i++) {
@@ -325,6 +325,7 @@ const permissions = {
   },
   // navite.js 检测悬浮窗权限并且打开设置
   check_overlays(callbackFn){
+    // this.judgeIosPermissionPush()
     const isIos = uni.getSystemInfoSync().platform == 'ios' 
       const android_overlays = (callbackFn) => {  
         var main = plus.android.runtimeMainActivity()  
@@ -333,8 +334,9 @@ const permissions = {
         var Uri = plus.android.importClass('android.net.Uri')  
         var Build = plus.android.importClass('android.os.Build')  
         var Intent = plus.android.importClass('android.content.Intent')  
-        var intent = new Intent( 'android.settings.action.MANAGE_OVERLAY_PERMISSION',  Uri.parse('package:' + pkName)  )  
+        var intent = new Intent( 'android.settings.action.MANAGE_OVERLAY_PERMISSION',  Uri.parse('package:' + pkName)  ) 
         // main.startActivityForResult(intent, 5004);
+        console.log(JSON.stringify(Settings))
         if (!Settings.canDrawOverlays(main)) {
           // 检测悬浮窗
           uni.showModal({
@@ -343,13 +345,14 @@ const permissions = {
             showCancel: false,
             success: function(res) {  
               if (res.confirm) {
-                // main.startActivityForResult(intent, 5004) // 转跳到悬浮窗设置  
+                main.startActivityForResult(intent, 5004) // 转跳到悬浮窗设置  
+                // main.startActivityForResult(intent, 2000) // 转跳到悬浮窗设置  
                 
                 // const main = plus.android.runtimeMainActivity();
-                let intentChild = plus.android.newObject('android.content.Intent', 'android.settings.APPLICATION_DETAILS_SETTINGS');
-                let uriChild = plus.android.invoke('android.net.Uri', 'fromParts', 'package', main.getPackageName(), null);
-                plus.android.invoke(intentChild, 'setData', uriChild);
-                main.startActivity(intentChild);
+                // let intentChild = plus.android.newObject('android.content.Intent', 'android.settings.APPLICATION_DETAILS_SETTINGS');
+                // let uriChild = plus.android.invoke('android.net.Uri', 'fromParts', 'package', main.getPackageName(), null);
+                // plus.android.invoke(intentChild, 'setData', uriChild);
+                // main.startActivity(intentChild);
               }  
             }  
           })
@@ -386,24 +389,25 @@ const permissions = {
   	} catch {
   		console.log('白名单调起失败')
   	}
-  	// if (pm.isIgnoringBatteryOptimizations(packName)) {
-  	//     console.log(11)
-  	// } else {
-  //     uni.showModal({
-  //         title: '提示',
-  //         content: '请开启自启动权限和省电策略设置无限制!',
-  //         success: function(res) {
-  //             if (res.confirm) {
-  //                 Settings.openAppSetting()
-  //             } else if (res.cancel) {
-  //                 console.log('用户点击取消')
-  //             }
-  //         }
-  //     })
-  	// }
+  	if (pm.isIgnoringBatteryOptimizations(packName)) {
+  	    console.log(11)
+  	} else {
+      uni.showModal({
+          title: '提示',
+          content: '请开启自启动权限和省电策略设置无限制!',
+          success: function(res) {
+              if (res.confirm) {
+                  Settings.openAppSetting()
+              } else if (res.cancel) {
+                  console.log('用户点击取消')
+              }
+          }
+      })
+  	}
   },
   // 判断推送权限是否开启
   judgeIosPermissionPush() {
+    const isIos = uni.getSystemInfoSync().platform == 'ios' 
   	if (isIos) { //ios
   		var result = false
   		var UIApplication = plus.ios.import('UIApplication')

@@ -318,7 +318,7 @@ export default {
       }
       if(e.type == 'window'){
         var _this = this
-          this.helper.check_overlays(function(){
+          this.helper.permissions.check_overlays(function(){
             // //显示 悬浮框
             floatWindow.showIcon({
                 tag: _this.tag

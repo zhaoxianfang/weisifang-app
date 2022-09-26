@@ -198,20 +198,6 @@
                     "parameters" : {}
                 }
             },
-            "Ba-ImageEditor" : {
-                "__plugin_info__" : {
-                    "name" : "图片编辑插件 Ba-ImageEditor",
-                    "description" : "Ba-ImageEditor 是一款功能强大的uniapp图片编辑插件，支持涂鸦、滤镜、裁剪、旋转、添加文字、美颜等等。",
-                    "platforms" : "Android",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=9095",
-                    "android_package_name" : "com.weisifang",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 1,
-                    "pid" : "9095",
-                    "parameters" : {}
-                }
-            },
             "Ba-MediaPicker" : {
                 "__plugin_info__" : {
                     "name" : "图片选择插件（支持视频、音频） Ba-MediaPicker",
@@ -251,6 +237,20 @@
                     "isCloud" : true,
                     "bought" : 1,
                     "pid" : "9432",
+                    "parameters" : {}
+                }
+            },
+            "Seal-OfficeOnline" : {
+                "__plugin_info__" : {
+                    "name" : "跨平台Office文档预览原生插件（支持组件嵌入、离线、水印、WPS预览或编辑）",
+                    "description" : "支持Android和IOS，支持Office文档，常用图片和视频格式",
+                    "platforms" : "Android,iOS",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=3226",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "3226",
                     "parameters" : {}
                 }
             }
