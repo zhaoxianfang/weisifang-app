@@ -20,43 +20,43 @@ export default {
 			tabs: [
 				{
 					id: 1,
-					title: '军事'
+					title: '栏目一'
 				},
 				{
 					id: 2,
-					title: '科幻'
+					title: '栏目二'
 				},
 				{
 					id: 3,
-					title: '战争'
+					title: '栏目三'
 				},
 				{
 					id: 4,
-					title: '人文'
+					title: '栏目四'
 				},
 				{
 					id: 5,
-					title: '地理'
+					title: '栏目五'
 				},
 				{
 					id: 6,
-					title: '社会'
+					title: '栏目六'
 				},
 				{
 					id: 7,
-					title: '家庭'
+					title: '栏目七'
 				},
 				{
 					id: 8,
-					title: '育儿'
+					title: '栏目八'
 				},
 				{
 					id: 9,
-					title: '科技'
+					title: '栏目九'
 				},
 				{
 					id: 10,
-					title: '教育'
+					title: '栏目十'
 				}
 			],
 			// 当前激活的tab 数据

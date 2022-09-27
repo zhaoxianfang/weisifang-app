@@ -63,9 +63,7 @@ export default {
 			// 未登录
 			console.log('请登录')
 			// 关闭所有页面，跳转到登录页面。
-			uni.reLaunch({
-				url: '/pages/common/login/login'
-			});
+			this.tui.toLogin()
 		}
     
 	},

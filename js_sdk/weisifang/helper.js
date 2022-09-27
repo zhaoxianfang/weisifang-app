@@ -17,7 +17,9 @@ const helper = {
   download:download,
   files:files,
   permissions:permissions,
+	// #ifdef APP-PLUS
   utils:utils,
+	// #endif
 	init() {
 		// #ifdef APP-PLUS
 		// plus.screen.lockOrientation('portrait-primary') //锁定竖屏

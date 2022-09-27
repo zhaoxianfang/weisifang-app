@@ -3,7 +3,7 @@
 		<view class="content">
 			<!-- 头部logo -->
 			<view class="header">
-				<image :src="logoImage"></image>
+				<image src="/static/images/common/logo.png"></image>
 			</view>
 			<!-- 主体表单 -->
 			<view class="main">

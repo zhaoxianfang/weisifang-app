@@ -111,6 +111,16 @@ const tui = {
 					if (tui.loadding && !hideLoading) {
 						uni.hideLoading()
 					}
+					let res_content = res.data || res
+					if(!this.isObj(res_content)){
+						if(this.isHtml(res.data)){
+							console.log('返回html 一般是报错了')
+							this.toLogin()
+							return false
+						}
+					}
+					
+					
 					resolve(res.data)
 				},
 				fail: res => {
@@ -121,6 +131,12 @@ const tui = {
 				}
 			})
 		})
+	},
+	isHtml:function(input) {
+	    return /<[a-z]+\d?(\s+[\w-]+=("[^"]*"|'[^']*'))*\s*\/?>|&#?\w+;/i.test(input);
+	},
+	isObj:function(val) {
+	    return Object.prototype.toString.call(val) === '[object Object]' || Object.prototype.toString.call(val) === '[object Array]'
 	},
 	/**
 	 * 上传文件
@@ -186,6 +202,12 @@ const tui = {
 		} else {
 			uni.navigateTo({ url: url })
 		}
+	},
+	toLogin(){
+		// 关闭所有页面，跳转到登录页面。
+		uni.reLaunch({
+			url: '/pages/common/login/login'
+		});
 	}
 }
 

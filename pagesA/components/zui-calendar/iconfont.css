@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont";
-  src: url('../../static/calendar/iconfont.woff2?t=1660529797094') format('woff2'),
-       url('../../static/calendar/iconfont.woff?t=1660529797094') format('woff'),
-       url('../../static/calendar/iconfont.ttf?t=1660529797094') format('truetype');
+  src: url('../../static/calendar/iconfont.woff2?t=1661934945336') format('woff2'),
+       url('../../static/calendar/iconfont.woff?t=1661934945336') format('woff'),
+       url('../../static/calendar/iconfont.ttf?t=1661934945336') format('truetype');
 }
 
 .iconfont {
@@ -12,6 +12,14 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 	color: #909193;
+}
+
+.icon-zhankai:before {
+  content: "\eb0b";
+}
+
+.icon-shousuo:before {
+  content: "\e672";
 }
 
 .icon-dui:before {
@@ -37,4 +45,5 @@
 .icon-jiantou_xiangzuoliangci:before {
   content: "\eb0a";
 }
+
 

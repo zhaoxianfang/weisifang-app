@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<view class="tui-box-upload">
-			<tui-upload :value="value" :header="header" fileKeyName='photo' :formData="formData" :limit="99" :size="8" :serverUrl="serverUrl" @complete="result" @remove="remove"></tui-upload>
+			<tui-upload :value="value" :header="headers" fileKeyName='photo' :formData="formData" :limit="99" :size="8" :serverUrl="serverUrl" @complete="result" @remove="remove"></tui-upload>
 		</view>
 	</view>
 </template>
@@ -9,6 +9,7 @@
 <script>
 	import config from '@/common/config.js' // 倒入默认配置
 	export default {
+		name: 'upload-page',
 		data() {
 			return {
 				// 上传文件
@@ -17,7 +18,7 @@
 				serverUrl: "",
 				 //初始化图片
 				value:[],
-				header:{
+				headers:{
 					'Authorization': this.tui.getToken()
 				},
 				formData:{
@@ -26,10 +27,11 @@
 			}
 		},
 		onLoad(option) {
-			this.serverUrl = config.baseURL+'photo/items/upload'
+			
 		  if (option) {
 				console.log(option)
 				this.formData.id = option.id
+				this.serverUrl = config.baseURL+'photo/items/upload/'+option.id
 			// 设置标题
 			// uni.setNavigationBarTitle({
 			// 	title: '相册详情'
