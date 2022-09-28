@@ -226,20 +226,6 @@
                     "parameters" : {}
                 }
             },
-            "Ba-FloatWindow" : {
-                "__plugin_info__" : {
-                    "name" : "悬浮窗（在其他应用上层显示） Ba-FloatWindow",
-                    "description" : "Ba-FloatWindow 是一款在其他应用上层显示的悬浮窗插件。支持多种场景；支持拖动；支持多个。",
-                    "platforms" : "Android",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=9432",
-                    "android_package_name" : "com.weisifang",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 1,
-                    "pid" : "9432",
-                    "parameters" : {}
-                }
-            },
             "Seal-OfficeOnline" : {
                 "__plugin_info__" : {
                     "name" : "跨平台Office文档预览原生插件（支持组件嵌入、离线、水印、WPS预览或编辑）",
