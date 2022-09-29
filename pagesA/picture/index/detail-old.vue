@@ -7,8 +7,7 @@
 		</view>
 		
     <block v-else>
-      <!-- <wsf-choose-img :manage="managePhoto" :list="photoList" :refresh="refresh" @hasRefresh="hasRefresh" @closeImage="closeImage" @setCover="setCover"></wsf-choose-img> -->
-			<wsf-upload v-model="photoList" :max="999" :remove="managePhoto" :add="false" @imgDelete="remove"></wsf-upload>
+      <wsf-choose-img src="url" :manage="managePhoto" :list="photoList" :refresh="refresh" @hasRefresh="hasRefresh" @closeImage="closeImage" @setCover="setCover"></wsf-choose-img>
     </block>
   
     <tui-divider v-if="!notMore" :size="28" :bold="true" color="#ccc" width="50%">加载中...</tui-divider>
@@ -28,7 +27,7 @@
 				photoList:[], // 照片列表
         queryList:{
           page:1,
-          limit:30
+          limit:25
         },
         notMore:false,
         finished:true,
@@ -161,19 +160,7 @@
       // 收到组件通知已经初始化过刷新操作了，重置为不刷新「追加」
       hasRefresh(e){
         this.refresh = false
-      },
-			remove: function(e) {
-				//移除图片
-				console.log('移除图片',e)
-				// console.log('移除图片',e,e.file.id)
-				
-				// tui-upload 方法
-				// let index = e.index
-				// this.$api.photo.del_photo_item(e.file.id)
-				
-				// wsf-upload 方法
-				this.$api.photo.del_photo_item(e.del.id)
-			},
+      }
 		}
 	}
 </script>

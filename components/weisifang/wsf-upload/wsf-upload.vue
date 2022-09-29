@@ -195,11 +195,13 @@
 		},
 		methods: {
 			isVideo(item) {
-				let isPass = false
-				if (!/.(gif|jpg|jpeg|png|gif\?|jpg\?|jpeg\?|png\?)/i.test(item) || (this.dataType == 1 && item.type == 1)) {
-					isPass = true
-				}
-				return isPass
+				var path = item.url || item;
+				var index = path.lastIndexOf('.') // 获取指定字符串最后一次出现的位置，返回index
+				var ext = path.substr(index + 1, 4) // substr(start, length) 抽取从start下标开始的length个字符，返回新的字符串
+				// toLowerCase() 将字符串转换为小写，返回一个新的字符串
+				let isImages = ['png','png?', 'jpg','jpg?','jpeg', 'bmp','bmp?', 'gif','gif?', 'webp', 'psd','psd?', 'svg','svg?', 'tiff'].indexOf(ext.toLowerCase()) !== -1
+				
+				return !isImages
 			},
 			getFileUrl(item) {
 				var url = item.url || item;
@@ -514,14 +516,14 @@
 				uni.showLoading({
 					title: '上传中'
 				});
-				console.log('imgUpload', tempFilePaths, type)
+				// console.log('imgUpload', tempFilePaths, type)
 				let uploadImgs = [];
 				tempFilePaths.forEach((item, index) => {
 					uploadImgs.push(new Promise((resolve, reject) => {
-						if (item.substring(0,7) !== "file://"){
-							item = "file://"+item
-						}
-						console.log(index, item, this.name, this.formData, this.headers)
+						// if (item.substring(0,7) !== "file://"){
+						// 	item = "file://"+item
+						// }
+						// console.log(index, item, this.name, this.formData, this.headers)
 						const uploadTask = uni.uploadFile({
 							url: this.action, //仅为示例，非真实的接口地址
 							filePath: item,

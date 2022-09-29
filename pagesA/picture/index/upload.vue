@@ -19,7 +19,7 @@
 				serverUrl: "",
 				 //初始化图片
 				value:[
-					'https://weisifang.com/photos/9PfZSGkucgm7/20220928/6334570676ad4.jpg?uni_file=6'
+					// 'https://weisifang.com/photos/9PfZSGkucgm7/20220928/6334570676ad4.jpg?uni_file=6'
 				],
 				headers:{
 					'Authorization': this.tui.getToken()
@@ -46,8 +46,20 @@
 				//移除图片
 				console.log('移除图片',e)
 				// console.log('移除图片',e,e.file.id)
+				
+				// tui-upload 方法
 				// let index = e.index
 				// this.$api.photo.del_photo_item(e.file.id)
+				
+				// wsf-upload 方法
+				
+				
+				// 1.find() 返回数组中第一个满足条件的数据
+				var delObj = this.imageData.find((item, index) => {
+				    return item.url == e.del;
+				})
+				
+				this.$api.photo.del_photo_item(delObj.id)
 			},
 			uploadSuccess(res) { //上传成功
 				//console.log('res11111111111', res)
@@ -58,6 +70,7 @@
 				console.log('_res', _res)
 				if (_res.code == 200) {
 					this.value.push(_res.url);
+					this.imageData.push(_res);
 				}
 				/*******************************/
 			},

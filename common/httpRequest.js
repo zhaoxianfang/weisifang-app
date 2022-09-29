@@ -115,7 +115,8 @@ const tui = {
 					if(!this.isObj(res_content)){
 						if(this.isHtml(res.data)){
 							console.log('返回html 一般是报错了')
-							this.toLogin()
+							tui.toast('出错啦~')
+							// this.toLogin()
 							return false
 						}
 					}
