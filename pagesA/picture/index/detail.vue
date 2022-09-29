@@ -9,6 +9,9 @@
     <block v-else>
       <wsf-choose-img src="url" :manage="managePhoto" :list="photoList" :refresh="refresh" @hasRefresh="hasRefresh" @closeImage="closeImage" @setCover="setCover"></wsf-choose-img>
     </block>
+  
+    <tui-divider v-if="!notMore" :size="28" :bold="true" color="#ccc" width="50%">加载中...</tui-divider>
+    <tui-divider v-if="notMore" :size="28" :bold="true" color="#ccc" width="50%">没有了</tui-divider>
     
 		<tui-fab :left="0" :right="80" :bottom="80" :width="100" :height="100" bgColor="#5677fc" :btnList="btnList" @click="onClick" custom maskClosable><tui-icon name="setup" color="#fff"></tui-icon></tui-fab>
 	</view>
@@ -22,6 +25,12 @@
         refresh:false,
 				photo_id:'',
 				photoList:[], // 照片列表
+        queryList:{
+          page:1,
+          limit:25
+        },
+        notMore:false,
+        finished:true,
 				btnList: [{
 					bgColor: "#1589FF",
 					//图标/图片地址
@@ -54,6 +63,9 @@
 			}
 		},
 		onLoad(option) {
+      this.queryList.page = 1
+      this.notMore = false
+      this.finished = true
 		  if (option) {
 				this.photo_id = option.id
 				console.log(option)
@@ -74,15 +86,40 @@
         this.btnList[1].text = '管理图片'
       }
 		},
+    onReachBottom() {
+      console.log('触底了')
+      if(this.notMore){
+        return false
+      }
+      if(!this.finished){
+        return false
+      }
+      this.queryList.page++
+      this.getList();
+    },
 		methods: {
 			getList(){
-				this.$api.photo.get_photo_item_list(this.photo_id).then(res => {
-					 console.log('照片列表',res);
+        if(this.notMore){
+          return false
+        }
+        this.finished = false
+				this.$api.photo.get_photo_item_list(this.photo_id,this.queryList).then(res => {
+          console.log('返回', res.data);
 						if(res.data && res.data.length > 0){
-							this.photoList = res.data
-						}
+              if(this.queryList.page>1){
+                this.photoList = [...this.photoList, ...res.data]
+              }else{
+                this.photoList = res.data
+              }
+              this.notMore = false
+						}else{
+              // 没有了
+              this.notMore = true
+            }
+            this.finished = true
 					})
 					.catch(e => {
+            this.finished = true
 						console.log('出错啦', e);
 						this.tui.toast('出错啦')
 					});

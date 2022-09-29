@@ -518,21 +518,26 @@
 				let uploadImgs = [];
 				tempFilePaths.forEach((item, index) => {
 					uploadImgs.push(new Promise((resolve, reject) => {
-						// if (item.substring(0,7) !== "file://"){
-						// 	item = "file://"+item
-						// }
-						console.log(index, item)
+						if (item.substring(0,7) !== "file://"){
+							item = "file://"+item
+						}
+						console.log(index, item, this.name, this.formData, this.headers)
 						const uploadTask = uni.uploadFile({
 							url: this.action, //仅为示例，非真实的接口地址
 							filePath: item,
 							name: this.name,
-							fileType: type == 1 ? 'video' : 'image', //文件类型，image/video/audio
+							// fileType: type == 1 ? 'video' : 'image', //文件类型，image/video/audio 仅支付宝小程序填
 							formData: this.formData,
 							header: this.headers,
 							success: (uploadFileRes) => {
 								//uni.hideLoading();
 								//console.log(typeof this.uploadSuccess)
-								console.log('success',uploadFileRes)
+								// console.log('success',uploadFileRes,this.action)
+                if(this.tui.isHtml(uploadFileRes.data) ){
+                  reject('上传出错啦');
+                  this.$emit("uploadFail", '上传出错啦');
+                  return false
+                }
 								uploadFileRes.fileType = type
 								if (typeof this.uploadSuccess == 'function') {
 

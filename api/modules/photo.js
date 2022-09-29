@@ -18,8 +18,8 @@ var apiList = {
 	del_photo_item(id){
 		return fetch.request('photo/items/delete/'+id, "POST", {})
 	},
-	get_photo_item_list(id){
-		return fetch.request('photo/items/list/'+id, "POST", {})
+	get_photo_item_list(id,data){
+		return fetch.request('photo/items/list/'+id, "POST", data || {})
 	},
   set_cover_img(photo_id,item_id){
 		return fetch.request('photo/cover/'+photo_id+'/'+item_id, "POST", {})

@@ -118,7 +118,8 @@
 			"path": "picture/index/detail",
 			"style": {
 				"navigationBarTitleText": "相片列表详情",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+        "onReachBottomDistance": 250
 			}
 		}, {
 			"path": "picture/index/upload",

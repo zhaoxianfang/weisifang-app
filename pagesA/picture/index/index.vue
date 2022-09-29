@@ -132,7 +132,6 @@ export default {
 		// 获取我的相册列表
 		getList(){
 			this.$api.photo.get_photo_list().then(res => {
-				 console.log('我的相册列表',res);
 					if(res.code == 200){
 						this.folderList = res.data
 					}
@@ -203,7 +202,6 @@ export default {
 		
 		// 打开相册
 		openFolder(info) {
-			console.log('openFolder')
 			uni.navigateTo({
 			    url: 'detail?id='+info.id+"&name="+info.name
 			});

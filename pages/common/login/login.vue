@@ -28,8 +28,14 @@
 				@click="startLogin"
 			></wButton>
 			
+      <!-- 底部信息 -->
+      <view class="footer">
+      	<navigator url="forget" open-type="navigate">找回密码</navigator>
+      	<text>|</text>
+      	<navigator url="register" open-type="navigate">注册账号</navigator>
+      </view>
+      
 			<!-- #ifdef APP-PLUS -->
-			
 			<!-- 其他登录 -->
 			<view class="other_login">
 				<view class="login_icon" v-for="(item,index) in otherLoginType" :key="index" @tap="chooseLoginType(item)">
@@ -41,12 +47,6 @@
 			</view>
 			<!-- #endif -->
 			
-			<!-- 底部信息 -->
-			<view class="footer">
-				<navigator url="forget" open-type="navigate">找回密码</navigator>
-				<text>|</text>
-				<navigator url="register" open-type="navigate">注册账号</navigator>
-			</view>
 		</view>
 	</view>
 </template>
@@ -82,7 +82,7 @@
 					icon: "wechat",
 					color: "#80D640"
 				}, {
-					name: "新浪微博",
+					name: "微博",
 					value:'sina',
 					icon: "sina",
 					color: "#F9C718"
