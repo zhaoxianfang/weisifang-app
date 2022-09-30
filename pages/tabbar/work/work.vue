@@ -20,10 +20,8 @@
 <script>
 // #ifdef APP-PLUS
 const officeViewModule = uni.requireNativePlugin("Seal-OfficeOnline")
-const imageEditor = uni.requireNativePlugin('Ba-ImageEditor')
 const mediaPicker = uni.requireNativePlugin('Ba-MediaPicker') // 图文选择
-const filePicker = uni.requireNativePlugin('Ba-FilePicker') // 文件选择
-const floatWindow = uni.requireNativePlugin('Ba-FloatWindow') // 悬浮框
+
 // 已经安装的应用列表
 import wxy from '@/js_sdk/weisifang/wxy-android.js';
 // #endif
@@ -144,27 +142,7 @@ export default {
 	},
   mounted() {
     // #ifdef APP-PLUS
-    // 初始化悬浮框
-    floatWindow.initIcon({
-        widthRatio: this.widthRatio,
-        heightRatio: this.heightRatio,
-        xRatio: this.xRatio,
-        yRatio: this.yRatio,
-        moveType: this.moveType,
-        slideLeftMargin: this.slideLeftMargin,
-        slideRightMargin: this.slideRightMargin,
-        duration: this.duration,
-        desktopShow: this.desktopShow,
-        tag: this.tag,
-        iconPath: this.iconPath
-    },(res) => {
-        console.log('初始化悬浮框',res);
-        uni.showToast({
-            title: res.msg,
-            icon: "none",
-            duration: 3000
-        })
-    });
+    
     // #endif
   },
 	methods: {
@@ -188,52 +166,22 @@ export default {
       
       if(e.type == 'img'){
         // 图片视频选择
-        mediaPicker.selectPicture({
-            'onlyCamera': false, // 是否仅拍照
-            'mediaType': 0, // 选择媒体类型 0:所有 1:图片 2:视频 3:音频
-            'single': false, // 是否单选
-            'singleBack': false, // 单选模式直接返回
-            'max': 9, // 多选最大选择数
-            'maxVideo': 1, // 多选最大选择数（视频）
-            'compress': false, // 是否压缩
-            'crop': false, // 是否裁剪
-            'cropScale': 0, // 裁剪比例 0(默认) 1(1:1) 2(3:4) 3(3:2) 4(16:9)
-            'cropRound': false, // 是否裁剪圆形
-            'gif': false, // 是否显示gif图片
-            'language': 0, // 语言 0简体中文 1繁体中文 2英语 3韩语 4德语 5法语 6日语 7越语 8西班牙语 9葡萄牙语 10阿拉伯语 11俄语
-            'slide': true, // 滑动选择
-            'isCamera': true, // 显示拍摄、拍照、录音
-            'isDisplayTimeAxis': false, // 显示资源时间轴
-            'isOriginalControl': false, // 是否开启原图功能
-            'isOpenClickSound': false, // 是否开启点击声音
-            'isMaxSelectEnabledMask': false, // 是否显示蒙层(达到最大可选数量，默认false,弹窗提示)
-            'selectedList': this.baSelectedList,//已选择项回显，注意：需传选择回调返回的data数组
-            'position': 0,//初始显示第几项（已选择预览时使用）
-        },
-        (ret) => {//回调参数
-            console.log('文件选择',ret);
-            if (ret.data) {
-                ret.data.forEach(item => {
-                    //文件名： item.fileName
-                    //初始路径： item.path
-                    //绝对路径： item.realPath
-                    //压缩文件路径： item.compressPath
-                    //...等等，参照：回调函数表
-                })
-            }
-        });
+        this.helper.files.selectImgOrVideo({'mediaType': 0,'max': 99},function(file){
+          if(file === false){
+            console.log('选择文件出错啦 ')
+            return false
+          }
+          console.log('file',file)
+        })
       }
       if(e.type == 'files'){
-        filePicker.selectFile({
-            'selectType': 1, // 选择类型：默认为0（ 0：浏览文件目录 1：文件分类）
-            'maxCount': 9,
-            'filetypes':'png,jpg,gif,mp3,mp4,txt,doc,apk,zip' // 文件类型，多个英文","隔开
-        },(ret) => {
-            console.log(ret)
-            if (ret.data) {
-                this.selectedList = ret.data;
-            }
-        });
+        this.helper.files.selectFiles({},function(file){
+          if(file === false){
+            console.log('选择文件出错啦 ')
+            return false
+          }
+          console.log('file',file)
+        })
       }
       if(e.type=='office'){
         // 文件预览组件
@@ -257,49 +205,9 @@ export default {
           	text:'消息内容',
           	bigText:'君不见黄河之水天上来，奔流到海不复回。君不见高堂明镜奔白发，朝如青丝暮成雪。',
           })
-        
       }
       if(e.type=='editimg'){
         var _this = this
-        this.helper.files.chooseFile({'mediaType': 1,'max': 1},function(file){
-          if(file === false){
-            console.log('选择文件出错啦 ')
-            return false
-          }
-          var img_path = file[0].realPath
-          var out_path = plus.io.convertLocalFileSystemURL('_downloads/image_edit.png')
-            imageEditor.imageEdit({
-                'path': img_path,//原始图片路径
-                'outputPath': out_path,//保存图片路径
-                // 'outputPath': '/storage/emulated/0/Pictures/BaImageEditor/tietu123.png',//保存图片路径
-                // 'outputPath': '_downloads/image_edit.png',//保存图片路径
-            },
-            (ret) => {
-                if (ret.outputPath && ret.isImageEdit) {
-                  console.log('isImageEdit ',ret.outputPath)
-                    // this.path = ret.outputPath;
-                    // 获取到图片本地地址后再保存图片到相册（因为此方法不支持远程地址）
-                    uni.saveImageToPhotosAlbum({
-                      filePath: ret.outputPath,
-                      success: () => {
-                        uni.showToast({
-                          title: "保存成功！",
-                        });
-                        // 再删除保存文件
-                        _this.helper.download.delFile(ret.outputPath)
-                      },
-                      fail: () => {
-                        uni.showToast({
-                          title: "保存失败",
-                        });
-                      },
-                    });
-                }
-            });
-            
-          
-        })
-        
       }
       if(e.type == 'app_list'){
         
@@ -318,36 +226,10 @@ export default {
       }
       if(e.type == 'window'){
         var _this = this
-          this.helper.permissions.check_overlays(function(){
-            // //显示 悬浮框
-            floatWindow.showIcon({
-                tag: _this.tag
-            }, (res) => {
-                console.log(res);
-                // if(res.code && res.code==2){
-                if(res.code){
-                  console.log('点击',res);
-                    //点击事件
-                    
-                    // 唤醒app
-                    _this.helper.utils.openApp()
-                    
-                }
-                // uni.showToast({
-                //     title: res.msg,
-                //     icon: "none",
-                //     duration: 3000
-                // })
-            });
-            //隐藏
-            // floatWindow.hideIcon({
-            //     tag: this.tag
-            // });
-          })
       }
       if(e.type == 'share'){
         // 图片视频选择
-        this.helper.files.chooseFile({'mediaType': 1,'max': 1},function(file){
+        this.helper.files.selectImgOrVideo({'mediaType': 1,'max': 1},function(file){
           console.log('选择',file[0])
           // 分享
           uni.shareWithSystem({

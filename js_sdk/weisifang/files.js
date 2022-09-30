@@ -1,11 +1,12 @@
 // 文件操作相关。例如选择文件等
 // #ifdef APP-PLUS
 const mediaPicker = uni.requireNativePlugin('Ba-MediaPicker') // 图文选择
+const filePicker = uni.requireNativePlugin('Ba-FilePicker') // 文件选择
 // #endif
 
 const files = {
-  // 选择资源文件
-  chooseFile(options = {}, callbackFun) {
+  // 选择资源文件 主要是 图片，视频，音频
+  selectImgOrVideo(options = {}, callbackFun) {
     // #ifdef APP-PLUS
     var defautl_options = {
       'onlyCamera': false, // 是否仅拍照
@@ -74,6 +75,38 @@ const files = {
       complete: function(res) {}
     });
     // #endif
+    
+    
+  },
+  // 选择文件
+  selectFiles(options = {}, callbackFun){
+    var defautl_options = {
+      'selectType':  1, // 选择类型：默认为0（ 0：浏览文件目录 1：文件分类）
+      'maxCount': 1,
+      'filetypes':'doc,docx,ppt,xls,xlsx,zip,mp3,mp4,avi,mov,rmvb,rm,flv,wmv' // 文件类型，多个英文","隔开
+    }
+    var opts = Object.assign({}, defautl_options, options)
+
+    // #ifdef APP-PLUS
+    filePicker.selectFile(opts,(ret) => {
+        callbackFun && callbackFun(ret.data)
+    });
+    // #endif
+    
+    // #ifndef APP-PLUS
+    uni.chooseFile({
+      count: opts.maxCount || 9,
+      extension: opts.filetypes || ['.zip','.doc','.docx','.ppt','.pptx','.xls','.xlsx','.mp3','.mp4','.avi','.mov','.rmvb','.rm','.flv','.wmv'],
+    	success: function (res) {
+    		callbackFun && callbackFun(res)
+      },
+      fail: function(err) {
+        callbackFun && callbackFun(false)
+      },
+      complete: function(res) {}
+    });
+    // #endif
+    
   },
   // #ifndef APP-PLUS
   // 创建文件夹 例如：path='_downloads/images' 以"_downloads/"、"_doc/"、"_documents/" 开头

@@ -21,7 +21,7 @@ const notify = {
 		// 如需本地打包使用本插件，可联系作者打包本地包，本地包需要帮顶包名，qq: 1320024819  微信： m1320024819
 
     // 判断是否开启通知权限
-    helper.judgeIosPermissionPush()
+    helper.permissions.judgeIosPermissionPush()
 		// 初始化通知内容
 		obj = obj || {}
 		options = options || {}
@@ -67,19 +67,19 @@ const notify = {
 			// isShowWhen: false,// 可选，通知上面是否显示时间，默认是显示的，所以如果不想显示的话，只用设置为false即可
 			// when: 1629435337521, // 可选，通知上面的时间，格式是时间戳，单位是毫秒
       autoCancel: true, // 点击后自动取消
-      clickStr: '789' ,///点击通知需要回调的字符串
-      // clickStr:(new Date()).getTime(),///点击通知需要回调的字符串
+      // clickStr: '789' ,///点击通知需要回调的字符串
+      clickStr:(new Date()).getTime(),///点击通知需要回调的字符串
 		})
 		console.log('测试发送数据', notificationContent)
 
 		// 弹出将app添加到电池优化白名单提示框，此功能可在一定程度上防止app被系统后台杀死
 		uniNotification.addBatteryIgnore()
 
-		let res = uniNotification.postNotification(notificationContent, res => {
+		let res = uniNotification.postNotification(notificationContent, clickEvent => {
 			// 点击多媒体按钮的回调
 			// 特别注意，每次回调里，需要重新发送多媒体通知，否则下次的点击会接收不到回调
-			console.log('点击了第x个按钮/回调',res)
-			callFn && callFn('click', btnIndex)
+			console.log('点击了第x个按钮/回调',clickEvent)
+			callFn && callFn('click', clickEvent)
 		})
 
 		// 前台通知，可加大防杀死几率

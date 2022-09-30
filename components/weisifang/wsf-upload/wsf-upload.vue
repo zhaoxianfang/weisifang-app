@@ -7,9 +7,11 @@
 					<cover-view class="wsf-upload-Item-video-fixed" @click="previewVideo(getFileUrl(item))">
 					</cover-view>
 
-					<cover-view class="wsf-upload-Item-del-cover" v-if="remove && previewVideoSrc==''"
-						@click="imgDel(index)">×</cover-view>
-
+					<cover-view class="wsf-upload-Item-del-cover" v-if="remove && previewVideoSrc==''" @click="imgDel(index)">×</cover-view>
+					<view v-if="!isVideo(item.url)">
+            <cover-view class="wsf-upload-Item-capital-cover cover-active" v-if="manage && previewVideoSrc=='' && coverIndex === index " >封面图</cover-view>
+            <cover-view class="wsf-upload-Item-capital-cover" v-if="manage && previewVideoSrc=='' && coverIndex !== index " @click="setCapital(index)">设为封面图</cover-view>
+          </view>
 				</video>
 				<!-- #endif -->
 				<!-- #ifdef APP-PLUS -->
@@ -21,6 +23,10 @@
 			<image v-else :src="getFileUrl(item)" @click="imgPreview(getFileUrl(item))"></image>
 
 			<view class="wsf-upload-Item-del" v-if="remove" @click="imgDel(index)">×</view>
+      <view v-if="!isVideo(item.url)">
+        <view class="wsf-upload-Item-capital cover-active" v-if="manage && coverIndex === index" >封面图</view>
+        <view class="wsf-upload-Item-capital" v-if="manage && coverIndex !== index" @click="setCapital(index)">设为封面图</view>
+      </view>
 		</view>
 		<view class="wsf-upload-Item wsf-upload-Item-add" v-if="uploadLists.length<max && add"
 			@click="chooseFile">
@@ -77,6 +83,10 @@
 			remove: { //是否展示删除按钮
 				type: Boolean,
 				default: true,
+			},
+      manage: { //是否展示管理
+				type: Boolean,
+				default: false,
 			},
 			add: { //是否展示添加按钮
 				type: Boolean,
@@ -149,6 +159,7 @@
 		},
 		data() {
 			return {
+        coverIndex:'',
 				uploadLists: [],
 				mediaTypeData: ['image', 'video', 'all'],
 				previewVideoSrc: '',
@@ -191,6 +202,9 @@
 				this.uploadLists = val;
 			},
 			// #endif
+      manage(val, oldVal) {
+      },
+      
 
 		},
 		methods: {
@@ -242,6 +256,12 @@
 					}
 				});
 			},
+      // 设置封面图
+      setCapital(index){
+        let item = this.uploadLists[index]
+        this.coverIndex = index
+        this.$emit("setCover", item);
+      },
 			imgPreview(index) {
 
 				var imgData = []
@@ -267,7 +287,7 @@
 				}
 				// #ifdef APP-PLUS
 				
-					this.helper.files.chooseFile({'mediaType': 0,'max': 99},function(file){
+					this.helper.files.selectImgOrVideo({'mediaType': 0,'max': 99},function(file){
 					  if(file === false){
 					    console.log('选择文件出错啦 ')
 					    return false
@@ -846,7 +866,23 @@
 		z-index: 997;
 		color: #fff;
 	}
-
+  .wsf-upload-Item-capital {
+		background-color: #0A98D5;
+		font-size: 24rpx;
+		position: absolute;
+		// width: 35rpx;
+    padding: 4rpx;
+		height: 35rpx;
+		line-height: 35rpx;
+		text-align: center;
+		bottom: 0;
+		right: 0;
+		z-index: 997;
+		color: #fff;
+	}
+  .cover-active{
+    background-color: #1AAD19;
+  }
 	.wsf-upload-Item-del-cover {
 		background-color: #f5222d;
 		font-size: 24rpx;
@@ -855,6 +891,26 @@
 		height: 35rpx;
 		text-align: center;
 		top: 0;
+		right: 0;
+		color: #fff;
+		/* #ifdef APP-PLUS */
+		line-height: 25rpx;
+		/* #endif */
+		/* #ifndef APP-PLUS */
+		line-height: 35rpx;
+		/* #endif */
+		z-index: 997;
+
+	}
+  .wsf-upload-Item-capital-cover {
+		background-color: #0A98D5;
+		font-size: 24rpx;
+		position: absolute;
+		// width: 35rpx;
+    padding: 4rpx;
+		height: 35rpx;
+		text-align: center;
+		bottom: 0;
 		right: 0;
 		color: #fff;
 		/* #ifdef APP-PLUS */

@@ -8,7 +8,7 @@
 		
     <block v-else>
       <!-- <wsf-choose-img :manage="managePhoto" :list="photoList" :refresh="refresh" @hasRefresh="hasRefresh" @closeImage="closeImage" @setCover="setCover"></wsf-choose-img> -->
-			<wsf-upload v-model="photoList" :max="999" :remove="managePhoto" :add="false" @imgDelete="remove"></wsf-upload>
+			<wsf-upload v-model="photoList" :max="999" :remove="managePhoto" :manage="managePhoto" :add="false" @imgDelete="remove" @setCover="setCover"></wsf-upload>
     </block>
   
     <tui-divider v-if="!notMore" :size="28" :bold="true" color="#ccc" width="50%">加载中...</tui-divider>
@@ -88,7 +88,6 @@
       }
 		},
     onReachBottom() {
-      console.log('触底了')
       if(this.notMore){
         return false
       }
@@ -105,7 +104,6 @@
         }
         this.finished = false
 				this.$api.photo.get_photo_item_list(this.photo_id,this.queryList).then(res => {
-          console.log('返回', res.data);
 						if(res.data && res.data.length > 0){
               if(this.queryList.page>1){
                 this.photoList = [...this.photoList, ...res.data]
