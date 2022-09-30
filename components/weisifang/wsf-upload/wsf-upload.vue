@@ -928,3 +928,9 @@
 		height: 100%;
 	}
 </style>
+<style scoped>
+img,.uni-uploader__img{
+  /* background-image:url('@/static/images/photo/default.png')); */
+   background: #f2f2f2 url('@/static/images/photo/default_img.png') top left no-repeat;
+}
+</style>
