@@ -195,11 +195,26 @@ const files = {
       var yyyy = now.getFullYear();
       let today = yyyy + '-' + mm + '-' + dd;
       
+			var isDeleteFile = false
+			if(url.substr(0, 4) == "http"){
+			  isDeleteFile = true
+			}
+			
       // 判断文件类型
       var index = url.lastIndexOf('.'); // 获取指定字符串最后一次出现的位置，返回index
       var ext = url.substr(index + 1, 4); // substr(start, length) 抽取从start下标开始的length个字符，返回新的字符串
       let isImages = ['png','png?', 'jpg','jpg?','jpeg', 'bmp','bmp?', 'gif','gif?', 'webp', 'psd','psd?', 'svg','svg?', 'tiff'].indexOf(ext.toLowerCase()) !== -1;
       let isVideo = ['mp4','avi','mov','rmvb','rm','flv','wmv'].indexOf(ext.toLowerCase()) !== -1;
+      let isPdf = ['pdf'].indexOf(ext.toLowerCase()) !== -1;
+			url = encodeURI(url) // url 中可能包含中文，空格等特殊字符，需要 使用 encodeURI 进行编码转换
+			// if(isPdf){
+			//   officeViewModule.openFileBS({
+			//       url: url, // 同时支持在线和本地文档，三种参数传递方式，具体查看文档说明
+			//       topBarBgColor: '#3394EC', // 顶栏背景颜色，默认为：#177cb0（靛青）
+			//       isDeleteFile: isDeleteFile, // 退出是否删除缓存的文件，默认为true（删除缓存文件）// 会删除文件
+			//   });
+			//   return false
+			// }
       if(isImages){
         this.openImage(url,0)
         return false
@@ -208,10 +223,7 @@ const files = {
         this.openVideo(url)
         return false
       }
-      var isDeleteFile = false
-      if(url.substr(0, 4) == "http"){
-        isDeleteFile = true
-      }
+      
       let waterText = '威四方\n'+today;
       officeViewModule.openFile({
           url: url, // 同时支持在线和本地文档，三种参数传递方式，具体查看文档说明

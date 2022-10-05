@@ -125,7 +125,6 @@ export default {
 	},
 	mounted() {
     this.getList()
-    console.log('xx')
 	},
 	onLoad() {
 		// #ifdef H5
@@ -152,7 +151,7 @@ export default {
 				});
 		},
 		tabbarSwitch(e) {
-      console.log(e)
+      // console.log(e)
 			//获取登录状态，此处默认未登录
 			if (e.verify) {
 				this.tui.toast('此功能暂未开通~');
@@ -183,7 +182,7 @@ export default {
     	this.collapseCurrent = this.collapseCurrent == e.index ? -1 : e.index
     },
     previewFile(file){
-      console.log(file)
+      // console.log(file)
       this.helper.files.preview(file.url,file.title)
     }
 	}
