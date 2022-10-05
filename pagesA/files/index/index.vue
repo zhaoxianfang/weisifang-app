@@ -124,6 +124,8 @@ export default {
 	onShow() {
 	},
 	mounted() {
+    this.getList()
+    console.log('xx')
 	},
 	onLoad() {
 		// #ifdef H5
@@ -138,9 +140,10 @@ export default {
 	methods: {
 		// 获取我的相册列表
 		getList(){
-			this.$api.photo.get_photo_list().then(res => {
+			this.$api.my_files.jdwz({}).then(res => {
+        // console.log(res)
 					if(res.code == 200){
-						this.folderList = res.data
+						this.filesList = res.data
 					}
 				})
 				.catch(e => {
