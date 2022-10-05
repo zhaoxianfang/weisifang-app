@@ -55,70 +55,17 @@ export default {
 			
       collapseCurrent: 0, // 手风琴
       
-      filesList: [{
-      		name: "杜甫",
-      		current: 0,
-      		disabled: false,
-          list:[{
-            title:'李清照出生于书香门第李清照出生于书香门第李清照出生于书香门第',
-            url:'http://silianpan.cn/upload/2022/01/01/1.docx'
-          },{
-            title:'李清照出生于书香门第',
-            url:'http://silianpan.cn/upload/2022/01/01/1.docx'
-          },{
-            title:'李清照出生于书香门第',
-            url:'http://silianpan.cn/upload/2022/01/01/1.docx'
-          },{
-            title:'李清照出生于书香门第',
-            url:'http://silianpan.cn/upload/2022/01/01/1.docx'
-          },{
-            title:'李清照出生于书香门第',
-            url:'http://silianpan.cn/upload/2022/01/01/1.docx'
-          }]
-      	},
-      	{
-      		name: "李清照",
-      		current: -1,
-      		disabled: false,
-      		list:[{
-      		  title:'李清照出生于书香门第',
-      		  url:'http://silianpan.cn/upload/2022/01/01/1.docx'
-      		},{
-      		  title:'李清照出生于书香门第',
-      		  url:'http://silianpan.cn/upload/2022/01/01/1.docx'
-      		},{
-      		  title:'李清照出生于书香门第',
-      		  url:'http://silianpan.cn/upload/2022/01/01/1.docx'
-      		},{
-      		  title:'李清照出生于书香门第',
-      		  url:'http://silianpan.cn/upload/2022/01/01/1.docx'
-      		},{
-      		  title:'李清照出生于书香门第',
-      		  url:'http://silianpan.cn/upload/2022/01/01/1.docx'
-      		}]
-      	},
-      	{
-      		name: "鲁迅",
-      		current: -1,
-      		disabled: false,
-      		list:[{
-      		  title:'李清照出生于书香门第',
-      		  url:'http://silianpan.cn/upload/2022/01/01/1.docx'
-      		},{
-      		  title:'李清照出生于书香门第',
-      		  url:'http://silianpan.cn/upload/2022/01/01/1.docx'
-      		},{
-      		  title:'李清照出生于书香门第',
-      		  url:'http://silianpan.cn/upload/2022/01/01/1.docx'
-      		},{
-      		  title:'李清照出生于书香门第',
-      		  url:'http://silianpan.cn/upload/2022/01/01/1.docx'
-      		},{
-      		  title:'李清照出生于书香门第',
-      		  url:'http://silianpan.cn/upload/2022/01/01/1.docx'
-      		}]
-      	}
-      ],
+      filesList: [],
+      // filesList: [{
+      // 		name: "杜甫",
+      // 		current: 0,
+      // 		disabled: false,
+      //     list:[{
+      //       title:'李清照出生于书香门第李清照出生于书香门第李清照出生于书香门第',
+      //       url:'http://silianpan.cn/upload/2022/01/01/1.docx'
+      //     }]
+      // 	}
+      // ],
 		};
 	},
 	onShow() {
@@ -165,7 +112,7 @@ export default {
 			this.helper.files.selectFiles({
         'selectType':  1, // 选择类型：默认为0（ 0：浏览文件目录 1：文件在线文件）
         'maxCount': 1,
-        'filetypes':'jpg,png,doc,ppt,xls,zip,mp3,mp4,avi,mov,rmvb,rm,flv,wmv' // 文件类型，多个英文","隔开
+        'filetypes':'jpg,png,doc,ppt,xls,mp3,mp4,avi,mov,rmvb,rm,flv,wmv' // 文件类型，多个英文","隔开
       },function(file){
 			  if(file === false){
 			    console.log('选择文件出错啦 ')

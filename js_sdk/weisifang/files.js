@@ -206,15 +206,22 @@ const files = {
       let isImages = ['png','png?', 'jpg','jpg?','jpeg', 'bmp','bmp?', 'gif','gif?', 'webp', 'psd','psd?', 'svg','svg?', 'tiff'].indexOf(ext.toLowerCase()) !== -1;
       let isVideo = ['mp4','avi','mov','rmvb','rm','flv','wmv'].indexOf(ext.toLowerCase()) !== -1;
       let isPdf = ['pdf'].indexOf(ext.toLowerCase()) !== -1;
-			url = encodeURI(url) // url 中可能包含中文，空格等特殊字符，需要 使用 encodeURI 进行编码转换
-			// if(isPdf){
-			//   officeViewModule.openFileBS({
-			//       url: url, // 同时支持在线和本地文档，三种参数传递方式，具体查看文档说明
-			//       topBarBgColor: '#3394EC', // 顶栏背景颜色，默认为：#177cb0（靛青）
-			//       isDeleteFile: isDeleteFile, // 退出是否删除缓存的文件，默认为true（删除缓存文件）// 会删除文件
-			//   });
-			//   return false
-			// }
+      let isAudio = ['mp3'].indexOf(ext.toLowerCase()) !== -1; // 音频
+			
+			if(isDeleteFile && /[\u4E00-\u9FA5\ ]+/g.test(url)) 
+			{
+				 url = encodeURI(url) // url 中可能包含中文，空格等特殊字符，需要 使用 encodeURI 进行编码转换
+			}
+			if(isAudio){
+				// 播放音频
+				const bgAudioManager = uni.getBackgroundAudioManager();
+				bgAudioManager.title = title || '音频';
+				bgAudioManager.singer = '暂无';
+				bgAudioManager.coverImgUrl = '';
+				bgAudioManager.src = url;
+				bgAudioManager.play();
+				return false
+			}
       if(isImages){
         this.openImage(url,0)
         return false
