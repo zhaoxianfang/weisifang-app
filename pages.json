@@ -139,6 +139,12 @@
 				"navigationBarTitleText": "备忘录",
 				"enablePullDownRefresh": false
 			}
+		}, {
+			"path": "files/index/index",
+			"style": {
+				"navigationBarTitleText": "我的文件",
+				"enablePullDownRefresh": false
+			}
 		}
   ]
 	}, {

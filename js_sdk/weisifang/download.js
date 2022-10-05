@@ -1,8 +1,12 @@
 // https://www.html5plus.org/doc/zh_cn/downloader.html#plus.downloader.createDownload
 const download = {
-	// 下载文件 到本应用 的 downloads 文件夹下，loadUrl：文件地址;
-	downloadFile(loadUrl) {
+  callFun:null, // 下载完成后的回调函数
+	// 下载文件 到本应用 的 downloads 文件夹下，
+  // loadUrl：文件地址;
+  // existAndDel: 如果本地存在此文件，是否删除重新下载
+	downloadFile(loadUrl,callFun,existAndDel=false) {
 		let that = this
+    this.callFun = callFun || null;
     // #ifdef H5
     uni.downloadFile({
     	url: loadUrl,
@@ -23,10 +27,10 @@ const download = {
 			//检查图片是否已存在
 			plus.io.resolveLocalFileSystemURL(relativePath, function(entry) {
 				//如果文件存在,则先删除本地图片再重新下载,防止同名文件 或者文件内容被更新
-				that.delFile(relativePath, function() {
+				existAndDel && that.delFile(relativePath, function() {
 					that.setFileFromNet(loadUrl, relativePath)
 				})
-				that.setFileFromLocal(relativePath)
+				let file_local_path = that.setFileFromLocal(relativePath)
 			}, function(e) {
 				// console.log('图片不存在,联网下载=' + relativePath)
 				//如果文件不存在,联网下载图片
@@ -98,10 +102,15 @@ const download = {
 		// 其他文件类型
 		return 'other'
 	},
-	setFileFromLocal(relativePath) {
+	// 下载成功后都调用此方法
+  setFileFromLocal(relativePath) {
 		//获取 SD卡绝对路径
 		var sd_path = plus.io.convertLocalFileSystemURL(relativePath)
-		console.log('文件路径', sd_path)
+		// console.log('文件路径', sd_path)
+    if(typeof this.callFun === "function"){
+      this.callFun(sd_path)
+    }
+    return sd_path
 	},
 	/*联网下载图片*/
 	// relativePath 参数仅支持 以"_downloads/"、"_doc/"、"_documents/" 开头
@@ -135,6 +144,21 @@ const download = {
 				plus.nativeUI.toast('文件删除失败')
 			})
 		})
-	}
+	},
+  // 检查下载文件是否存在
+  existFile(loadUrl){
+    var filename = loadUrl.substring(loadUrl.lastIndexOf('/') + 1, loadUrl.length)
+    var download_path_dir = '_downloads/' + this.getFileType(loadUrl)
+    var relativePath = download_path_dir + '/' + filename
+    
+    //检查图片是否已存在
+    plus.io.resolveLocalFileSystemURL(relativePath, function(entry) {
+    	//如果文件存在,则先删除本地图片再重新下载,防止同名文件 或者文件内容被更新
+    	return that.setFileFromLocal(relativePath)
+    }, function(e) {
+    	//如果文件不存在
+    	return false
+    })
+  }
 }
 export default download

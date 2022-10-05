@@ -56,9 +56,10 @@ export default {
 					size: 30
 				},
 				{
-					name: 'addressbook',
-					label: '通讯录',
+					name: 'link',
+					label: '我的文件',
 					color: '#8a5966',
+          page: '/pagesA/files/index/index',
 					size: 30
 				},
 				{

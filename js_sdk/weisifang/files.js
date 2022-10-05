@@ -2,8 +2,11 @@
 // #ifdef APP-PLUS
 const mediaPicker = uni.requireNativePlugin('Ba-MediaPicker') // 图文选择
 const filePicker = uni.requireNativePlugin('Ba-FilePicker') // 文件选择
+const officeViewModule = uni.requireNativePlugin("Seal-OfficeOnline") // 文件预览
 // #endif
-
+import helper from './helper.js'
+// 离线文件预览插件
+const tbs_core_file_url = 'https://weisifang.com/sdk/tbs_core_20210925_release.tbs'
 const files = {
   // 选择资源文件 主要是 图片，视频，音频
   selectImgOrVideo(options = {}, callbackFun) {
@@ -108,7 +111,7 @@ const files = {
     // #endif
     
   },
-  // #ifndef APP-PLUS
+  // #ifdef APP-PLUS
   // 创建文件夹 例如：path='_downloads/images' 以"_downloads/"、"_doc/"、"_documents/" 开头
   createDir(path, callback) {
   	plus.io.requestFileSystem(plus.io.PUBLIC_DOWNLOADS, function(success) {
@@ -183,7 +186,117 @@ const files = {
   			plus.nativeUI.toast('文件删除失败')
   		})
   	})
-  }
+  },
+  // 文件预览
+    preview(url,title='文件预览'){
+      var now = new Date();
+      var dd = String(now.getDate()).padStart(2, '0');
+      var mm = String(now.getMonth() + 1).padStart(2, '0'); 
+      var yyyy = now.getFullYear();
+      let today = yyyy + '-' + mm + '-' + dd;
+      
+      // 判断文件类型
+      var index = url.lastIndexOf('.'); // 获取指定字符串最后一次出现的位置，返回index
+      var ext = url.substr(index + 1, 4); // substr(start, length) 抽取从start下标开始的length个字符，返回新的字符串
+      let isImages = ['png','png?', 'jpg','jpg?','jpeg', 'bmp','bmp?', 'gif','gif?', 'webp', 'psd','psd?', 'svg','svg?', 'tiff'].indexOf(ext.toLowerCase()) !== -1;
+      let isVideo = ['mp4','avi','mov','rmvb','rm','flv','wmv'].indexOf(ext.toLowerCase()) !== -1;
+      if(isImages){
+        this.openImage(url,0)
+        return false
+      }
+      if(isVideo){
+        this.openVideo(url)
+        return false
+      }
+      var isDeleteFile = false
+      if(url.substr(0, 4) == "http"){
+        isDeleteFile = true
+      }
+      let waterText = '威四方\n'+today;
+      officeViewModule.openFile({
+          url: url, // 同时支持在线和本地文档，三种参数传递方式，具体查看文档说明
+          isTopBar: true, // 是否显示顶栏，默认为：true（显示）
+          title: title || '在线预览', // 顶栏标题，默认为：APP名称
+          topBarBgColor: '#3394EC', // 顶栏背景颜色，默认为：#177cb0（靛青）
+          isBackArrow: true, // 是否显示返回按钮，默认为：true（显示）
+          isDeleteFile: isDeleteFile, // 退出是否删除缓存的文件，默认为true（删除缓存文件）// 会删除文件
+          waterMarkText: waterText, // 水印文本
+          // 离线文件tbs
+          installOfflineCore: true, // 是否离线安装内核
+          coreLocalPath: files.tbs_core_url, // 离线安装内核本地路径
+      });
+    },
+    /**
+    * 图片预览，支持jpg、jpeg、png、bmp、jpg、gif等多种常用图片格式
+    * 图片可以来源于列表或九宫格，传递给imageUrls数组
+    * @param {Object} fileUrl 图片url
+    * @param {Object} imageCurrentIndex 当前图片位置下标，从0开始
+    */
+    openImage(fileUrl, imageCurrentIndex) {
+        if(fileUrl.substr(0, 4) !== "http"){
+            // 预览图片
+            return uni.previewImage({
+                urls: [fileUrl],
+            });
+        }
+        var isDeleteFile = false
+        if(fileUrl.substr(0, 4) == "http"){
+          isDeleteFile = true
+        }
+        if (this.platform === 'android') {
+            // Android
+            officeViewModule.openFile({
+                imageUrls: [fileUrl],
+                imageCurrentIndex, // 当前点击图片在imageUrls中的下标，从0开始，默认为0
+                imageIndexType: 'number' ,// 图片底部指示器类型，默认为'dot'，可选：'number':数字；'dot':点
+                isDeleteFile: isDeleteFile, // 退出是否删除缓存的文件，默认为true（删除缓存文件）// 会删除文件
+                installOfflineCore: true, // 是否离线安装内核
+                coreLocalPath: files.tbs_core_url, // 离线安装内核本地路径
+            });
+        } else if (this.platform === 'ios') {
+            // IOS
+            officeViewModule.openFile(
+                {
+                    url: fileUrl, // 同时支持在线和本地文档，三种参数传递方式，具体查看文档说明
+                    title: 'IOS图片预览', // 顶栏标题，默认为：APP名称
+                    topBarBgColor: '#3394EC' ,// 顶栏背景颜色，默认为：#177cb0（靛青）
+                    isDeleteFile: isDeleteFile, // 退出是否删除缓存的文件，默认为true（删除缓存文件）// 会删除文件
+                    installOfflineCore: true, // 是否离线安装内核
+                    coreLocalPath: files.tbs_core_url, // 离线安装内核本地路径
+                },
+                res => {
+                    uni.showModal({
+                        content: 'IOS图片预览事件结果：' + JSON.stringify(res)
+                    });
+                }
+            );
+        }
+    },
+    /**
+    * 视频播放，支持市面上几乎所有的视频格式，包括mp4, flv, avi, 3gp, webm, ts, ogv, m3u8, asf, wmv, rm, rmvb, mov, mkv等18种视频格式
+    * 功能包括：全屏播放、锁屏、分享、画面比例调节、左边上下滑动调节亮度，右边上下滑动调节音量等
+    * 支持Android和IOS
+    * @param {Object} fileUrl 视频url
+    */
+    openVideo(fileUrl) {
+      var isDeleteFile = false
+      if(fileUrl.substr(0, 4) == "http"){
+        isDeleteFile = true
+      }
+      officeViewModule.openFile(
+        {
+          videoUrl: fileUrl, // 视频在线url，此参数优先于图片预览和文档预览
+          isDeleteFile: isDeleteFile, // 退出是否删除缓存的文件，默认为true（删除缓存文件）// 会删除文件
+          installOfflineCore: true, // 是否离线安装内核
+          coreLocalPath: files.tbs_core_url // 离线安装内核本地路径
+        },
+        res => {
+            uni.showModal({
+                content: '播放视频事件结果：' + JSON.stringify(res)
+            });
+        }
+      );
+    }
   // #endif
 }
 export default files

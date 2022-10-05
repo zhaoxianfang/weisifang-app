@@ -8,7 +8,7 @@
 		</tui-drawer>
     
     
-    <tui-fab :left="0" :right="60" :bottom="140" :width="100" :height="100" bgColor="#5677fc" :btnList="btnList" @click="openMenu" custom maskClosable><tui-icon name="screen" color="#fff"></tui-icon></tui-fab>
+    <tui-fab :left="0" :right="60" :bottom="140" :width="80" :height="80" bgColor="#5677fc" :btnList="btnList" @click="openMenu" custom maskClosable><tui-icon name="screen" color="#fff" class="menu-fab"></tui-icon></tui-fab>
     
 	</view>
 </template>
@@ -37,4 +37,7 @@
 		width: 400rpx;
 		padding: 80rpx 30rpx
 	}
+  .menu-fab{
+    font-size: 36rpx!important;
+  }
 </style>
