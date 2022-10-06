@@ -1,8 +1,8 @@
 <template>
 	<view class="container">
 		<view class="tui-box-upload">
-			<wsf-upload :max="19" v-model="value" :chooseNum="9" :headers="headers" :compress="true" name='file' :formData="formData" :remove="true"
-				@uploadSuccess="uploadSuccess" @imgDelete="remove" @uploadFail="uploadFail" :action="serverUrl" @chooseSuccess="chooseSuccess"></wsf-upload>
+			<wsf-upload :max="20" v-model="value" :chooseNum="9" :headers="headers" :compress="true" name='file' :formData="formData" :remove="true"
+				@uploadSuccess="uploadSuccess" @imgDelete="remove" @uploadFail="uploadFail" :action="serverUrl" :add="true" @chooseSuccess="chooseSuccess"></wsf-upload>
 		</view>
 	</view>
 </template>
@@ -30,9 +30,7 @@
 			}
 		},
 		onLoad(option) {
-			
 		  if (option) {
-				console.log(option)
 				this.formData.id = option.id
 				this.serverUrl = config.baseURL+'photo/items/upload/'+option.id
 			// 设置标题
@@ -67,7 +65,7 @@
 				因为上传接口返回的结构不一致，所以以下代码需要根据实际的接口返回结构开发，在此只是展示如果给数组里添加的过程，仅供参考
 				***************/
 				var _res = JSON.parse(res.data);
-				console.log('_res', _res)
+				console.log('_res x', typeof(_res.url), _res.url)
 				if (_res.code == 200) {
 					this.value.push(_res.url);
 					this.imageData.push(_res);

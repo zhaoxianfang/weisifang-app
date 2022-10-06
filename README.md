@@ -31,3 +31,6 @@ life-FileShare（安卓ios分享任意类型文件）到微信 只能分享 文�
 
 Seal-OfficeOnline 和 life-FileShare 冲突
 Seal-OfficeOnline 和 imageedit 冲突
+
+
+uniapp 图片宽高缩放 [](https://uniapp.dcloud.net.cn/component/image.html#image)

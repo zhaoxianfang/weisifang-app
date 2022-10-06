@@ -28,7 +28,7 @@
 				photoList:[], // 照片列表
         queryList:{
           page:1,
-          limit:30
+          limit:20
         },
         notMore:false,
         finished:true,
@@ -60,7 +60,8 @@
 					fontSize: 34,
 					//字体颜色
 					color: "#fff"
-				}]
+				}],
+        timer:'' // 定时器
 			}
 		},
 		onLoad(option) {
@@ -69,23 +70,26 @@
       this.finished = true
 		  if (option) {
 				this.photo_id = option.id
-				console.log(option)
 				// 设置标题
 				uni.setNavigationBarTitle({
 					title: option.name || '相册详情'
 				});
 		  }
+      
+      if(this.photo_id ){
+        // 加载
+        this.refresh = true;
+        this.photoList = [];
+        this.getList()
+        if(this.managePhoto){
+          this.btnList[1].text = '完成管理'
+        }else{
+          this.btnList[1].text = '管理图片'
+        }
+      }
+      
 		},
 		onShow() {
-			console.log(this.photo_id )
-      this.refresh = true;
-      this.photoList = [];
-      this.getList()
-      if(this.managePhoto){
-        this.btnList[1].text = '完成管理'
-      }else{
-        this.btnList[1].text = '管理图片'
-      }
 		},
     onReachBottom() {
       if(this.notMore){
@@ -94,8 +98,15 @@
       if(!this.finished){
         return false
       }
-      this.queryList.page++
-      this.getList();
+      if(this.timer){
+        return false
+      }
+      this.finished = false
+      this.timer = setTimeout(() => {
+      	this.queryList.page++
+      	this.getList();
+        this.timer = ''
+      }, 3500)
     },
 		methods: {
 			getList(){

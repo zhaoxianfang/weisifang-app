@@ -9,7 +9,7 @@
 		<block>
 			<view class="tui-ranking__list tui-justify__start" >
 				<view class="tui-ranking__item tui-item-mr__16" @tap="openFolder(item)" v-for="(item, key) in folderList" :key="key">
-					<image :src="item.cover || '/static/images/photo/default.png'"></image>
+					<image :src="item.cover || '/static/images/photo/default.png'" mode="aspectFill"></image>
 					<view class="tui-ranking__gtitle">{{ item.name }}</view>
 					<!-- <view class="tui-ranking__sub" v-if="!isManage">包含xxx张照片</view> -->
 					<view class="tui-flex-box" v-if="isManage">

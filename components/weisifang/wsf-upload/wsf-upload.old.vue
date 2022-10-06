@@ -1,6 +1,6 @@
 <template>
 	<view class="wsf-upload-list">
-		<tui-col :sm="8" :md="6" :lg="4" :span="4" v-for="(item,index) in uploadLists" :key="index" class="wsf-upload-col">
+		<view class="wsf-upload-Item" v-for="(item,index) in uploadLists" :key="index">
 			<view class="wsf-upload-Item-video" v-if="isVideo(item)">
 				<!-- #ifndef APP-PLUS -->
 				<video :disabled="false" :controls="false" :src="getFileUrl(item)">
@@ -16,23 +16,22 @@
 				<!-- #endif -->
 				<!-- #ifdef APP-PLUS -->
 				<view class="wsf-upload-Item-video-fixed" @click="previewVideo(getFileUrl(item))"></view>
-				<image class="wsf-upload-Item-video-app-poster" mode="scaleToFill" :src="appVideoPoster"></image>
+				<image class="wsf-upload-Item-video-app-poster" mode="widthFix" :src="appVideoPoster"></image>
 				<!-- #endif -->
 			</view>
 
-      <tui-lazyload-img v-else width="100%" height="320rpx" mode="scaleToFill" placeholder="" :src="getFileUrl(item)" @click="imgPreview(getFileUrl(item))"></tui-lazyload-img>
-      
+			<image v-else :src="getFileUrl(item)" @click="imgPreview(getFileUrl(item))"></image>
+
 			<view class="wsf-upload-Item-del" v-if="remove" @click="imgDel(index)">×</view>
       <view v-if="!isVideo(item.url)">
         <view class="wsf-upload-Item-capital cover-active" v-if="manage && coverIndex === index" >封面图</view>
         <view class="wsf-upload-Item-capital" v-if="manage && coverIndex !== index" @click="setCapital(index)">设为封面图</view>
       </view>
-		</tui-col>
-    <tui-col :sm="8" :md="6" :lg="4" :span="4" class="wsf-upload-col" v-if="uploadLists.length < max && add" >
-			<view class="wsf-upload-Item-add" @click="chooseFile">
-        +
-      </view>
-    </tui-col>
+		</view>
+		<view class="wsf-upload-Item wsf-upload-Item-add" v-if="uploadLists.length<max && add"
+			@click="chooseFile">
+			+
+		</view>
 		<view class="preview-full" v-if="previewVideoSrc!=''">
 			<video :autoplay="true" :src="previewVideoSrc" :show-fullscreen-btn="false">
 				<cover-view class="preview-full-close" @click="previewVideoClose"> ×
@@ -40,9 +39,26 @@
 			</video>
 		</view>
 
-    <tui-loading :text="`上传中...${upladFinishNum}/${upladAllNum}`" v-if="uploading"></tui-loading>
+
+		<!--  -->
 	</view>
 </template>
+
+<style>
+	.ceshi {
+		width: 100%;
+		height: 100%;
+		position: relative;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		background-color: #FFFFFF;
+		color: #2C405A;
+		opacity: 0.5;
+		z-index: 100;
+	}
+</style>
 
 <script>
 	export default {
@@ -143,11 +159,6 @@
 		},
 		data() {
 			return {
-        upladFinishNum:0,
-        upladAllNum:0,
-        upladFailNum:0,
-        uploading:false, // 是否在上传中
-        
         coverIndex:'',
 				uploadLists: [],
 				mediaTypeData: ['image', 'video', 'all'],
@@ -270,7 +281,6 @@
 
 			},
 			chooseFile() {
-        console.log('chooseFile')
 				var _this = this
 				if (this.disabled) {
 					return false;
@@ -282,12 +292,10 @@
 					    console.log('选择文件出错啦 ')
 					    return false
 					  }
-            _this.uploading = true // 是否在上传中
-            _this.upladFinishNum = 0
-            _this.upladFailNum = 0
-            _this.upladAllNum = file.length  || 0
-            
 						file.forEach(item => {
+							//TG-2022-09-22-200117456.mp4
+							// console.log(_this.isVideo('TG-2022-09-22-200117456.mp4'))
+							console.log(_this.isVideo(item.fileName),item.fileName,item.realPath)
 							if(_this.isVideo(item.fileName)){
 								_this.chooseSuccessMethod([item.realPath], 1)
 							}else{
@@ -451,6 +459,7 @@
 				if (this.action == '') { //未配置上传路径
 					this.$emit("chooseSuccess", filePaths, type); //filePaths 路径 type 0 为图片 1为视频
 				} else {
+					console.log(' chooseSuccessMethod type',type)
 					if (type == 1) {
 						this.imgUpload(filePaths, type);
 					} else {
@@ -512,7 +521,6 @@
 					});
 			},
 			imgUpload(tempFilePaths, type) { //type 0 为图片 1为视频
-        var _this = this
 				// if (this.action == '') {
 				// 	uni.showToast({
 				// 		title: '未配置上传地址',
@@ -525,19 +533,18 @@
 					this.uniCloudUpload(tempFilePaths, type)
 					return
 				}
-        //#ifndef APP-PLUS
 				uni.showLoading({
 					title: '上传中'
 				});
-        // #endif
-        let uploadImgs = [];
+				// console.log('imgUpload', tempFilePaths, type)
+				let uploadImgs = [];
 				tempFilePaths.forEach((item, index) => {
 					uploadImgs.push(new Promise((resolve, reject) => {
 						// if (item.substring(0,7) !== "file://"){
 						// 	item = "file://"+item
 						// }
 						// console.log(index, item, this.name, this.formData, this.headers)
-						return uni.uploadFile({
+						const uploadTask = uni.uploadFile({
 							url: this.action, //仅为示例，非真实的接口地址
 							filePath: item,
 							name: this.name,
@@ -574,7 +581,7 @@
 												...thisUploadSuccess
 											})
 										}
-                    
+
 										//this.$emit("input", this.uploadLists);
 										// #ifndef VUE3
 										this.$emit("input", this.uploadLists);
@@ -588,34 +595,34 @@
 								this.$emit("uploadSuccess", uploadFileRes);
 							},
 							fail: (err) => {
-                
 								console.log(err);
 								//uni.hideLoading();
 								reject(err);
 								this.$emit("uploadFail", err);
 							},
 							complete: () => {
-								uni.hideLoading();
+								//uni.hideLoading();
 							}
 						});
 					}))
 				})
 				Promise.all(uploadImgs) //执行所有需请求的接口
 					.then((results) => {
-            _this.upladFinishNum++;
 						uni.hideLoading();
-            if(parseInt(_this.upladFinishNum) + parseInt(_this.upladFailNum) >= parseInt(_this.upladAllNum)){
-              _this.uploading = false
-            }
 					})
 					.catch((res, object) => {
-            this.upladFailNum++;
-						_this.hideLoading();
-            if(parseInt(_this.upladFinishNum) + parseInt(_this.upladFailNum) >= parseInt(_this.upladAllNum)){
-              _this.uploading = false
-            }
+						uni.hideLoading();
 						this.$emit("uploadFail", res);
 					});
+				// uploadTask.onProgressUpdate((res) => {
+				// 	//console.log('',)
+				// 	uni.showLoading({
+				// 		title: '上传中' + res.progress + '%'
+				// 	});
+				// 	if (res.progress == 100) {
+				// 		uni.hideLoading();
+				// 	}
+				// });
 			},
 			uniCloudUpload(tempFilePaths, type) {
 				uni.showLoading({
@@ -798,17 +805,12 @@
 	}
 
 	.wsf-upload-Item {
-		width: 200rpx;
-		height: 200rpx;
+		width: 160rpx;
+		height: 160rpx;
 		margin: 13rpx;
 		border-radius: 10rpx;
 		position: relative;
 	}
-  .wsf-upload-col{
-    padding-left: 2rpx;
-    border-radius: 10rpx;
-    position: relative;
-  }
 
 	.wsf-upload-Item image {
 		width: 100%;
@@ -845,9 +847,7 @@
 
 	.wsf-upload-Item-add {
 		font-size: 105rpx;
-		line-height: 320rpx;
-    height: 320rpx;
-    width: 100%;
+		line-height: 160rpx;
 		text-align: center;
 		border: 1px dashed #d9d9d9;
 		color: #d9d9d9;
@@ -855,11 +855,11 @@
 
 	.wsf-upload-Item-del {
 		background-color: #f5222d;
-		font-size: 40rpx;
+		font-size: 24rpx;
 		position: absolute;
-		width: 46rpx;
-		height: 46rpx;
-		line-height: 46rpx;
+		width: 35rpx;
+		height: 35rpx;
+		line-height: 35rpx;
 		text-align: center;
 		top: 0;
 		right: 0;
@@ -868,14 +868,14 @@
 	}
   .wsf-upload-Item-capital {
 		background-color: #0A98D5;
-		font-size: 36rpx;
+		font-size: 24rpx;
 		position: absolute;
 		// width: 35rpx;
-    padding: 8rpx;
-		height: 42rpx;
-		line-height: 42rpx;
+    padding: 4rpx;
+		height: 35rpx;
+		line-height: 35rpx;
 		text-align: center;
-		bottom: 10rpx;
+		bottom: 0;
 		right: 0;
 		z-index: 997;
 		color: #fff;
