@@ -2,8 +2,8 @@
     "name" : "威四方",
     "appid" : "__UNI__F89051B",
     "description" : "一个为个人和企业提供个性化定制和服务的综合性平台",
-    "versionName" : "1.0.0",
-    "versionCode" : 100,
+    "versionName" : "1.0.1",
+    "versionCode" : 101,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {

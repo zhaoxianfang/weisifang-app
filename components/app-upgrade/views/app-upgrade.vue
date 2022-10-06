@@ -87,9 +87,6 @@ export default {
     methods: {
         // 当点击更新时
         onUpdate() {
-            this.helper.toast('此功能未上线，模拟更新...')
-            this.closeUpdate()
-            return false
             //判断是否为WIFI网络 并且是非强制更新
             if (this.update_info.net_check == 1 && this.update_info.net_check == 0) {
                 //判断是否为wifi模式
@@ -116,16 +113,17 @@ export default {
         },
         //开始更新
         startUpdate() {
+					console.log(this.update_info)
             if (this.downing) return false //如果正在下载就停止操作
             this.downing = true //状态改变 正在下载中
-            if (/\.apk$/.test(this.update_info.now_url)) {
+            if (/\.apk$/.test(this.update_info.url)) {
                 // 如果是apk地址
                 this.download_wgt() // 安装包/升级包更新
-            } else if (/\.wgt$/.test(this.update_info.now_url)) {
+            } else if (/\.wgt$/.test(this.update_info.url)) {
                 // 如果是更新包
                 this.download_wgt() // 安装包/升级包更新
             } else {
-                plus.runtime.openURL(this.update_info.now_url, function() { //调用外部浏览器打开更新地址
+                plus.runtime.openURL(this.update_info.url, function() { //调用外部浏览器打开更新地址
                     plus.nativeUI.toast('打开错误')
                 })
             }
@@ -136,7 +134,7 @@ export default {
             let options = {
                 method: 'get'
             }
-            let dtask = plus.downloader.createDownload(this.update_info.now_url, options)
+            let dtask = plus.downloader.createDownload(this.update_info.url, options)
             dtask.addEventListener('statechanged', (task, status) => {
                 if (status === null) {} else if (status == 200) {
                     //在这里打印会不停的执行，请注意，正式上线切记不要在这里打印东西!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
