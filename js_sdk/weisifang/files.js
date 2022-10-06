@@ -195,11 +195,33 @@ const files = {
       var yyyy = now.getFullYear();
       let today = yyyy + '-' + mm + '-' + dd;
       
+			var isDeleteFile = false
+			if(url.substr(0, 4) == "http"){
+			  isDeleteFile = true
+			}
+			
       // 判断文件类型
       var index = url.lastIndexOf('.'); // 获取指定字符串最后一次出现的位置，返回index
       var ext = url.substr(index + 1, 4); // substr(start, length) 抽取从start下标开始的length个字符，返回新的字符串
       let isImages = ['png','png?', 'jpg','jpg?','jpeg', 'bmp','bmp?', 'gif','gif?', 'webp', 'psd','psd?', 'svg','svg?', 'tiff'].indexOf(ext.toLowerCase()) !== -1;
       let isVideo = ['mp4','avi','mov','rmvb','rm','flv','wmv'].indexOf(ext.toLowerCase()) !== -1;
+      let isPdf = ['pdf'].indexOf(ext.toLowerCase()) !== -1;
+      let isAudio = ['mp3'].indexOf(ext.toLowerCase()) !== -1; // 音频
+			
+			if(isDeleteFile && /[\u4E00-\u9FA5\ ]+/g.test(url)) 
+			{
+				 url = encodeURI(url) // url 中可能包含中文，空格等特殊字符，需要 使用 encodeURI 进行编码转换
+			}
+			if(isAudio){
+				// 播放音频
+				const bgAudioManager = uni.getBackgroundAudioManager();
+				bgAudioManager.title = title || '音频';
+				bgAudioManager.singer = '暂无';
+				bgAudioManager.coverImgUrl = '';
+				bgAudioManager.src = url;
+				bgAudioManager.play();
+				return false
+			}
       if(isImages){
         this.openImage(url,0)
         return false
@@ -208,10 +230,7 @@ const files = {
         this.openVideo(url)
         return false
       }
-      var isDeleteFile = false
-      if(url.substr(0, 4) == "http"){
-        isDeleteFile = true
-      }
+      
       let waterText = '威四方\n'+today;
       officeViewModule.openFile({
           url: url, // 同时支持在线和本地文档，三种参数传递方式，具体查看文档说明
