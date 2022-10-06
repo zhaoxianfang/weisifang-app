@@ -65,9 +65,8 @@
 				因为上传接口返回的结构不一致，所以以下代码需要根据实际的接口返回结构开发，在此只是展示如果给数组里添加的过程，仅供参考
 				***************/
 				var _res = JSON.parse(res.data);
-				console.log('_res x', typeof(_res.url), _res.url)
 				if (_res.code == 200) {
-					this.value.push(_res.url);
+					this.value.push({url:_res.url,id:_res.id || 0});
 					this.imageData.push(_res);
 				}
 				/*******************************/

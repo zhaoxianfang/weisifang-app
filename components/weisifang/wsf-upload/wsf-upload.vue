@@ -277,7 +277,7 @@
 				}
 				// #ifdef APP-PLUS
 				
-					this.helper.files.selectImgOrVideo({'mediaType': 0,'max': 99},function(file){
+					this.helper.files.selectImgOrVideo({'mediaType': 0,'max': this.max},function(file){
 					  if(file === false){
 					    console.log('选择文件出错啦 ')
 					    return false
