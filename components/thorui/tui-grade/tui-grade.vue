@@ -145,10 +145,9 @@
 			this.$nextTick(() => {
 				setTimeout(() => {
 					// #ifndef MP-BAIDU
-					const className = '.tui-grade__box';
-					let query = uni.createSelectorQuery().in(this);
-					query
-						.select(className)
+					uni.createSelectorQuery()
+						.in(this)
+						.select('.tui-grade__box')
 						.boundingClientRect(res => {
 							this.pageX = res.left || 0;
 						})
@@ -156,10 +155,9 @@
 					// #endif
 
 					// #ifdef MP-BAIDU
-					const className = '.' + this.classBaidu;
-					let query = uni.createSelectorQuery().in(this);
-					query
-						.select(className)
+					uni.createSelectorQuery()
+						.in(this)
+						.select('.' + this.classBaidu)
 						.boundingClientRect(res => {
 							this.pageX = res.left || 0;
 						})

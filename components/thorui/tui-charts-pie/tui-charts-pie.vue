@@ -15,6 +15,7 @@
 				<view class="tui-charts__pie-item"
 					:style="{width:diam/2+'rpx',height:diam+'rpx',marginLeft:diam/2+'rpx','-webkit-transform': `rotate(${item.transformAngle}deg)`,'transform': `rotate(${item.transformAngle}deg)`,backgroundColor:item.color}">
 				</view>
+				
 			</view>
 			<view class="tui-charts__pie-annular" v-if="type==2"
 				:style="{width:annular.width+'rpx',height:annular.width+'rpx',backgroundColor:annular.backgroundColor}">

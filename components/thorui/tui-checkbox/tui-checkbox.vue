@@ -4,7 +4,7 @@
 		@tap.stop="checkboxChange">
 		<view class="tui-check__mark" :style="{borderBottomColor:checkMarkColor,borderRightColor:checkMarkColor}"
 			v-if="val"></view>
-		<checkbox class="tui-checkbox__hidden" hidden :color="color" :disabled="disabled" :value="value" :checked="val">
+		<checkbox class="tui-checkbox__hidden" style="position: absolute;opacity: 0;" hidden :color="color" :disabled="disabled" :value="value" :checked="val">
 		</checkbox>
 	</view>
 </template>

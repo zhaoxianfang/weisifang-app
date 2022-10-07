@@ -1,8 +1,9 @@
+var _st = {}
+
 var isOutRange = function(x1, y1, x2, y2, x3, y3) {
 	return x1 < 0 || x1 >= y1 || x2 < 0 || x2 >= y2 || x3 < 0 || x3 >= y3
 };
 var isEdit = false;
-
 function bool(str) {
 	return str === 'true' || str == true ? true : false
 }
@@ -88,7 +89,7 @@ var longPress = function(event, ownerInstance) {
 	var dataset = ins.getDataset()
 	isEdit = bool(dataset.edit)
 	if (!isEdit) return;
-	var st = ownerInstance.getState();
+	var st = ins.getState();
 	if (!st.basedata || st.basedata == 'undefined') {
 		st.basedata = JSON.parse(dataset.basedata)
 	}
@@ -123,7 +124,7 @@ var longPress = function(event, ownerInstance) {
 		item.removeClass("tui-drag__transition").removeClass("tui-drag__current");
 		item.addClass(index == st.cur ? "tui-drag__current" : "tui-drag__transition");
 	})
-
+     
 	ownerInstance.callMethod("vibrate");
 	st.dragging = true;
 };
@@ -131,6 +132,9 @@ var longPress = function(event, ownerInstance) {
 var touchStart = function(event, ownerInstance) {
 	var ins = event.instance;
 	var state = ins.getState()
+	state.list = _st.list
+	state.itemsInstance = _st.itemsInstance
+	state.basedata = _st.basedata
 	state.sTouch = event.changedTouches[0]
 	var dataset = ins.getDataset()
 	isEdit = bool(dataset.edit)
@@ -138,7 +142,10 @@ var touchStart = function(event, ownerInstance) {
 
 var touchMove = function(event, ownerInstance) {
 	var ins = event.instance;
-	var st = ownerInstance.getState();
+	var st = ins.getState();
+	if (event.preventDefault && st.dragging) {
+		event.preventDefault()
+	}
 	var _ = st.basedata;
 
 	if (!st.dragging || !isEdit) return;
@@ -205,7 +212,7 @@ var touchMove = function(event, ownerInstance) {
 
 var touchEnd = function(event, ownerInstance) {
 	var ins = event.instance;
-	var st = ownerInstance.getState();
+	var st = ins.getState();
 
 	if (!st.dragging || !isEdit) return;
 	triggerCustomEvent(st.list, "sort_end", ownerInstance);
@@ -230,18 +237,18 @@ var touchEnd = function(event, ownerInstance) {
 }
 
 var baseDataObserver = function(newVal, oldVal, ownerInstance, ins) {
-	var st = ownerInstance.getState();
-	st.basedata = newVal;
+	// var st = ownerInstance.getState();
+	_st.basedata = newVal;
 }
 
 var listObserver = function(newVal, oldVal, ownerInstance, ins) {
-	var st = ownerInstance.getState();
-	st.itemsInstance = ownerInstance.selectAllComponents('.tui-drag__item');
+	// var st = ownerInstance.getState();
+	_st.itemsInstance = ownerInstance.selectAllComponents('.tui-drag__item');
 
-	st.list = newVal || [];
-
-	st.list.forEach(function(item, index) {
-		var itemIns = st.itemsInstance[index];
+	_st.list = newVal || [];
+    if (!_st.itemsInstance || _st.itemsInstance.length === 0) return;
+	_st.list.forEach(function(item, index) {
+		var itemIns = _st.itemsInstance[index];
 		if (item && itemIns) {
 			itemIns.setStyle({
 				'transform': 'translate3d(' + item.tranX + ',' + item.tranY + ', 0)'

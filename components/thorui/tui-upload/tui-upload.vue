@@ -1,5 +1,5 @@
 <template>
-	<view class="tui-container">
+	<view class="tui-upload__container">
 		<view class="tui-upload-box">
 			<view class="tui-image-item" :style="{width:width+'rpx',height:height+'rpx'}"
 				v-for="(item,index) in imageList" :key="index">
@@ -124,8 +124,7 @@
 				//图片地址
 				imageList: [],
 				//上传状态：1-上传成功 2-上传中 3-上传失败
-				statusArr: [],
-				sussFils:[] // 上传成功的图片信息
+				statusArr: []
 			}
 		},
 		created() {
@@ -133,7 +132,6 @@
 		},
 		watch: {
 			value(val) {
-				console.log('监听到数据变化',val)
 				if (val) {
 					this.initImages()
 				}
@@ -178,7 +176,6 @@
 				this.$emit('complete', {
 					status: status,
 					imgArr: this.imageList,
-					sussFils: this.sussFils,
 					params: this.params,
 					manual: manual
 				})
@@ -270,13 +267,11 @@
 							if (res.statusCode == 200) {
 								//返回结果 此处需要按接口实际返回进行修改
 								let d = JSON.parse(res.data.replace(/\ufeff/g, "") || "{}")
-								console.log('上传成功',d,res)
 								//判断code，以实际接口规范判断
-								if (d.code === 200) {
+								if (d.code % 100 === 0) {
 									// 上传成功 d.url 为上传后图片地址，以实际接口返回为准
 									d.url && (_this.imageList[index] = d.url)
 									_this.$set(_this.statusArr, index, d.url ? "1" : "3")
-									_this.$set(_this.sussFils, index, d)
 								} else {
 									// 上传失败
 									_this.$set(_this.statusArr, index, "3")
@@ -307,28 +302,22 @@
 						confirmText: "确定",
 						success(res) {
 							if (res.confirm) {
-								let fileItem = this.sussFils[index]
 								that.imageList.splice(index, 1)
 								that.statusArr.splice(index, 1)
-								that.sussFils.splice(index, 1)
 								that.$emit("remove", {
 									index: index,
-									params: that.params,
-									file:fileItem
+									params: that.params
 								})
 								that.change()
 							}
 						}
 					})
 				} else {
-					let fileItem = this.sussFils[index]
 					that.imageList.splice(index, 1)
 					that.statusArr.splice(index, 1)
-					that.sussFils.splice(index, 1)
 					that.$emit("remove", {
 						index: index,
-						params: that.params,
-						file:fileItem
+						params: that.params
 					})
 					that.change()
 				}

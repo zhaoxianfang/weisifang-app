@@ -7,7 +7,7 @@
 			v-else>
 			<view class="tui-check__mark" :style="{borderBottomColor:checkMarkColor,borderRightColor:checkMarkColor}"
 				v-if="val"></view>
-			<switch class="tui-switch__hidden" @change="change" :name="name" type="checkbox" :checked="val"
+			<switch class="tui-switch__hidden" style="position: absolute;opacity: 0;" @change="change" :name="name" type="checkbox" :checked="val"
 				:disabled="disabled"></switch>
 		</view>
 	</view>

@@ -279,7 +279,7 @@
 		},
 		methods: {
 			getParams(e) {
-				let val = e.value || this.value;
+				let val = e.value || 0;
 				if (this.section && !e.isStart) {
 					this.end = val
 				} else {

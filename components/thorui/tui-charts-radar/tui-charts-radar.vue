@@ -10,17 +10,17 @@
 		<view class="tui-charts-radar" :class="{'tui-radar__mrgin':label.show}"
 			:style="{width:radar_w+'px',height:radar_w+'px'}">
 			<view class="tui-radar__radius" v-for="(item,index) in indicators" :key="index"
-				:style="{height:radar_w/2+'px',transform:`rotate(${item.angle}deg)`,background:axisLineColor}">
+				:style="{height:radar_w/2+'px',transform:`rotate(${item.angle}deg)`,background:axisLineColor,width:lineBold?'2px':'1px'}">
 				<view class="tui-radar__name" v-if="label.show"
 					:style="{color:label.color || '#bbb',fontSize:(label.size || 24) +'rpx'}">{{item.name}}</view>
 			</view>
-			<view class="tui-radar__center">
+			<view class="tui-radar__center" :style="{width:lineBold?'2px':'1px',height:lineBold?'2px':'1px'}">
 				<view class="tui-radar__hypotenuse" v-for="(l,idx) in hypotenuse" :key="l.id"
-					:style="{bottom: l.y+'px', left: l.x+'px',width: l.width+'px',transform: `rotate(${l.angle}deg)`,background:splitLineColor}">
+					:style="{bottom: l.y+'px', left: l.x+'px',width: l.width+'px',transform: `rotate(${l.angle}deg)`,background:splitLineColor,height:lineBold?'2px':'1px'}">
 				</view>
 				<view v-for="(item,index) in dataset" :key="index" @tap.stop="onDotTap(index)">
 					<view class="tui-radar__dataset" v-for="(d,i) in item.lines" :key="d.id"
-						:style="{bottom: d.y+'px', left: d.x+'px',width: d.width+'px',transform: `rotate(${d.angle}deg)`,background:item.color}">
+						:style="{bottom: d.y+'px', left: d.x+'px',width: d.width+'px',transform: `rotate(${d.angle}deg)`,background:item.color,height:lineBold?'2px':'1px'}">
 						<view class="tui-radar__dot" :style="{background:item.color}"></view>
 					</view>
 				</view>
@@ -88,6 +88,10 @@
 			splitLineColor: {
 				type: String,
 				default: '#eee'
+			},
+			lineBold:{
+				type: Boolean,
+				default: false
 			}
 		},
 		// #ifndef VUE3
@@ -241,7 +245,7 @@
 	}
 
 	.tui-radar__radius {
-		width: 1px;
+		/* width: 1px; */
 		position: absolute;
 		left: 50%;
 		top: 0;
@@ -261,16 +265,16 @@
 
 	.tui-radar__center {
 		position: absolute;
-		width: 1px;
-		height: 1px;
+		/* width: 2px;
+		height: 2px; */
 		left: 50%;
 		top: 50%;
-		transform: translate(-50%, -50%);
+		transform: translate(0, -50%);
 	}
 
 	.tui-radar__hypotenuse,
 	.tui-radar__dataset {
-		height: 1px;
+		/* height: 1px; */
 		position: absolute;
 		transform-origin: 0 50%;
 		z-index: 2;
@@ -284,8 +288,8 @@
 	}
 
 	.tui-radar__dot {
-		height: 5px;
-		width: 5px;
+		height: 6px;
+		width: 6px;
 		border-radius: 50%;
 		position: absolute;
 		left: 0;

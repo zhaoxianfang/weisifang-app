@@ -124,6 +124,9 @@
 				default: ''
 			},
 			// #endif
+			modelModifiers: {
+				default: () => ({})
+			},
 			//与官方input type属性一致
 			type: {
 				type: String,
@@ -140,6 +143,14 @@
 			maxlength: {
 				type: [Number, String],
 				default: 140
+			},
+			min: {
+				type: [Number, String],
+				default: 'NaN'
+			},
+			max: {
+				type: [Number, String],
+				default: 'NaN'
 			},
 			cursorSpacing: {
 				type: Number,
@@ -296,13 +307,30 @@
 					this.placeholderStyl = this.placeholderStyle
 				} else {
 					const size = uni.upx2px(this.size)
-					this.placeholderStyl = `fontSize:${size}px`
+					this.placeholderStyl = `font-size:${size}px`
 				}
 			},
 			onInput(event) {
 				let value = event.detail.value;
 				if (this.trim) value = this.trimStr(value);
 				this.inputVal = value
+				if (this.modelModifiers.number || this.type === 'digit' || this.type === 'number') {
+					let eVal = Number(value)
+					if (typeof eVal === 'number') {
+						const min = Number(this.min)
+						const max = Number(this.max)
+						if (typeof min === 'number' && eVal < min) {
+							eVal = min
+						} else if (typeof max === 'number' && max < eVal) {
+							eVal = max
+						}
+					}
+					value = isNaN(eVal) ? value : eVal
+				}
+				this.$nextTick(() => {
+					event.detail.value !== '' && (this.inputVal = value);
+				})
+				
 				this.$emit('input', value);
 				// #ifdef VUE3
 				this.$emit('update:modelValue', value)
@@ -318,6 +346,7 @@
 				this.$emit('confirm', e);
 			},
 			onClear(event) {
+				if(this.disabled) return;
 				uni.hideKeyboard()
 				this.inputVal = '';
 				this.$emit('input', '');

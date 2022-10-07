@@ -4,7 +4,7 @@
 		@tap.stop="radioChange">
 		<view class="tui-check__mark" :style="{borderBottomColor:checkMarkColor,borderRightColor:checkMarkColor}"
 			v-if="val"></view>
-		<radio class="tui-radio__hidden" hidden :color="color" :disabled="disabled" :value="value" :checked="val"></radio>
+		<radio class="tui-radio__hidden" style="position: absolute;opacity: 0;" hidden :color="color" :disabled="disabled" :value="value" :checked="val"></radio>
 	</view>
 </template>
 

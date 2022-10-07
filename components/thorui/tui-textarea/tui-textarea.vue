@@ -31,8 +31,9 @@
 					@input="onInput" @confirm="onConfirm" @linechange="onLinechange"
 					@keyboardheightchange="onKeyboardheightchange"></textarea>
 				<view class="tui-textarea__counter" :style="{fontSize:counterSize+'rpx',color:counterColor}"
-					v-if="isCounter && maxlength!=-1">
-					<text :style="{fontSize:counterSize+'rpx',color:counterColor}">{{count}}/{{maxlength}}</text>
+					v-if="isCounter">
+					<text
+						:style="{fontSize:counterSize+'rpx',color:counterColor}">{{maxlength!=-1?`${count}/${maxlength}`:count}}</text>
 				</view>
 			</view>
 			<slot name="right"></slot>
@@ -306,7 +307,7 @@
 		methods: {
 			getCount(count) {
 				const max = Number(this.maxlength)
-				if (count > max) {
+				if (count > max && max !== -1) {
 					return max
 				}
 				return count;
@@ -324,7 +325,7 @@
 				if (this.trim) value = this.trimStr(value);
 				const lenth = value.length;
 				const max = Number(this.maxlength)
-				if (lenth > max) {
+				if (lenth > max && max !== -1) {
 					lenth = max;
 					value = value.substring(0, max - 1)
 				}
@@ -560,6 +561,7 @@
 		justify-content: flex-end;
 		/* #endif */
 	}
+
 	.tui-text__right {
 		text-align: right;
 	}

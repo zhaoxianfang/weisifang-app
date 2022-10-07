@@ -8,7 +8,7 @@
 				<view class="tui-tabs__item" :style="{height: height+'rpx'}" v-for="(item,index) in tabs" :key="index"
 					@tap="handleClick" :data-index="index">
 					<view class="tui-item__child" :class="[childClass]"
-						:style="{	color: currentTab == index ? selectedColor : color,fontSize: size + 'rpx',lineHeight: size + 'rpx',fontWeight: bold && currentTab == index ? 'bold' : 'normal'}">
+						:style="{	color: currentTab == index ? selectedColor : color,fontSize: size + 'rpx',fontWeight: bold && currentTab == index ? 'bold' : 'normal'}">
 						{{item}}
 					</view>
 				</view>

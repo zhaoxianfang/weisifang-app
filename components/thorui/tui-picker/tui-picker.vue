@@ -234,6 +234,7 @@
 				// #endif
 			},
 			pickerChange() {
+				if(!this.show) return;
 				let text = [];
 				let value = [];
 				let result = '';

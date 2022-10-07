@@ -26,10 +26,7 @@
 							{{ item.letter }}
 						</view>
 					</view>
-					<view class="tui-content__item" v-for="(model, subIndex) in item.data" :key="subIndex"
-						:data-index="index" :data-subi="subIndex" @tap="itemClick">
-						<slot name="item" :entity="model" :index="index" :subi="subIndex"></slot>
-					</view>
+					<slot name="item" :entity="item.data" :index="index"></slot>
 				</view>
 			</view>
 			<slot name="footer"></slot>
@@ -103,7 +100,7 @@
 	};
 	export default {
 		name: 'tuiIndexList',
-		emits: ['click','letterClick'],
+		emits: ['letterClick'],
 		props: {
 			// 数据源
 			listData: {
@@ -231,20 +228,6 @@
 			};
 		},
 		methods: {
-			/**
-			 * 点击每一项后触发事件
-			 */
-			itemClick(e) {
-				let {
-					index,
-					subi
-				} = e.currentTarget.dataset;
-				let data = this.listData[index].data[subi];
-				this.$emit('click', data);
-			},
-			/**
-			 * scroll-view 滚动监听
-			 */
 			scroll(e) {
 				if (this.touching) return;
 

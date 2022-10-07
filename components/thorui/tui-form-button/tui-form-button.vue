@@ -1,6 +1,6 @@
 <template>
 	<view class="tui-button__container" :style="{width: width,height: height,margin:margin,borderRadius: radius}"
-		@touchstart="handleStart" @touchend="handleClick" @touchcancel="handleEnd" @tap="handleTap">
+		@touchstart="handleStart" @touchend="handleClick" @touchcancel="handleEnd">
 		<button class="tui-button" :class="[
 				bold ? 'tui-text__bold' : '',
 				time && (plain || link) ? 'tui-button__opacity' : '',
@@ -19,7 +19,7 @@
 				color: disabled && disabledBackground ? disabledColor : color
 			}" :loading="loading" :form-type="formType" :open-type="openType" @getuserinfo="bindgetuserinfo"
 			@getphonenumber="bindgetphonenumber" @contact="bindcontact" @error="binderror"
-			@opensetting="bindopensetting" :disabled="disabled" :scope="scope">
+			@opensetting="bindopensetting" :disabled="disabled" :scope="scope" @tap.stop="handleTap">
 			<text class="tui-button__text" :class="{'tui-text__bold':bold}" v-if="text"
 				:style="{fontSize: size + 'rpx',lineHeight:size + 'rpx',color: disabled && disabledBackground ? disabledColor : color}">{{text}}</text>
 			<slot></slot>
@@ -157,17 +157,12 @@
 			handleClick() {
 				if (this.disabled || !this.trigger) return;
 				this.time = 0;
-				this.$emit('click', {
-					index: Number(this.index)
-				});
 			},
 			handleTap() {
-				// #ifdef H5
-				if (this.tap || this.disabled) return;
+				if (this.disabled) return;
 				this.$emit('click', {
 					index: Number(this.index)
 				});
-				// #endif
 			},
 			handleEnd() {
 				if (this.disabled) return;

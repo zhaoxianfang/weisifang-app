@@ -8,7 +8,7 @@
 			<!-- #endif -->
 			<!-- #ifdef MP-WEIXIN -->
 			<view class="tui-drag__item" v-for="(item, index) in list" :key="item.id" :data-index="index"
-				:style="{ width: baseData.itemWidth+'px', height:  baseData.itemHeight + 'px' }"
+				:style="{ width:100 / columns + '%', height:  baseData.itemHeight + 'px' }"
 				@longpress="handler.longPress" :data-basedata="baseData" :data-edit="isEdit"
 				@touchstart="handler.touchStart" :catch:touchmove="dragging?handler.touchMove:''"
 				:catch:touchend="dragging?handler.touchEnd:''">
