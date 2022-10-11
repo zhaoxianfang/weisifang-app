@@ -106,7 +106,7 @@
       	this.queryList.page++
       	this.getList();
         this.timer = ''
-      }, 3500)
+      }, 1800)
     },
 		methods: {
 			getList(){

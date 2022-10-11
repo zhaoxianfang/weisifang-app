@@ -239,6 +239,34 @@
                     "pid" : "3226",
                     "parameters" : {}
                 }
+            },
+            "Ba-ChangeIcon" : {
+                "__plugin_info__" : {
+                    "name" : "动态切换应用图标、名称（如新年、国庆等） Ba-ChangeIcon",
+                    "description" : "Ba-ChangeIcon 是一款uniapp动态切换应用图标、名称的插件。可实现新年、过节动态切换应用图标的效果，给用户更好的体验。",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=9648",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "9648",
+                    "parameters" : {}
+                }
+            },
+            "sn-videoframe" : {
+                "__plugin_info__" : {
+                    "name" : "视频缩略图、封面",
+                    "description" : "获取视频缩略图",
+                    "platforms" : "Android,iOS",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=4469",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "4469",
+                    "parameters" : {}
+                }
             }
         }
     },

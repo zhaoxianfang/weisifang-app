@@ -16,7 +16,7 @@
 				<!-- #endif -->
 				<!-- #ifdef APP-PLUS -->
 				<view class="wsf-upload-Item-video-fixed" @click="previewVideo(getFileUrl(item))"></view>
-				<image class="wsf-upload-Item-video-app-poster" mode="scaleToFill" :src="appVideoPoster"></image>
+				<image class="wsf-upload-Item-video-app-poster" mode="scaleToFill" :src="getVideoCover(getFileUrl(item))"></image>
 				<!-- #endif -->
 			</view>
 
@@ -270,7 +270,7 @@
 
 			},
 			chooseFile() {
-        console.log('chooseFile')
+        // console.log('chooseFile')
 				var _this = this
 				if (this.disabled) {
 					return false;
@@ -545,11 +545,12 @@
 							formData: this.formData,
 							header: this.headers,
 							success: (uploadFileRes) => {
-								//uni.hideLoading();
+								uni.hideLoading();
 								//console.log(typeof this.uploadSuccess)
-								// console.log('success',uploadFileRes,this.action)
+								// console.log('success',JSON.stringify( uploadFileRes),uploadFileRes,this.action)
                 if(this.tui.isHtml(uploadFileRes.data) ){
                   reject('上传出错啦');
+                  this.uploading = false
                   this.$emit("uploadFail", '上传出错啦');
                   return false
                 }
@@ -729,6 +730,33 @@
 					callback(base64);
 				}
 			},
+      async getVideoCover(url){
+        const videframe = uni.requireNativePlugin("sn-videoframe");
+        // 获取指定帧图片
+        videframe.getFrame(
+          {
+            // url: "static/test.mp4",
+            url: url,
+            time: 0, // 默认0
+          },
+          (e) => {
+            console.log(e);
+            if (e.code == 0) {
+              // self.imgSrc = e.imagePath;
+              console.log(e.imagePath);
+              return plus.io.convertLocalFileSystemURL(e.imagePath)
+            } else {
+              return this.appVideoPoster
+              // console.log(e.imagePath);
+              // uni.showToast({
+              //   title: e.msg,
+              //   icon: "none",
+              // });
+            }
+          }
+        );
+        // appVideoPoster
+      }
 		}
 	}
 </script>

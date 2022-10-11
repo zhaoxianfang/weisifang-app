@@ -72,7 +72,9 @@
 				/*******************************/
 			},
 			uploadFail(err) { //上传失败
+        uni.hideLoading();
 				console.log('err', err)
+        this.tui.toast('上传失败:文件太大或系统出错')
 			},
 			chooseSuccess(file,tyoe) { //未设置上传地址
 				console.log('chooseSuccess', file,tyoe)
