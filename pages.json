@@ -78,8 +78,15 @@
 				"navigationBarTitleText": "忘记密码",
 				"enablePullDownRefresh": false
 			}
-		}
-	],
+		},{
+        "path" : "pages/common/webview/webview",
+        "style" :                                                                                    
+        {
+            "navigationBarTitleText": "在线访问",
+            "enablePullDownRefresh": false
+        }
+      }
+    ],
 	"preloadRule": {
 		"pages/tabbar/work/work": {
 			"network": "all",

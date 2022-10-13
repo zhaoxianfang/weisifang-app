@@ -106,10 +106,10 @@ export default {
 				},
         {
         	name: 'more-fill',
-        	label: 'editimg',
+        	label: '打开网页',
         	color: '#999',
         	size: 30,
-          type:'editimg'
+          type:'webview'
         },{
         	name: 'more-fill',
         	label: '悬浮框',
@@ -122,6 +122,12 @@ export default {
         	color: '#999',
         	size: 30,
           type:'share'
+        },{
+        	name: 'more-fill',
+        	label: '扫一扫',
+        	color: '#999',
+        	size: 30,
+          type:'scan'
         }
 			],
       
@@ -207,7 +213,8 @@ export default {
           	bigText:'君不见黄河之水天上来，奔流到海不复回。君不见高堂明镜奔白发，朝如青丝暮成雪。',
           })
       }
-      if(e.type=='editimg'){
+      if(e.type=='webview'){
+        this.helper.openUrl('https://weisifang.com/docs')
         var _this = this
       }
       if(e.type == 'app_list'){
@@ -252,6 +259,10 @@ export default {
             }
           })
         })
+      }
+      if(e.type == 'scan'){
+        // 扫一扫
+        this.helper.scanCode.scan()
       }
       // #endif
 			

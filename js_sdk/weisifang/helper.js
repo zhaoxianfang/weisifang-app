@@ -2,14 +2,16 @@ var isIos = false
 import download from '@/js_sdk/weisifang/download.js'
 import files from '@/js_sdk/weisifang/files.js'
 import permissions from '@/js_sdk/weisifang/permissions.js'
+import scanCode from '@/js_sdk/weisifang/scan_code.js'
+
 // #ifdef APP-PLUS
 import { checkUpdate } from '../../components/app-upgrade/js/app-update-check.js'
 import utils from '@/js_sdk/weisifang/utils.js'
 isIos = (plus.os.name === 'iOS')
+// #endif
 
 import api from '@/api/index.js'
 
-// #endif
 
 const helper = {
 	debounceTime: null, // 防抖计时器
@@ -17,28 +19,18 @@ const helper = {
   download:download,
   files:files,
   permissions:permissions,
+  scanCode:scanCode,
 	// #ifdef APP-PLUS
   utils:utils,
 	// #endif
 	init() {
 		// #ifdef APP-PLUS
-		// plus.screen.lockOrientation('portrait-primary') //锁定竖屏
-		// plus.navigator.setFullscreen(false); // 设置应用全屏显示！ 
-
-		// 判断通知权限 移到 notify 里面去触发
-		// this.judgeIosPermissionPush()
 		this.clickToBack()
-		// this.checkWhiteList()
-
-		// this.requestPermission()
-    // this.openPermissionSetting()
-		// 测试下载文件
-		// download.downloadFile('https://weisifang.com/static/system/logo/logo-sm.png')
-    // setTimeout(() => {
-    //     this.keeplive()
-    // }, 10000);
 		// #endif
 	},
+  openUrl(url){
+    uni.navigateTo({ url: '/pages/common/webview/webview?url='+encodeURI(url) })
+  },
   test_live(){
     api.app.test_live({'name':"test setInterval live"})
   },
@@ -89,7 +81,6 @@ const helper = {
 				.then(res => {
 					if (res.code === 200 && res.data && res.data.latest && res.data.latest.url) {
 						let update_info = res.data.latest
-						// console.log('app/version:', update_info);
 						checkUpdate(update_info, type).then(res => {
 							if (res.msg) {
 								plus.nativeUI.toast(res.msg)
@@ -103,16 +94,6 @@ const helper = {
 					console.log('出错啦', e);
 				});
 		});
-
-		// 	let update_info = {
-		// 		version: '1.0.2', //线上版本
-		// 		now_url: 'https://dldir1.qq.com/weixin/android/weixin802android1860_arm64.apk', //更新链接
-		// 		silent: 1, //是否是静默更新
-		// 		force: 0, //是否是强制更新 1是 0否(有关闭按钮)
-		// 		net_check: 1, //非WIfi是否提示
-		// 		note: '产品汪汪要改这个字的颜色<br />1、...<br />2、...<br />3、...', //更新内容
-		// 	}
-
 		// #endif
 	},
 	toast: (title = '提示', duration = 'long', align = 'center') => {

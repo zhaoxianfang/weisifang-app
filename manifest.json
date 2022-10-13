@@ -267,6 +267,20 @@
                     "pid" : "4469",
                     "parameters" : {}
                 }
+            },
+            "CL-WebH5View" : {
+                "__plugin_info__" : {
+                    "name" : "封装了原生webview实现h5与app交互",
+                    "description" : "封装了原生webview 实现h5与app交互,传值、支持h5 拍照,录像,选择、js注入、支持cookie、页面跳转拦截、自定义ua",
+                    "platforms" : "Android,iOS",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=1034",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "1034",
+                    "parameters" : {}
+                }
             }
         }
     },
