@@ -59,8 +59,10 @@
 				url:"", //加载url
 				// url:"http://test.weisifang.com/", //加载url
 				reg:"", //设置拦截地址;(支持正则字符串)
-				jsdata:"function receiveAppData(data){}" //注入js; 
-				
+        //此组件内web采用固定的receiveAppData方法接收消息，注入的目的是为了
+        // 防止没加载web内未定义receiveAppData时候不报错，如果web内已经定义
+        // 过则此注入无效果
+        jsdata:"function receiveAppData(data){}", 
 			}
 		},
     onLoad(options) {
@@ -68,15 +70,18 @@
     	this.url = decodeURI(options.url)
     	// #endif
     },
+    beforeCreate() {
+    },
 		mounted() {	
-      // this.url= "https://www.baidu.com";
+      // #ifdef APP-PLUS
 			h5WebView = this.$refs.webView;
 			// this.url=uni.getStorageSync("webviewURL");
+      // #endif
 			
 		},
 		 onBackPress(options) {  
-			  if (options.from === 'navigateBack') {  
-				      return false;
+			  if (options.from === 'navigateBack') {
+				    return false;
 			   }  
 			  this.goH5Back();
 		    return true;
@@ -147,7 +152,7 @@
 					 if(state==false)
 					 {
 						 uni.navigateBack({
-						 	
+                delta: 1 // 返回的页面数
 						 })
 					 }
 				 });
@@ -212,7 +217,7 @@
 		position: fixed;
 		left: 0;
 		top: 0;
-		bottom: 0;
+		bottom: 20px;
 		right: 0;
 	}
 	

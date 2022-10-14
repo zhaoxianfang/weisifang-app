@@ -25,6 +25,9 @@ const helper = {
 	// #endif
 	init() {
 		// #ifdef APP-PLUS
+    // plus.screen.lockOrientation('portrait-primary') //锁定竖屏
+    plus.navigator.setFullscreen(false); // 设置应用全屏显示！
+
 		this.clickToBack()
 		// #endif
 	},

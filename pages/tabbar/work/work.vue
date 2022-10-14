@@ -131,26 +131,18 @@ export default {
         }
 			],
       
-      // 悬浮框参数
-      widthRatio: 0.1,
-      heightRatio: 0.1,
-      xRatio: 0.8,
-      yRatio: 0.8,
-      moveType: 3,
-      slideLeftMargin: 0,
-      slideRightMargin: 0,
-      duration: 500,
-      desktopShow: true,
-      tag: "weisifang_default", // 为该弹窗设置标识，以做区分，用于多个
-      iconPath: "ba_float_win_icon", // 默认 ba_float_win_icon | custom
-      // 悬浮框参数 end
-             
     };
 	},
   mounted() {
     // #ifdef APP-PLUS
     
     // #endif
+  },
+  onShow: function() {
+    // uni.showTabBar()
+  },
+  onHide: function() {
+    // uni.hideTabBar()
   },
 	methods: {
 		jump_page: function(e) {
@@ -218,7 +210,7 @@ export default {
         var _this = this
       }
       if(e.type == 'app_list'){
-        
+        return false
         let appArr=[];
         uni.showLoading({
         	title: '获取中',

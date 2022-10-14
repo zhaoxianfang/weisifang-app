@@ -80,9 +80,8 @@
 			}
 		},{
         "path" : "pages/common/webview/webview",
-        "style" :                                                                                    
-        {
-            "navigationBarTitleText": "在线访问",
+        "style" : {
+            "navigationBarTitleText": "",
             "enablePullDownRefresh": false
         }
       }
