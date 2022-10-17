@@ -9,14 +9,14 @@
     "app-plus" : {
         // 设置全屏
         // "fullscreen" : true,
-        "screenOrientation" : [ "portrait-primary" ], //竖屏
+        // "screenOrientation" : [ "portrait-primary" ], //竖屏
         "softinput" : {
             "mode" : "adjustPan" // 禁止软键盘顶起菜单
         },
-        // 设置手机状态栏不被遮挡
-        "statusbar" : {
-            "immersed" : false
-        },
+        // 应用启动后的系统状态栏相关配置 配置后容易导致 tabbar 溢出手机底部可视边界
+        // "statusbar" : {
+        //     "immersed" : "none"
+        // },
         "usingComponents" : true,
         "safearea" : {
             "background" : "#FFFFFF",
@@ -279,6 +279,20 @@
                     "isCloud" : true,
                     "bought" : 1,
                     "pid" : "1034",
+                    "parameters" : {}
+                }
+            },
+            "Ba-ImageEditor" : {
+                "__plugin_info__" : {
+                    "name" : "图片编辑插件 Ba-ImageEditor",
+                    "description" : "Ba-ImageEditor 是一款功能强大的uniapp图片编辑插件，支持涂鸦、贴图、滤镜、裁剪、旋转、添加文字、美颜等等。",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=9095",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "9095",
                     "parameters" : {}
                 }
             }

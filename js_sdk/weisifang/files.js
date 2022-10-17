@@ -315,6 +315,30 @@ const files = {
             });
         }
       );
+    },
+    // 编辑图片，涂鸦
+    editImg() {
+      const imageEditor = uni.requireNativePlugin('Ba-ImageEditor')
+      //选择图片，本插件自带
+      imageEditor.selectImage( (ret) => {
+          console.log(ret)
+          if (ret.outputPath) {
+              let path = ret.outputPath;
+              
+              imageEditor.imageEdit({
+                  'isShowSticker': true, //是否展示贴图功能，默认为true
+                  'path': path,//原始图片路径
+                  'outputPath': this.outputPath,//保存图片路径
+              },
+              (ret) => {
+                  console.log(ret)
+                  if (ret.outputPath && ret.isImageEdit) {
+                      path = ret.outputPath;
+                      console.log(ret,path)
+                  }
+              });
+          }
+      });
     }
   // #endif
 }

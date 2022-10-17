@@ -128,6 +128,12 @@ export default {
         	color: '#999',
         	size: 30,
           type:'scan'
+        },{
+        	name: 'more-fill',
+        	label: '图片编辑',
+        	color: '#999',
+        	size: 30,
+          type:'edit_img'
         }
 			],
       
@@ -255,6 +261,10 @@ export default {
       if(e.type == 'scan'){
         // 扫一扫
         this.helper.scanCode.scan()
+      }
+      if(e.type == 'edit_img'){
+        // 扫一扫
+        this.helper.files.editImg()
       }
       // #endif
 			

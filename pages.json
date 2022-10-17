@@ -5,13 +5,9 @@
 				// #ifdef H5
 				"titleNView": false,
 				// #endif
-				// #ifdef APP-PLUS
-				"navigationStyle": "custom",
-				// #endif
 				"navigationBarTitleText": "威四方",
 				"app-plus": {
-					"bounce": "vertical",
-					"titleNView": false //禁用原生导航栏 
+					"bounce": "vertical"
 				}
 			}
 		}, {
