@@ -66,6 +66,9 @@ export default {
 
 	onLoad() {
 	},
+	onNavigationBarButtonTap(e) {
+		this.helper.navBtns.handle(e)
+	},
 	methods: {
 		loadList(obj) {
 			// console.log('需要加载数据：', obj)

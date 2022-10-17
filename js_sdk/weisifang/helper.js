@@ -3,6 +3,7 @@ import download from '@/js_sdk/weisifang/download.js'
 import files from '@/js_sdk/weisifang/files.js'
 import permissions from '@/js_sdk/weisifang/permissions.js'
 import scanCode from '@/js_sdk/weisifang/scan_code.js'
+import navButtonsHandle from '@/js_sdk/weisifang/navButtonsHandle.js'
 
 // #ifdef APP-PLUS
 import { checkUpdate } from '../../components/app-upgrade/js/app-update-check.js'
@@ -22,6 +23,7 @@ const helper = {
   scanCode:scanCode,
 	// #ifdef APP-PLUS
   utils:utils,
+  navBtns:navButtonsHandle,
 	// #endif
 	init() {
 		// #ifdef APP-PLUS

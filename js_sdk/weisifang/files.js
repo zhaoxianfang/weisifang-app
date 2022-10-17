@@ -203,10 +203,10 @@ const files = {
       // 判断文件类型
       var index = url.lastIndexOf('.'); // 获取指定字符串最后一次出现的位置，返回index
       var ext = url.substr(index + 1, 4); // substr(start, length) 抽取从start下标开始的length个字符，返回新的字符串
-      let isImages = ['png','png?', 'jpg','jpg?','jpeg', 'bmp','bmp?', 'gif','gif?', 'webp', 'psd','psd?', 'svg','svg?', 'tiff'].indexOf(ext.toLowerCase()) !== -1;
-      let isVideo = ['mp4','avi','mov','rmvb','rm','flv','wmv'].indexOf(ext.toLowerCase()) !== -1;
-      let isPdf = ['pdf'].indexOf(ext.toLowerCase()) !== -1;
-      let isAudio = ['mp3'].indexOf(ext.toLowerCase()) !== -1; // 音频
+			let isImages = ['png','png?', 'jpg','jpg?','jpeg', 'bmp','bmp?', 'gif','gif?', 'webp', 'psd','psd?', 'svg','svg?', 'tiff'].indexOf(ext.toLowerCase()) !== -1;
+			let isVideo = ['mp4','mp4?','avi','avi?','mov','mov?','rmvb','rm','flv','flv?','wmv','wmv?'].indexOf(ext.toLowerCase()) !== -1;
+			let isPdf = ['pdf','pdf?'].indexOf(ext.toLowerCase()) !== -1;
+			let isAudio = ['mp3','mp3?'].indexOf(ext.toLowerCase()) !== -1; // 音频
 			
 			if(isDeleteFile && /[\u4E00-\u9FA5\ ]+/g.test(url)) 
 			{
@@ -262,7 +262,9 @@ const files = {
         if(fileUrl.substr(0, 4) == "http"){
           isDeleteFile = true
         }
-        if (this.platform === 'android') {
+				let os = plus.os.name;
+				console.log(os)
+				if ('Android' == os) {
             // Android
             officeViewModule.openFile({
                 imageUrls: [fileUrl],
@@ -272,7 +274,7 @@ const files = {
                 installOfflineCore: true, // 是否离线安装内核
                 coreLocalPath: files.tbs_core_url, // 离线安装内核本地路径
             });
-        } else if (this.platform === 'ios') {
+        } else if (os === 'iOS') {
             // IOS
             officeViewModule.openFile(
                 {

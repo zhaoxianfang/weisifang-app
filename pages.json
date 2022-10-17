@@ -7,7 +7,18 @@
 				// #endif
 				"navigationBarTitleText": "威四方",
 				"app-plus": {
-					"bounce": "vertical"
+					"bounce": "vertical",
+					"titleNView": {
+							"buttons": [{
+								"id": "1",
+								"uni_code": "scan",
+								"float": "right",
+								"fontSize": "22px",
+								"fontSrc": "/static/fonts/iconfont.ttf",// 也可以使用字体icon
+								"text": "\ue61c",
+								"width": "auto"
+							}]
+						}
 				}
 			}
 		}, {
