@@ -12,7 +12,7 @@ const navButtonsHandle = {
 	  	case 'scan': // 扫码
 				event = helper.scanCode.scan()
 	  		break;
-			case 'share': // 分享
+			case 'webview_menu': // webview 顶部菜单
 				// 
 				break;
 	  	default:

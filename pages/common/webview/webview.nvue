@@ -1,6 +1,7 @@
 <template>
 	<view class="bgview">
-		
+		<wsf-rt-popup :itemList="itemList" ref="rtBubble" @click="itemClick"></wsf-rt-popup>
+    
 		<!-- <view style="flex-direction: row;flex-wrap: wrap;">
 			
 			<view class="btn" @click="goH5Back()">
@@ -49,7 +50,6 @@
 </template>
 
 <script>
-	
 	let h5WebView = null;
   let showLoading = null;
 	export default {
@@ -63,6 +63,16 @@
         // 防止没加载web内未定义receiveAppData时候不报错，如果web内已经定义
         // 过则此注入无效果
         jsdata:"function receiveAppData(data){}", 
+        
+        itemList: [{
+        		title: '复制地址',
+        		icon: 'link'
+        	},
+        	{
+        		title: '刷新',
+        		icon: 'refresh'
+        	}
+        ],
 			}
 		},
     onLoad(options) {
@@ -71,6 +81,10 @@
     	// #endif
     },
     beforeCreate() {
+    },
+    onNavigationBarButtonTap(e) {
+    	// this.helper.navBtns.handle(e)
+      this.$refs.rtBubble.toggle();
     },
 		mounted() {	
       // #ifdef APP-PLUS
@@ -207,7 +221,12 @@
         let obj = Object.assign({}, json || {},{'source':'weisifang.com','type':'app'});
 				//发送消息到h5页面; 要求H5页面必须 定义函数 function receiveAppData(data){}
 				h5WebView.sendMessage(JSON.stringify(obj));
-			}
+			},
+      itemClick(e) {
+        console.log(e.item)
+      	// let text = ["首页", "收藏", "分享"][e.index];
+      	// this.tui.toast(`您点击了：${text}`);
+      }
 		}
 	}
 </script>

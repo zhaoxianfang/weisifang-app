@@ -9,16 +9,16 @@
 				"app-plus": {
 					"bounce": "vertical",
 					"titleNView": {
-							"buttons": [{
-								"id": "1",
-								"uni_code": "scan",
-								"float": "right",
-								"fontSize": "22px",
-								"fontSrc": "/static/fonts/iconfont.ttf",// 也可以使用字体icon
-								"text": "\ue61c",
-								"width": "auto"
-							}]
-						}
+            "buttons": [{
+              "id": "1",
+              "uni_code": "scan",
+              "float": "right",
+              "fontSize": "22px",
+              "fontSrc": "/static/fonts/iconfont.ttf",// 也可以使用字体icon
+              "text": "\ue61c",
+              "width": "auto"
+            }]
+          }
 				}
 			}
 		}, {
@@ -89,7 +89,20 @@
         "path" : "pages/common/webview/webview",
         "style" : {
             "navigationBarTitleText": "",
-            "enablePullDownRefresh": false
+            "enablePullDownRefresh": false,
+            "app-plus": {
+            	"titleNView": {
+                "buttons": [{
+                  "id": "2",
+                  "uni_code": "webview_menu",
+                  "float": "right",
+                  "fontSize": "22px",
+                  "fontSrc": "/static/fonts/iconfont.ttf",// 也可以使用字体icon
+                  "text": "\ue704",
+                  "width": "auto"
+                }]
+              }
+            }
         }
       }
     ],
