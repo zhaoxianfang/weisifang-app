@@ -124,12 +124,6 @@ export default {
           type:'share'
         },{
         	name: 'more-fill',
-        	label: '扫一扫',
-        	color: '#999',
-        	size: 30,
-          type:'scan'
-        },{
-        	name: 'more-fill',
         	label: '图片编辑',
         	color: '#999',
         	size: 30,

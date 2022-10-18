@@ -104,6 +104,12 @@
               }
             }
         }
+      },{
+				"path" : "pages/common/msg/msg",
+				"style" : {
+						"navigationBarTitleText": "识别结果",
+						"enablePullDownRefresh": false
+				}
       }
     ],
 	"preloadRule": {

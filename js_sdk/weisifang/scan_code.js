@@ -19,13 +19,7 @@ const scanCode = {
 					console.log('打开网页：' + res.result);
           return _this.urlHandle(res.result)
         }else{
-          uni.showToast({
-          	// #ifndef MP-ALIPAY
-          	duration: 2500,
-          	// #endif
-          	title: res.result || '识别有误',
-          	icon: 'none'
-          })
+					return _this.textHandle(res.result)
         }
     	},
       complete: function (res) {
@@ -57,6 +51,9 @@ const scanCode = {
   urlHandle(url){
     uni.navigateTo({ url: '/pages/common/webview/webview?url='+encodeURI(url) })
   },
+	textHandle(text){
+		uni.navigateTo({ url: '/pages/common/msg/msg?text='+text })
+	},
 	// 预览文件 操作
   previewFileHandle(url){
     helper.files.preview(url,'预览')

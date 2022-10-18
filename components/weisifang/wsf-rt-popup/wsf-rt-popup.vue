@@ -1,7 +1,6 @@
 <template>
 	<view>
-		<tui-bubble-popup :show="popupShow" @close="toggle" :maskBgColor="maskBgColor" right="8px" :top="popupTop"
-		 triangleRight="16px" triangleTop="-22rpx">
+		<tui-bubble-popup :show="popupShow" @close="toggle" :maskBgColor="maskBgColor" right="8px" :top="popupTop" :mask="false" triangleRight="16px" triangleTop="-22rpx">
 			<view class="tui-popup-item" :class="{ 'tui-start': index === 0, 'tui-last': index === itemList.length - 1 }"
 			 hover-class="tui-item-active" :hover-stay-time="150" @tap="handleClick(item)" v-for="(item, index) in itemList"
 			 :key="index">
@@ -83,7 +82,7 @@
 		},
 		methods: {
 			handleClick(item) {
-        console.log('handleClick',item)
+        console.log('handleClick 点击item',item)
 				this.$emit('click', item);
 				this.toggle()
 			},
