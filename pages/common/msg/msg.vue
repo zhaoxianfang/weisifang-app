@@ -32,21 +32,24 @@
 
 <style>
 	.container {
-		/* padding: 0 80rpx; */
+		padding: 0 80rpx;
 	}
 	.msg-content{
 		width: 90%;
-		height: 200upx;
-		line-height: 200upx;
+		min-height: 100upx;
+		line-height: 100upx;
 		text-align: center;
 		border-top: 2rpx solid #ffaa00;
 		border-bottom: 2rpx solid #ffaa00;
 		margin: 30rpx auto;
 		padding: 20upx 30upx;
+    vertical-align: middle;
 	}
 	.tips{
+    width: 100%;
 		line-height: 1.5;
 		display: inline-block;
 		vertical-align: middle;
+    word-wrap: break-word;
 	}
 </style>

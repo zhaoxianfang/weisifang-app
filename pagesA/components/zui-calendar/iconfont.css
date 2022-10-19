@@ -1,8 +1,6 @@
 @font-face {
   font-family: "iconfont";
-  src: url('../../static/calendar/iconfont.woff2?t=1661934945336') format('woff2'),
-       url('../../static/calendar/iconfont.woff?t=1661934945336') format('woff'),
-       url('../../static/calendar/iconfont.ttf?t=1661934945336') format('truetype');
+  src: url('iconfont.ttf?t=1661934945336') format('truetype');
 }
 
 .iconfont {

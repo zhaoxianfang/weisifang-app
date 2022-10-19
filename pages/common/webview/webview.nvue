@@ -101,7 +101,6 @@
     	// #endif
     },
     beforeCreate() {
-			this.notFound = false
     },
     onNavigationBarButtonTap(e) {
 			if(this.notFound){
@@ -142,19 +141,24 @@
 				});
 			},
 			onTitle:function(e){
+        console.log(e)
 				//监听 h5 title 变化;
         uni.setNavigationBarTitle({
         	title: e.detail || ''
         });
+        if(e.detail == '网页无法打开'){
+          	this.descTips = this.url;
+          	this.notFound = true
+        }
 			},
 			onConsole:function(e){
 				//获取h5调试数据;
 				console.log('onConsole',JSON.stringify(e));
-				let detailStr = JSON.stringify(e.detail.message)
-				if(detailStr.indexOf('receiveAppData is not defined')){
-					this.descTips = this.url;
-					this.notFound = true
-				}
+				// let detailStr = JSON.stringify(e.detail.message)
+				// if(detailStr.indexOf('receiveAppData is not defined') > -1){
+				// 	this.descTips = this.url;
+				// 	this.notFound = true
+				// }
 			},
 			//拦截回调事件
 			intercept:function(e){
@@ -257,7 +261,7 @@
 				h5WebView.sendMessage(JSON.stringify(obj));
 			},
       itemClick(e) {
-        console.log(e)
+        // console.log(e)
 				// 复制url链接
 				if(e.uni_code == 'copy_link'){
 					h5WebView.evaluateJavascript("window.location.href;",e=>{

@@ -82,7 +82,6 @@
 		},
 		methods: {
 			handleClick(item) {
-        console.log('handleClick 点击item',item)
 				this.$emit('click', item);
 				this.toggle()
 			},
