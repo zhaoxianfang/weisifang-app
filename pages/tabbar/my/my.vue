@@ -267,7 +267,7 @@ export default {
 			this.$store.dispatch('logout',true);//.then(() => {
 			    // this.$router.push({ path: this.redirect || '/' })
 			    // this.loading = false
-					this.tui.toast('退出成功', 2000, true);
+					this.tui.toast('退出成功', 2000);
 					// 关闭所有页面，跳转到登录页面。
 					uni.reLaunch({
 						url: '/pages/common/login/login'
