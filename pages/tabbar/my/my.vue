@@ -17,7 +17,7 @@
 		</tui-navigation-bar>
 		<!--header-->
 		<view class="tui-mybg-box">
-			<image :src="webURL + '/static/images/mall/my/img_bg_3x.png'" class="tui-my-bg" mode="widthFix"></image>
+			<image src="/static/images/my/mine_bg_3x.png" class="tui-my-bg" mode="widthFix"></image>
 			<view class="tui-header-center">
 				<image :src="user.userinfo.cover" class="tui-avatar" @tap="href(3)"></image>
 				<view class="tui-info">
@@ -217,7 +217,7 @@ export default {
 	},
 	data() {
 		return {
-			webURL: 'https://www.thorui.cn/wx',
+			webURL: '',
 			top: 0, //标题图标距离顶部距离
 			opacity: 0,
 			scrollTop: 0.5
