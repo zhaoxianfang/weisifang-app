@@ -6,12 +6,11 @@
 				<!--个人中心页为主页面，不应有返回键-->
 				<!-- #ifndef MP -->
 				<view class="tui-header-icon">
-          <view class="tui-icon-box tui-icon-tools" @tap="scanCode"><tui-icon name="sweep" :color="opacity > 0.8 ? '#333' : '#fff'" :size="26"></tui-icon></view>
-					<view class="tui-icon-box tui-icon-tools" @tap="href(7)">
+          <view class="tui-icon-box tui-icon-tools" @tap="href(7)">
 						<tui-icon name="message" :color="opacity > 0.8 ? '#333' : '#fff'" :size="28"></tui-icon>
 						<view class="tui-badge" :class="[opacity > 0.8 ? 'tui-badge-red' : 'tui-badge-white']">1</view>
 					</view>
-					<view class="tui-icon-box tui-icon-tools" @tap="href(2)"><tui-icon name="setup" :color="opacity > 0.8 ? '#333' : '#fff'" :size="28"></tui-icon></view>
+					<!-- <view class="tui-icon-box tui-icon-tools" @tap="href(2)"><tui-icon name="setup" :color="opacity > 0.8 ? '#333' : '#fff'" :size="28"></tui-icon></view> -->
 				</view>
 				<!-- #endif -->
 			</view>
@@ -70,39 +69,61 @@
 						<text class="tui-list-cell_name">我的钱包</text>
 					</view>
 				</tui-list-cell>
-				<tui-list-cell @click="detail" :arrow="true">
-					<view class="tui-item-box">
-						<tui-icon name="service-fill" :size="24" color="#5677fc"></tui-icon>
-						<view class="tui-list-cell_name">服务窗</view>
-					</view>
-				</tui-list-cell>
-				<tui-list-cell @click="detail" :arrow="true">
-					<view class="tui-item-box">
-						<tui-icon name="explore-fill" :size="24" color="#19be6b"></tui-icon>
-						<view class="tui-list-cell_name">发现</view>
-						<view class="tui-ml-auto">
-							<tui-tag padding="10rpx 12rpx" margin="0 30rpx 0 0" size="24rpx" type="light-green" shape="circle">探索发现</tui-tag>
-						</view>
-					</view>
-				</tui-list-cell>
-				<tui-list-cell @click="detail" :arrow="true">
-					<view class="tui-item-box">
-						<tui-icon name="shop-fill" :size="23" color="#ed3f14"></tui-icon>
-						<view class="tui-list-cell_name">我的店铺</view>
-						<view class="tui-right">进入店铺</view>
-					</view>
-				</tui-list-cell>
-				<tui-list-cell @click="detail" :arrow="true" last="true">
-					<view class="tui-item-box">
-						<image src="/static/images/my/thorui.png" class="tui-logo" mode="widthFix"></image>
-						<text class="tui-list-cell_name">关于</text>
-						<view class="tui-right">Thor UI</view>
-					</view>
-				</tui-list-cell>
 			</tui-list-view>
+      
+      <tui-list-view title="">
+      	<tui-list-cell @click="scanCode" :arrow="true">
+      		<view class="tui-item-box">
+            <tui-icon name="sweep" color="#0000ff" :size="22"></tui-icon>
+      			<text class="tui-list-cell_name">扫一扫</text>
+      		</view>
+      	</tui-list-cell>
+      </tui-list-view>
+      
+      <tui-list-view title="">
+      	<tui-list-cell @click="detail" :arrow="true">
+      		<view class="tui-item-box">
+      			<tui-icon name="service-fill" :size="24" color="#5677fc"></tui-icon>
+      			<view class="tui-list-cell_name">地址管理</view>
+      		</view>
+      	</tui-list-cell>
+      	<tui-list-cell @click="detail" :arrow="true">
+      		<view class="tui-item-box">
+      			<tui-icon name="explore-fill" :size="24" color="#19be6b"></tui-icon>
+      			<view class="tui-list-cell_name">识别历史</view>
+      			<view class="tui-ml-auto">
+      				<tui-tag padding="10rpx 12rpx" margin="0 30rpx 0 0" size="24rpx" type="light-green" shape="circle">扫一扫识别记录</tui-tag>
+      			</view>
+      		</view>
+      	</tui-list-cell>
+      	<tui-list-cell @click="detail" :arrow="true">
+      		<view class="tui-item-box">
+      			<tui-icon name="shop-fill" :size="23" color="#ed3f14"></tui-icon>
+      			<view class="tui-list-cell_name">我的店铺</view>
+      			<view class="tui-right">进入店铺</view>
+      		</view>
+      	</tui-list-cell>
+      </tui-list-view>
+      
+      <tui-list-view title="">
+      	<tui-list-cell @click="href('setting')" :arrow="true" last="true">
+      		<view class="tui-item-box">
+            <tui-icon name="setup" :size="23" color="#afadb2"></tui-icon>
+      			<text class="tui-list-cell_name">设置</text>
+      			<view class="tui-right"></view>
+      		</view>
+      	</tui-list-cell>
+        <tui-list-cell @click="detail" :arrow="true" last="true">
+        	<view class="tui-item-box">
+            <tui-icon name="about" :size="23" color="#afadb2"></tui-icon>
+        		<text class="tui-list-cell_name">关于</text>
+        		<view class="tui-right">{{version}}</view>
+        	</view>
+        </tui-list-cell>
+      </tui-list-view>
 
 			<!--为你推荐-->
-			<tui-divider :size="28" :bold="true" color="#333" width="50%">为你推荐</tui-divider>
+			<!-- <tui-divider :size="28" :bold="true" color="#333" width="50%">为你推荐</tui-divider> -->
 			
 		</view>
 	</view>
@@ -138,42 +159,29 @@ export default {
 			webURL: '',
 			top: 0, //标题图标距离顶部距离
 			opacity: 0,
-			scrollTop: 0.5
+			scrollTop: 0.5,
+      version:'1.0.0'
 		};
 	},
 	created() {
 		console.log(this.user.userinfo)
+    	// 获取本地应用资源版本号
+    	plus.runtime.getProperty(plus.runtime.appid, (info) => {
+    		this.version = info.version;
+    	})
 	},
 	methods: {
     scanCode(e){
       this.helper.navBtns.handle({'uni_code':'scan'})
     },
-		href(page) {
+		href(type) {
 			let url = '';
-			switch (page) {
-				case 2:
-					url = '../set/set';
+			switch (type) {
+				case 'setting':
+					url = '/pages/common/setting/setting';
 					break;
 				case 3:
 					url = '../userInfo/userInfo';
-					break;
-				case 4:
-					url = '../myOrder/myOrder';
-					break;
-				case 6:
-					url = '../coupon/coupon';
-					break;
-				case 7:
-					url = '../message/message';
-					break;
-				case 8:
-					url = '../myCoupon/myCoupon';
-					break;
-				case 9:
-					url = '../myGroup/myGroup';
-					break;
-				case 10:
-					url = '../refundList/refundList';
 					break;
 				default:
 					break;
@@ -198,10 +206,42 @@ export default {
 			  //   // this.loading = false
 			  // })
 		},
-		detail: function() {
-			uni.navigateTo({
-				url: '../productDetail/productDetail'
-			});
+		async detail() {
+       console.log('detail')
+      let location = await this.helper.utils.getLocation()
+      console.log('位置',location)
+			// uni.navigateTo({
+			// 	url: '../productDetail/productDetail'
+			// });
+      // uni.getLocation({
+      // 	type: 'gcj02', // gcj02，wgs84
+      // 	success: function (res) {
+      // 		console.log('当前位置的经度：' + res.longitude);
+      // 		console.log('当前位置的纬度：' + res.latitude);
+      // 	}
+      // });
+
+      // uni.getLocation({
+      // 	type: 'gcj02',
+      // 	success(res) {
+      // 		// #ifndef VUE3
+      // 		// #endif
+      // 		console.log('成功：' , res);
+      // 	},
+      // 	fail(res) {
+      // 		console.log('失败：' , res);
+      // 	}
+      // });
+      // uni.chooseLocation({
+      // 	success: function (res) {
+      // 		console.log('位置名称：' + res.name);
+      // 		console.log('详细地址：' + res.address);
+      // 		console.log('纬度：' + res.latitude);
+      // 		console.log('经度：' + res.longitude);
+      // 	}
+      // });
+
+
 		},
 		initNavigation(e) {
 			this.opacity = e.opacity;
@@ -228,7 +268,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .tui-header-box {
 	width: 100%;
 	padding: 0 30rpx 0 20rpx;
@@ -436,5 +476,7 @@ export default {
   	flex-shrink: 0;
   }
   
-
+.tui-list-view{
+  margin-bottom: 8rpx!important;
+}
 </style>

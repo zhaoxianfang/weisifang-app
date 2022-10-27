@@ -128,7 +128,23 @@ const utils = {
           icon: "none"
         })
       }
+  },
+  getLocation(){
+    // 获取系统自带的定位信息
+    return new Promise((resolve, reject) => {
+        uni.getLocation({
+          type: 'wgs84', // 默认wgs84，若为 gcj02 则走第三方sdk
+          isHighAccuracy: true, // 是否开启高精度定位
+          success: (res) => {
+            // console.log('获取位置成功', res)
+            resolve(res)
+          },
+          fail: (err) => {
+            console.log('获取位置失败', err)
+            resolve(false)
+          }
+        })
+      })
   }
-
 }
 export default utils

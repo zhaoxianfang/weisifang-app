@@ -167,11 +167,9 @@ const permissions = {
     return list[name] || false
   },
   // 判断权限
-  requestPermission() {
-  	plus.android.requestPermissions([
-  			'android.intent.action.BOOT_COMPLETED'
-  		],
-  		function(resultObj) {
+  requestPermission(list=[]) {
+    var _this =this;
+  	plus.android.requestPermissions(list,function(resultObj) {
   			for (var i = 0; i < resultObj.granted.length; i++) {
   				var grantedPermission = resultObj.granted[i]
   				console.log('已获取的权限：' + grantedPermission)
@@ -186,7 +184,8 @@ const permissions = {
   			}
   			// 若所需权限被永久拒绝,则打开APP设置界面,可以在APP设置界面打开相应权限  
   			if (resultObj.deniedAlways.length > 0) {
-  				this.openAppSetting()
+          console.log('进来没：')
+  				_this.openAppSetting()
   			}
   		},
   		function(error) {

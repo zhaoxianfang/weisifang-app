@@ -116,7 +116,23 @@
 						"navigationBarTitleText": "识别结果",
 						"enablePullDownRefresh": false
 				}
-      }
+      },{
+            "path" : "pages/common/setting/setting",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "设置",
+                "enablePullDownRefresh": false
+            }
+            
+        },{
+            "path" : "pages/common/setting/permissions",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "权限设置",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"preloadRule": {
 		"pages/tabbar/work/work": {

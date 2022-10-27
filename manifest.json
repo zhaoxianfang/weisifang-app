@@ -46,7 +46,6 @@
             "Bluetooth" : {},
             "Messaging" : {},
             "OAuth" : {},
-            "Maps" : {},
             "Push" : {},
             "Share" : {}
         },
@@ -115,8 +114,8 @@
             "sdkConfigs" : {
                 "maps" : {
                     "amap" : {
-                        "appkey_ios" : "8dd5ecfb43116afff70bfc17e314e782",
-                        "appkey_android" : "2012d8debdcb9dbd721e3b0a7d4358c8"
+                        "appkey_ios" : "6eb4c6fedf0009d65b559c6fbf68025e",
+                        "appkey_android" : "6eb4c6fedf0009d65b559c6fbf68025e"
                     }
                 },
                 "oauth" : {
@@ -128,11 +127,6 @@
                 "geolocation" : {
                     "system" : {
                         "__platform__" : [ "ios", "android" ]
-                    },
-                    "amap" : {
-                        "__platform__" : [ "ios", "android" ],
-                        "appkey_ios" : "8dd5ecfb43116afff70bfc17e314e782",
-                        "appkey_android" : "2012d8debdcb9dbd721e3b0a7d4358c8"
                     }
                 },
                 "ad" : {},
