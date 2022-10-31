@@ -76,6 +76,7 @@
 		},
 		watch: {
 			checked(val) {
+        console.log('checked',val)
 				this.val = val;
 			}
 		},

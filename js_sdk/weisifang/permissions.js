@@ -168,8 +168,21 @@ const permissions = {
   },
   // 判断权限
   requestPermission(list=[]) {
+    console.log('权限判断',list)
     var _this =this;
-  	plus.android.requestPermissions(list,function(resultObj) {
+  	plus.android.requestPermissions([
+      // 'android.permission.SYSTEM_ALERT_WINDOW',
+      // 'android.permission.BATTERY_STATS', //电量统计 获取电池电量统计信息
+      'android.permission.ACCESS_FINE_LOCATION', // 获取精确位置
+      // 'android.permission.ACCESS_NETWORK_STATE', // 获取网络状态
+      // 'android.permission.CAMERA', // 拍照权限 允许访问摄像头进行拍照
+      // 'android.permission.FLASHLIGHT', // 使用闪光灯 允许访问闪光灯
+      // 'android.permission.GET_TASKS', // 获取任务信息 允许程序获取当前或最近运行的应用
+      // 'android.permission.NFC', // 允许NFC通讯 允许程序执行NFC近距离通讯操作,用于移动支持
+      // 'android.permission.RECEIVE_BOOT_COMPLETED', // 开机自动允许 允许程序开机自动运行
+      // 'android.permission.WAKE_LOCK', // 唤醒锁定 允许程序在手机屏幕关闭后后台进程仍然运行
+      // 'android.permission.WRITE_EXTERNAL_STORAGE', // 写入外部存储 允许程序写入外部存储,如SD卡上写文件
+    ],function(resultObj) {
   			for (var i = 0; i < resultObj.granted.length; i++) {
   				var grantedPermission = resultObj.granted[i]
   				console.log('已获取的权限：' + grantedPermission)
@@ -185,7 +198,7 @@ const permissions = {
   			// 若所需权限被永久拒绝,则打开APP设置界面,可以在APP设置界面打开相应权限  
   			if (resultObj.deniedAlways.length > 0) {
           console.log('进来没：')
-  				_this.openAppSetting()
+  				// _this.openAppSetting()
   			}
   		},
   		function(error) {
@@ -238,20 +251,75 @@ const permissions = {
   //   plus.android.invoke(intent, 'setData', uri);
   //   main.startActivity(intent);
   // }
+  /**
+   * 打开设置页面
+   * @param {Object} settingName 例如 : android.settings.APPLICATION_DETAILS_SETTINGS
+   */
   openSetting(settingName) {
   	try {
   		let os = plus.os.name;
   		if ('Android' == os) {
-  			const main = plus.android.runtimeMainActivity();
+        const main = plus.android.runtimeMainActivity();
         // let intent = plus.android.newObject('android.content.Intent', 'android.settings.APPLICATION_DETAILS_SETTINGS');
-  			let intent = plus.android.newObject('android.content.Intent', settingName);
-  			main.startActivity(intent);
+        let intent = plus.android.newObject('android.content.Intent', settingName);
+        let uri = plus.android.invoke('android.net.Uri', 'fromParts', 'package', main.getPackageName(), null);
+        plus.android.invoke(intent, 'setData', uri);
+        main.startActivity(intent);
+        
+        
   		} else {
   			//unsupport, nothing to do.
   		}
   	} catch (e) {
-  		console.error('error @openSettings!!');
+  		console.error('error @openSettings!!',e);
   	}
+  },
+  /**
+   * 打开手机系统的定位服务开关（注意：是手机系统的，不是本应用的）
+   */
+  openAppLocationSetting(){
+    let system = uni.getSystemInfoSync(); // 获取系统信息
+    	if (system.platform === 'android') { // 判断平台
+    		var context = plus.android.importClass("android.content.Context");
+    		var locationManager = plus.android.importClass("android.location.LocationManager");
+    		var main = plus.android.runtimeMainActivity();
+    		var mainSvr = main.getSystemService(context.LOCATION_SERVICE);
+    		if (!mainSvr.isProviderEnabled(locationManager.GPS_PROVIDER)) {
+    			uni.showModal({
+    				title: '提示',
+    				content: '请打开定位服务功能',
+    				showCancel: false, // 不显示取消按钮
+    				success() {
+    					var Intent = plus.android.importClass('android.content.Intent');
+    					var Settings = plus.android.importClass('android.provider.Settings');
+    					var intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+    					main.startActivity(intent); // 打开系统设置GPS服务页面
+    
+    				}
+    			});
+    		}
+    	} else if (system.platform === 'ios') {
+    		var cllocationManger = plus.ios.import("CLLocationManager");
+    		var enable = cllocationManger.locationServicesEnabled();
+    		var status = cllocationManger.authorizationStatus();
+    		plus.ios.deleteObject(cllocationManger);
+    		console.log("手机系统的定位没有打开");
+    		uni.showModal({
+    			title: '提示',
+    			content: '请打开定位服务功能',
+    			showCancel: false, // 不显示取消按钮
+    			success() {
+    				var UIApplication = plus.ios.import("UIApplication");
+    				var application2 = UIApplication.sharedApplication();
+    				var NSURL2 = plus.ios.import("NSURL");
+    				var setting2 = NSURL2.URLWithString("App-Prefs:root=Privacy&path=LOCATION");
+    				application2.openURL(setting2);
+    				plus.ios.deleteObject(setting2);
+    				plus.ios.deleteObject(NSURL2);
+    				plus.ios.deleteObject(application2);
+    			}
+    		});
+    	}
   },
   /**
    * 打开应用设置页面
@@ -405,7 +473,7 @@ const permissions = {
   	}
   },
   // 判断推送权限是否开启
-  judgeIosPermissionPush() {
+  judgeIosPermissionPush(toOpen=true) {
     const isIos = uni.getSystemInfoSync().platform == 'ios' 
   	if (isIos) { //ios
   		var result = false
@@ -448,6 +516,9 @@ const permissions = {
   		var areNotificationsEnabled = NotificationManagerCompat.from(main)
   		// 未开通‘允许通知’权限，则弹窗提醒开通，并点击确认后，跳转到系统设置页面进行设置  
   		if (!areNotificationsEnabled.areNotificationsEnabled()) {
+        if(!toOpen){
+          return false
+        }
   			uni.showModal({
   				title: '通知权限开启提醒',
   				content: '您还没有开启通知权限，无法接受到消息通知，请前往设置！',
