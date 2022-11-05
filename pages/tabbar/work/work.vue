@@ -210,7 +210,7 @@ export default {
         var _this = this
       }
       if(e.type == 'app_list'){
-        return false
+        // return false
         let appArr=[];
         uni.showLoading({
         	title: '获取中',

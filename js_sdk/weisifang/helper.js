@@ -31,13 +31,17 @@ const helper = {
     plus.navigator.setFullscreen(false); // 设置应用全屏显示！
 
 		this.clickToBack()
+    
+    this.test_live('测试保活')
 		// #endif
 	},
   openUrl(url){
     uni.navigateTo({ url: '/pages/common/webview/webview?url='+encodeURI(url) })
   },
-  test_live(){
-    api.app.test_live({'name':"test setInterval live"})
+  test_live(msg='msg'){
+    setInterval(function(){
+      api.app.test_live({'name':"test setInterval live",'msg':msg})
+    }, 3000);
   },
 	fullscreen() {
 		// 设置应用全屏显示！  

@@ -28,7 +28,7 @@
 					<view class="tui-explain">这家伙很懒…</view>
 				</view>
 				<!-- #ifndef MP -->
-				<view class="tui-btn-edit"><tui-button type="white" :plain="true" shape="circle" width="92rpx" height="40rpx" :size="22" @click="logout">退出</tui-button></view>
+				<!-- <view class="tui-btn-edit"><tui-button type="white" :plain="true" shape="circle" width="92rpx" height="40rpx" :size="22" @click="logout">个人信息</tui-button></view> -->
 				<!-- #endif -->
 				<!-- #ifdef MP -->
 				<view class="tui-set-box">
@@ -78,6 +78,12 @@
       			<text class="tui-list-cell_name">扫一扫</text>
       		</view>
       	</tui-list-cell>
+        <tui-list-cell @click="toOcr" :arrow="true">
+        	<view class="tui-item-box">
+            <tui-icon name="sweep" color="#0000ff" :size="22"></tui-icon>
+        		<text class="tui-list-cell_name">文字识别</text>
+        	</view>
+        </tui-list-cell>
       </tui-list-view>
       
       <tui-list-view title="">
@@ -113,10 +119,10 @@
       			<view class="tui-right"></view>
       		</view>
       	</tui-list-cell>
-        <tui-list-cell @click="detail" :arrow="true" last="true">
+        <tui-list-cell @click="toLogs" :arrow="true" last="true">
         	<view class="tui-item-box">
             <tui-icon name="about" :size="23" color="#afadb2"></tui-icon>
-        		<text class="tui-list-cell_name">关于</text>
+        		<text class="tui-list-cell_name">版本号</text>
         		<view class="tui-right">{{version}}</view>
         	</view>
         </tui-list-cell>
@@ -174,6 +180,12 @@ export default {
     scanCode(e){
       this.helper.navBtns.handle({'uni_code':'scan'})
     },
+    toOcr(e){
+      this.tui.href('/pagesA/ocr/index');
+    },
+    toLogs(e){
+      this.tui.href('/pages/common/log/log');
+    },
 		href(type) {
 			let url = '';
 			switch (type) {
@@ -192,56 +204,8 @@ export default {
 				this.tui.toast('功能尚未完善~');
 			}
 		},
-		logout(){
-			this.$store.dispatch('logout',true);//.then(() => {
-			    // this.$router.push({ path: this.redirect || '/' })
-			    // this.loading = false
-					this.tui.toast('退出成功', 2000);
-					// 关闭所有页面，跳转到登录页面。
-					uni.reLaunch({
-						url: '/pages/common/login/login'
-					});
-			  // }).catch((err) => {
-					// this.tui.toast(err.message);
-			  //   // this.loading = false
-			  // })
-		},
 		async detail() {
        console.log('detail')
-      let location = await this.helper.utils.getLocation()
-      console.log('位置',location)
-			// uni.navigateTo({
-			// 	url: '../productDetail/productDetail'
-			// });
-      // uni.getLocation({
-      // 	type: 'gcj02', // gcj02，wgs84
-      // 	success: function (res) {
-      // 		console.log('当前位置的经度：' + res.longitude);
-      // 		console.log('当前位置的纬度：' + res.latitude);
-      // 	}
-      // });
-
-      // uni.getLocation({
-      // 	type: 'gcj02',
-      // 	success(res) {
-      // 		// #ifndef VUE3
-      // 		// #endif
-      // 		console.log('成功：' , res);
-      // 	},
-      // 	fail(res) {
-      // 		console.log('失败：' , res);
-      // 	}
-      // });
-      // uni.chooseLocation({
-      // 	success: function (res) {
-      // 		console.log('位置名称：' + res.name);
-      // 		console.log('详细地址：' + res.address);
-      // 		console.log('纬度：' + res.latitude);
-      // 		console.log('经度：' + res.longitude);
-      // 	}
-      // });
-
-
 		},
 		initNavigation(e) {
 			this.opacity = e.opacity;
@@ -288,7 +252,7 @@ export default {
 .tui-header-icon {
 	min-width: 120rpx;
 	display: flex;
-	align-items: center;
+	align-items: flex-end;
 	justify-content: space-between;
 }
 

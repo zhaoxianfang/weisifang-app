@@ -265,13 +265,13 @@ const permissions = {
         let uri = plus.android.invoke('android.net.Uri', 'fromParts', 'package', main.getPackageName(), null);
         plus.android.invoke(intent, 'setData', uri);
         main.startActivity(intent);
-        
-        
   		} else {
   			//unsupport, nothing to do.
+        return false
   		}
   	} catch (e) {
   		console.error('error @openSettings!!',e);
+      return false
   	}
   },
   /**

@@ -233,30 +233,30 @@ function getApplication() {
               versionCode: pkginfo.plusGetAttribute("versionCode"),
               appIco:pkginfo.plusGetAttribute("applicationInfo").loadIcon(PackageManager)
             };
-            var bimp=null;
-            try{
-              bimp=apkinfo.appIco.getBitmap();
-            }catch(e){
-              bimp = Bitmap.createBitmap(apkinfo.appIco.getIntrinsicWidth(), apkinfo.appIco.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-              var canvas = new Canvas(bimp);
-              apkinfo.appIco.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-              apkinfo.appIco.draw(canvas);
-            }
-            var baos = new ByteArrayOutputStream();
-            // 压缩 0-100
-            // bimp.compress(Bitmap.CompressFormat.PNG, 20, baos);
-            bimp.compress(Bitmap.CompressFormat.JPEG, 20, baos);
-            baos.flush();
-            baos.close();
-            var bitmapBytes = baos.toByteArray();
-            // var result = "data:image/png;base64,"+Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
-            var result = "data:image/jpg;base64,"+Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
-            if(apkinfo.packageName =='com.weisifang'){
+            // var bimp=null;
+            // try{
+            //   bimp=apkinfo.appIco.getBitmap();
+            // }catch(e){
+            //   bimp = Bitmap.createBitmap(apkinfo.appIco.getIntrinsicWidth(), apkinfo.appIco.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            //   var canvas = new Canvas(bimp);
+            //   apkinfo.appIco.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+            //   apkinfo.appIco.draw(canvas);
+            // }
+            // var baos = new ByteArrayOutputStream();
+            // // 压缩 0-100
+            // // bimp.compress(Bitmap.CompressFormat.PNG, 20, baos);
+            // bimp.compress(Bitmap.CompressFormat.JPEG, 20, baos);
+            // baos.flush();
+            // baos.close();
+            // var bitmapBytes = baos.toByteArray();
+            // // var result = "data:image/png;base64,"+Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+            // var result = "data:image/jpg;base64,"+Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+            // if(apkinfo.packageName =='com.weisifang'){
               
-              console.log(apkinfo.appIco.getIntrinsicWidth(),apkinfo.appIco.getIntrinsicHeight(), canvas.getWidth(), canvas.getHeight())
-              console.log('icon==========',result)
-            }
-            apkinfo.appIcon=result;
+            //   console.log(apkinfo.appIco.getIntrinsicWidth(),apkinfo.appIco.getIntrinsicHeight(), canvas.getWidth(), canvas.getHeight())
+            //   console.log('icon==========',result)
+            // }
+            // apkinfo.appIcon=result;
             apklist.push(apkinfo);
         };
       };

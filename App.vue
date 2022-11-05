@@ -1,12 +1,15 @@
 <script>
 // #ifdef APP-PLUS
 import helper from '@/js_sdk/weisifang/helper.js';
+
 // #endif
 export default {
 	onLaunch: function() {
 		let that = this;
 		// #ifdef APP-PLUS
 		/* 5+环境锁定屏幕方向 */
+    
+    // helper.test_live()
 
 		// app 辅助功能初始化
 		helper.init();

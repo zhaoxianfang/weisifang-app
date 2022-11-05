@@ -3,7 +3,7 @@
 		<view class="tui-top">
 			<tui-list-cell :hover="false" :unlined="true">
 				<view class="tui-notice-item">
-					<view class="tui-list-item_title">推送通知</view>
+					<view class="tui-list-item_title">消息通知</view>
 					<wsf-switch @change="openPushChange" :checked="notifyPushStatus" :disabled="notifyPushStatus" color="#19be6b" class="tui-scale-small" ></wsf-switch>
 				</view>
 			</tui-list-cell>
@@ -15,51 +15,15 @@
 					<wsf-switch @change="openLocationChange" :checked="locationStatus" :disabled="locationStatus" color="#19be6b" class="tui-scale-small" ></wsf-switch>
 				</view>
 			</tui-list-cell>
-			<tui-list-cell :hover="false">
-				<view class="tui-notice-item">
-					<view class="tui-list-item_title">发货通知</view>
-					<switch :checked="false" color="#19be6b" class="tui-scale-small"></switch>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false">
-				<view class="tui-notice-item">
-					<view class="tui-list-item_title">收货通知</view>
-					<switch :checked="true" color="#19be6b" class="tui-scale-small"></switch>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false">
-				<view class="tui-notice-item">
-					<view class="tui-list-item_title">支付成功通知</view>
-					<switch :checked="true" color="#19be6b" class="tui-scale-small"></switch>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false" :unlined="true">
-				<view class="tui-notice-item">
-					<view class="tui-list-item_title">系统通知</view>
-					<switch :checked="false" color="#19be6b" class="tui-scale-small"></switch>
-				</view>
-			</tui-list-cell>
 		</view>
-		<view class="tui-top">
-			<tui-list-cell :hover="false">
-				<view class="tui-notice-item">
-					<view class="tui-list-item_title">我关注的</view>
-					<switch :checked="false" color="#19be6b" class="tui-scale-small"></switch>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false">
-				<view class="tui-notice-item">
-					<view class="tui-list-item_title">我订阅的</view>
-					<switch :checked="false" color="#19be6b" class="tui-scale-small"></switch>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :hover="false" :unlined="true">
-				<view class="tui-notice-item">
-					<view class="tui-list-item_title">我喜欢的</view>
-					<switch :checked="false" color="#19be6b" class="tui-scale-small"></switch>
-				</view>
-			</tui-list-cell>
-		</view>
+    <view class="tui-top">
+    	<tui-list-cell :hover="false" :arrow="true" @click="toSetting">
+    		<view class="tui-notice-item">
+    			<view class="tui-list-item_title">其他应用权限</view>
+    			<view class="tui-right">去设置</view>
+    		</view>
+    	</tui-list-cell>
+    </view>
 	</view>
 </template>
 
@@ -80,8 +44,7 @@ export default {
 	methods: {
     init(){
       this.getPushAuah(false);
-      // this.helper.permissions.requestPermission()
-      // this.helper.permissions.openSetting('android.settings.APPLICATION_DETAILS_SETTINGS') // app 设置页面
+      this.openLocationChange(false)
       this.helper.permissions.openSetting('android.settings.ACCESS_FINE_LOCATION') //
     },
     // 判断是否开启消息推送
@@ -93,8 +56,24 @@ export default {
       this.getPushAuah(true);
     },
     // 开启定位
-    openLocationChange: function (e) {
-      // this.getPushAuah(true);
+    async openLocationChange (e) {
+      let location = await this.helper.utils.getLocation()
+      // console.log('位置',location,e)
+      this.locationStatus = location === false?false:true
+      if(e !==false ){
+        console.log('进来',e)
+        let res = this.helper.permissions.openSetting('android.permission.ACCESS_FINE_LOCATION')
+        if(res === false){
+          this.locationStatus = false
+        }else{
+          // setTimeout(function(){
+          //   this.openLocationChange(false)
+          // }, 3000 )
+        }
+      }
+    },
+    toSetting(){
+      this.helper.permissions.openSetting('android.settings.APPLICATION_DETAILS_SETTINGS') // app 设置页面
     }
   }
 };
@@ -123,4 +102,13 @@ export default {
 		}
 	}
 }
+
+
+.tui-right {
+  margin-left: auto;
+  margin-right: 34rpx;
+  font-size: 26rpx;
+  color: #999;
+}
+  
 </style>

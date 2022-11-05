@@ -54,27 +54,55 @@
 					<tui-badge :position="false" type="red" :scale="false">8</tui-badge>
 				</view>
 			</tui-list-cell>
-			<tui-list-cell :unlined="true" @click="href(6)">
+			<tui-list-cell :unlined="true" @click="toTest">
 				<view class="tui-message-item">
 					<view class="tui-title-box">
 						<view class="tui-icon-box tui-bg-blue">
 							<tui-icon name="message" color="#fff" :size="30"></tui-icon>
 						</view>
-						<view class="tui-title">系统通知</view>
+						<view class="tui-title">系统通知(测试页面)</view>
 					</view>
 					<tui-badge :position="false" type="red" :scale="false">10</tui-badge>
 				</view>
 			</tui-list-cell>
 		</view>
-	</view>
+    <view class="tui-btn-box">
+      <tui-button type="danger" plain @click="showActionSheet=true">退出登录</tui-button>
+    </view>
+    
+    <tui-actionsheet :show="showActionSheet" tips="退出登录会清除您的登录信息，确认退出吗？" :item-list="itemList" :mask-closable="true" color="#9a9a9a"
+     :size="26" :is-cancel="true" @click="itemClick" @cancel="closeActionSheet"></tui-actionsheet>
+  </view>
 </template>
 
 <script>
 	export default {
 		data() {
-			return {};
+			return {
+        // 退出
+        showActionSheet : false,
+        itemList : [{
+          text: "退出登录",
+          color: "#E3302D"
+        }],
+      };
 		},
 		methods: {
+      closeActionSheet: function() {
+      	this.showActionSheet = false
+      },
+      itemClick: function(e) {
+      	let index = e.index;
+      	this.closeActionSheet();
+        if(index < 0){
+          this.$store.dispatch('logout',true)
+          this.tui.toast('退出成功', 2000);
+          // 关闭所有页面，跳转到登录页面。
+          uni.reLaunch({
+            url: '/pages/common/login/login'
+          });
+        }
+      },
 			href(type) {
 				if(type==1){
 					this.tui.href('../notice/notice');
@@ -82,6 +110,9 @@
 					this.tui.toast("功能开发中~")
 				}
 			},
+      toTest(){
+        this.tui.href('./test');
+      },
       toAuth(){
         this.tui.href('./permissions');
       }
@@ -157,4 +188,9 @@
 			margin-top: 20rpx;
 		}
 	}
+  .tui-btn-box {
+    background-color: #fff;
+  	margin-top: 80rpx;
+    padding: 20rpx;
+  }
 </style>

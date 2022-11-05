@@ -133,6 +133,24 @@
             }
             
         }
+        ,{
+            "path" : "pages/common/setting/test",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "测试",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/common/log/log",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "更新日志",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"preloadRule": {
 		"pages/tabbar/work/work": {
@@ -196,8 +214,14 @@
 				"navigationBarTitleText": "我的文件",
 				"enablePullDownRefresh": false
 			}
-		}
-  ]
+		} ,{
+      "path" : "ocr/index",
+      "style" : {
+        "navigationBarTitleText": "OCR文字识别",
+        "enablePullDownRefresh": false
+      }
+    }
+    ]
 	}, {
 		"root": "pagesB",
 		"pages": []

@@ -15,8 +15,8 @@
 				</video>
 				<!-- #endif -->
 				<!-- #ifdef APP-PLUS -->
-				<view class="wsf-upload-Item-video-fixed" @click="previewVideo(getFileUrl(item))"></view>
-				<image class="wsf-upload-Item-video-app-poster" mode="scaleToFill" :src="getVideoCover(getFileUrl(item))"></image>
+				<view class="wsf-upload-Item-video-fixed" :poster="appVideoPoster" @click="previewVideo(getFileUrl(item))"></view>
+				<image class="wsf-upload-Item-video-app-poster" mode="scaleToFill" :src="appVideoPoster"></image>
 				<!-- #endif -->
 			</view>
 
@@ -729,34 +729,7 @@
 					// 回调函数返回base64的值
 					callback(base64);
 				}
-			},
-      async getVideoCover(url){
-        const videframe = uni.requireNativePlugin("sn-videoframe");
-        // 获取指定帧图片
-        videframe.getFrame(
-          {
-            // url: "static/test.mp4",
-            url: url,
-            time: 0, // 默认0
-          },
-          (e) => {
-            console.log(e);
-            if (e.code == 0) {
-              // self.imgSrc = e.imagePath;
-              console.log(e.imagePath);
-              return plus.io.convertLocalFileSystemURL(e.imagePath)
-            } else {
-              return this.appVideoPoster
-              // console.log(e.imagePath);
-              // uni.showToast({
-              //   title: e.msg,
-              //   icon: "none",
-              // });
-            }
-          }
-        );
-        // appVideoPoster
-      }
+			}
 		}
 	}
 </script>
@@ -953,7 +926,7 @@
 
 	.wsf-upload-Item-video-app-poster {
 		width: 100%;
-		height: 100%;
+		height: 320rpx; // 100%
 	}
 </style>
 <style scoped>

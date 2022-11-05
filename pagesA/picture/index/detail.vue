@@ -115,6 +115,7 @@
         }
         this.finished = false
 				this.$api.photo.get_photo_item_list(this.photo_id,this.queryList).then(res => {
+          // console.log(res.data)
 						if(res.data && res.data.length > 0){
               if(this.queryList.page>1){
                 this.photoList = [...this.photoList, ...res.data]
