@@ -289,6 +289,76 @@
                     "pid" : "8492",
                     "parameters" : {}
                 }
+            },
+            "Phone-Identification-code" : {
+                "__plugin_info__" : {
+                    "name" : "安卓手机唯一标识码 唯一码 唯一标识",
+                    "description" : "安卓手机唯一码，java用的是utdid阿里的第三方库，同一应用在同个设备上反复重装唯一码均唯一",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=10164",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "10164",
+                    "parameters" : {}
+                }
+            },
+            "Ba-Websocket" : {
+                "__plugin_info__" : {
+                    "name" : "websocket原生服务（自动重连、心跳检测） Ba-Websocket",
+                    "description" : "Ba-Websocket 是一款原生websocket服务插件，可在后台运行。支持自动重连、心跳检测；支持常驻通知保活；支持监听websocket连接状态；支持多页面订阅消息等等。",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=10186",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "10186",
+                    "parameters" : {}
+                }
+            },
+            "Ba-Notify" : {
+                "__plugin_info__" : {
+                    "name" : "应用消息通知插件（多种样式，新增支持常驻通知模式） Ba-Notify",
+                    "description" : "Ba-Notify 是一款功能全面的uniapp消息通知插件，可在状态栏显示各种样式的消息通知。包含普通、常驻、大图、多行、进度、按钮等通知；支持检查、设置、清除通知；支持根据渠道和ID，分类管管理；",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=9231",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "9231",
+                    "parameters" : {}
+                }
+            },
+            "Ba-Scanner" : {
+                "__plugin_info__" : {
+                    "name" : "扫码原生插件 - 新（连续扫码、设置格式、任意自定义界面）Ba-Scanner",
+                    "description" : "Ba-Scanner 是一款毫秒级扫码插件。支持连续扫码，持续万次不卡顿；支持自定义任意界面、任意点击事件，可以让扫码界面和您的应用更加匹配、美观；支持多码、相册、闪光灯、焦距缩放、提示音、震动等等。",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=9669",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "9669",
+                    "parameters" : {}
+                }
+            },
+            "Ba-Toast" : {
+                "__plugin_info__" : {
+                    "name" : "原生Toast弹窗提示（可穿透所有界面；可自定义颜色、图标） Ba-Toast",
+                    "description" : "Ba-Toast 是一款可穿透所有界面、可在系统页面显示的原生Toast弹窗提示插件。调用方法参照uniapp自带showToast风格，接入简单，功能强大。 ",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=9688",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "9688",
+                    "parameters" : {}
+                }
             }
         }
     },

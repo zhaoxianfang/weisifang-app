@@ -20,7 +20,7 @@
 				<!-- #endif -->
 			</view>
 
-      <tui-lazyload-img v-else width="100%" height="320rpx" mode="scaleToFill" placeholder="" :src="getFileUrl(item)" @click="imgPreview(getFileUrl(item))"></tui-lazyload-img>
+      <tui-lazyload-img v-else width="100%" height="320rpx" mode="scaleToFill" placeholder="/static/images/photo/image-default-small.png" :src="getFileUrl(item)" @click="imgPreview(getFileUrl(item))"></tui-lazyload-img>
       
 			<view class="wsf-upload-Item-del" v-if="remove" @click="imgDel(index)">×</view>
       <view v-if="!isVideo(item.url)">
@@ -252,7 +252,9 @@
         this.$emit("setCover", item);
       },
 			imgPreview(index) {
-
+				// 先关闭预览
+				uni.closePreviewImage();
+				// 再预览
 				var imgData = []
 
 				this.uploadLists.forEach(item => {
@@ -260,6 +262,7 @@
 						imgData.push(this.getFileUrl(item))
 					}
 				})
+				console.log(imgData.length)
 
 				uni.previewImage({
 					urls: imgData,

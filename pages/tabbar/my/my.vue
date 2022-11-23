@@ -111,6 +111,16 @@
       	</tui-list-cell>
       </tui-list-view>
       
+	  <tui-list-view title="">
+	  	<tui-list-cell @click="href('test')" :arrow="true" last="true">
+	  		<view class="tui-item-box">
+	        <tui-icon name="setup" :size="23" color="#afadb2"></tui-icon>
+	  			<text class="tui-list-cell_name">测试</text>
+	  			<view class="tui-right"></view>
+	  		</view>
+	  	</tui-list-cell>
+	  </tui-list-view>
+	  
       <tui-list-view title="">
       	<tui-list-cell @click="href('setting')" :arrow="true" last="true">
       		<view class="tui-item-box">
@@ -191,6 +201,9 @@ export default {
 			switch (type) {
 				case 'setting':
 					url = '/pages/common/setting/setting';
+					break;
+				case 'test':
+					url = '/pages/common/setting/test';
 					break;
 				case 3:
 					url = '../userInfo/userInfo';

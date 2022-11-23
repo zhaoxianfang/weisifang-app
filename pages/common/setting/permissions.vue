@@ -28,6 +28,7 @@
 </template>
 
 <script>
+	const notify = uni.requireNativePlugin('Ba-Notify')
 export default {
 	data() {
 		return {
@@ -43,18 +44,30 @@ export default {
   },
 	methods: {
     init(){
-      this.getPushAuah(false);
+	  this.isNotifyEnabled();
       this.openLocationChange(false)
       this.helper.permissions.openSetting('android.settings.ACCESS_FINE_LOCATION') //
     },
-    // 判断是否开启消息推送
-    getPushAuah(toOpen=true){
-      this.notifyPushStatus = this.helper.permissions.judgeIosPermissionPush(toOpen) || false
-    },
     // 开启消息通知
     openPushChange: function (e) {
-      this.getPushAuah(true);
+		if(!this.notifyPushStatus){
+			this.goSetNotify();
+		}
     },
+	// 判断是否开启消息推送
+	isNotifyEnabled() { //是否打开通知权限
+		notify.isNotifyEnabled( (res) => {
+			console.log(res)
+			this.notifyPushStatus = res.isNotifyEnabled ? true : false
+			// uni.showToast({
+			// 	title: 'isNotifyEnabled：' + res.isNotifyEnabled ? true : false,
+			// 	icon: "none"
+			// })
+		});
+	},
+	goSetNotify() { //跳转到通知设置界面
+		notify.goSetNotify();
+	},
     // 开启定位
     async openLocationChange (e) {
       let location = await this.helper.utils.getLocation()

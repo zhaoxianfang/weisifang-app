@@ -11,7 +11,7 @@
 			<wsf-upload v-model="photoList" :max="999" :remove="managePhoto" :manage="managePhoto" :add="false" @imgDelete="remove" @setCover="setCover"></wsf-upload>
     </block>
   
-    <tui-divider v-if="!notMore" :size="28" :bold="true" color="#ccc" width="50%">加载中...</tui-divider>
+    <tui-divider v-if="!notMore" :size="28" :bold="true" color="#ccc" width="50%">正在加载中...</tui-divider>
     <tui-divider v-if="notMore" :size="28" :bold="true" color="#ccc" width="50%">没有了</tui-divider>
     
 		<tui-fab :left="0" :right="80" :bottom="80" :width="100" :height="100" bgColor="#5677fc" :btnList="btnList" @click="onClick" custom maskClosable><tui-icon name="setup" color="#fff"></tui-icon></tui-fab>
@@ -106,7 +106,7 @@
       	this.queryList.page++
       	this.getList();
         this.timer = ''
-      }, 1800)
+      }, 800)
     },
 		methods: {
 			getList(){

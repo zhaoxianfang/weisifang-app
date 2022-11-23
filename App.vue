@@ -53,13 +53,14 @@ export default {
         }
 			}
 		}
-		// ba-natify 插件
+		// ba-natify 通知 插件
 		if (args) {
-		    // if(args.4){//判断是否为通知传来的消息
-		    //     //这里写你的处理逻辑
-		    //     //args参数见“点击事件参数”
-		    // }
-		    console.log(args);  
+		    let args1 = JSON.parse(args);
+			if (args1.BaNotifyID) { //判断是否为通知传来的消息
+				//这里写你的处理逻辑
+				//args参数见“点击事件参数”
+				console.log('args.BaNotifyID', args1.BaNotifyID,args);
+			}
 		}
 		// #endif
 		if(!this.$store.state.user.isLogin){
