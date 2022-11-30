@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="book">文档</string>
-    <string name="tools">工具</string>
-    <string name="extends">扩展</string>
-    <string name="wms">仓库</string>
-    <string name="live">休闲</string>
+    <string name="ba_change_icon1">威四方</string>
+    <string name="ba_change_icon2">威四方</string>
+    <string name="ba_change_icon3">威四方</string>
+    <string name="ba_change_icon4">威四方</string>
+    <string name="ba_change_icon5">威四方</string>
 </resources>

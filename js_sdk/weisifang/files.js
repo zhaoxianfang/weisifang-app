@@ -86,7 +86,7 @@ const files = {
     var defautl_options = {
       'selectType':  1, // 选择类型：默认为0（ 0：浏览文件目录 1：文件分类）
       'maxCount': 1,
-      'filetypes':'doc,docx,ppt,xls,xlsx,zip,mp3,mp4,avi,mov,rmvb,rm,flv,wmv' // 文件类型，多个英文","隔开
+      'filetypes':'doc,docx,ppt,xls,xlsx,zip,mp3,mp4,avi,mov,rmvb,rm,flv,wmv,apk' // 文件类型，多个英文","隔开
     }
     var opts = Object.assign({}, defautl_options, options)
 
