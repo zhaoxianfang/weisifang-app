@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ba_change_icon1">威四方</string>
-    <string name="ba_change_icon2">威四方</string>
-    <string name="ba_change_icon3">威四方</string>
-    <string name="ba_change_icon4">威四方</string>
-    <string name="ba_change_icon5">威四方</string>
+    <string name="ba_changeicon_name1">威四方</string>
+    <string name="ba_changeicon_name2">威四方</string>
+    <string name="ba_changeicon_name3">威四方</string>
+    <string name="ba_changeicon_name4">威四方</string>
+    <string name="ba_changeicon_name5">威四方</string>
 </resources>

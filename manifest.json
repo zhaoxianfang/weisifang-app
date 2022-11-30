@@ -43,11 +43,11 @@
             "VideoPlayer" : {},
             "Geolocation" : {},
             "Bluetooth" : {},
-            "Messaging" : {},
             "OAuth" : {},
             "Push" : {},
             "Share" : {},
-            "SQLite" : {}
+            "SQLite" : {},
+            "iBeacon" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
