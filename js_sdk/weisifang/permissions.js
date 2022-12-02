@@ -127,435 +127,431 @@
 // 'android.permission.WRITE_SETTINGS',//  读写系统设置 允许读写系统设置项
 // 'android.permission.WRITE_SMS',// 编写短信 允许编写短信
 const permissions = {
-  // #ifdef APP-PLUS
-  // app 权限设置列表
-  settingList(name){
-    // 更多请参考 https://www.apiref.com/android-zh/android/provider/Settings.html
-    var list={
-      'SETTINGS': 'android.settings.SETTINGS',
-      'APN_SETTINGS': 'android.settings.APN_SETTINGS',
-      'LOCATION_SOURCE_SETTINGS': 'android.settings.LOCATION_SOURCE_SETTINGS',
-      'USER_SETTINGS': 'android.settings.USER_SETTINGS',
-      'WIRELESS_SETTINGS': 'android.settings.WIRELESS_SETTINGS',
-      'SECURITY_SETTINGS': 'android.settings.SECURITY_SETTINGS',
-      'PRIVACY_SETTINGS': 'android.settings.PRIVACY_SETTINGS',
-      'WIFI_SETTINGS': 'android.settings.WIFI_SETTINGS',
-      'WIFI_IP_SETTINGS': 'android.settings.WIFI_IP_SETTINGS',
-      'BLUETOOTH_SETTINGS': 'android.settings.BLUETOOTH_SETTINGS',
-      'CAST_SETTINGS': 'android.settings.CAST_SETTINGS',
-      'DATE_SETTINGS': 'android.settings.DATE_SETTINGS',
-      'SOUND_SETTINGS': 'android.settings.SOUND_SETTINGS',
-      'DISPLAY_SETTINGS': 'android.settings.DISPLAY_SETTINGS',
-      'LOCALE_SETTINGS': 'android.settings.LOCALE_SETTINGS',
-      'VOICE_INPUT_SETTINGS': 'android.settings.VOICE_INPUT_SETTINGS',
-      'INPUT_METHOD_SETTINGS': 'android.settings.INPUT_METHOD_SETTINGS',
-      'MANAGE_APPLICATIONS_SETTINGS': 'android.settings.MANAGE_APPLICATIONS_SETTINGS',
-      'DEVICE_INFO_SETTINGS': 'android.settings.DEVICE_INFO_SETTINGS',
-      'NOTIFICATION_SETTINGS': 'android.settings.NOTIFICATION_SETTINGS',
-      'battery': 'android.settings.BATTERY_SAVER_SETTINGS”', // 显示节电设置
-      'ignore_battery': 'android.settings.IGNORE_BATTERY_OPTIMIZATION_SETTINGS', // 显示屏幕以控制哪些应用可以忽略电池优化
-      'storage': 'android.settings.INTERNAL_STORAGE_SETTINGS”', // 显示内部存储的设置
-      'req_ignore_battery': 'android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS', // 要求用户允许应用忽略电池优化(白名单)[需要]
-      'per_req_ignore_battery': 'android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS', // 
-      'window': 'android.permission.SYSTEM_ALERT_WINDOW', //  悬浮框权限窗口
-      'open': this.openSetting,
-      'openAppSetting': this.openAppSetting,
-      'openApp': this.openApp
-      // 'broadCast': broadCast,
-      // 'getApplication': getApplication
-    };
-    return list[name] || false
-  },
-  // 判断权限
-  requestPermission(list=[]) {
-    console.log('权限判断',list)
-    var _this =this;
-  	plus.android.requestPermissions([
-      // 'android.permission.SYSTEM_ALERT_WINDOW',
-      // 'android.permission.BATTERY_STATS', //电量统计 获取电池电量统计信息
-      'android.permission.ACCESS_FINE_LOCATION', // 获取精确位置
-      // 'android.permission.ACCESS_NETWORK_STATE', // 获取网络状态
-      // 'android.permission.CAMERA', // 拍照权限 允许访问摄像头进行拍照
-      // 'android.permission.FLASHLIGHT', // 使用闪光灯 允许访问闪光灯
-      // 'android.permission.GET_TASKS', // 获取任务信息 允许程序获取当前或最近运行的应用
-      // 'android.permission.NFC', // 允许NFC通讯 允许程序执行NFC近距离通讯操作,用于移动支持
-      // 'android.permission.RECEIVE_BOOT_COMPLETED', // 开机自动允许 允许程序开机自动运行
-      // 'android.permission.WAKE_LOCK', // 唤醒锁定 允许程序在手机屏幕关闭后后台进程仍然运行
-      // 'android.permission.WRITE_EXTERNAL_STORAGE', // 写入外部存储 允许程序写入外部存储,如SD卡上写文件
-    ],function(resultObj) {
-  			for (var i = 0; i < resultObj.granted.length; i++) {
-  				var grantedPermission = resultObj.granted[i]
-  				console.log('已获取的权限：' + grantedPermission)
-  			}
-  			for (var i = 0; i < resultObj.deniedPresent.length; i++) {
-  				var deniedPresentPermission = resultObj.deniedPresent[i]
-  				console.log('拒绝本次申请的权限：' + deniedPresentPermission)
-  			}
-  			for (var i = 0; i < resultObj.deniedAlways.length; i++) {
-  				var deniedAlwaysPermission = resultObj.deniedAlways[i]
-  				console.log('永久拒绝申请的权限：' + deniedAlwaysPermission)
-  			}
-  			// 若所需权限被永久拒绝,则打开APP设置界面,可以在APP设置界面打开相应权限  
-  			if (resultObj.deniedAlways.length > 0) {
-          console.log('进来没：')
-  				// _this.openAppSetting()
-  			}
-  		},
-  		function(error) {
-  			console.log('申请权限错误：' + error.code + ' = ' + error.message)
-  		})
-  },
-  // openSetting(){
-    
-  //   // ACTION_APPLICATION_DEVELOPMENT_SETTINGS 开发者选项
-  //   // ACTION_ACCESSIBILITY_SETTINGS 无障碍
-  //   // ACTION_ADD_ACCOUNT 添加账号
-  //   // ACTION_AIRPLANE_MODE_SETTINGS 无线和网络 飞行模式
-  //   // ACTION_APN_SETTINGS apn 网络节点
-  //   // ACTION_APPLICATION_SETTINGS 应用列表
-  //   // ACTION_BLUETOOTH_SETTINGS 蓝牙开关
-  //   // sim 卡网络与流量管理
-  //   // ACTION_DATE_SETTINGS 日期和时间 设置
-  //   // ACTION_DEVICE_INFO_SETTINGS 关于手机
-  //   // ACTION_DISPLAY_SETTINGS 显示与亮度设置
-  //   // ACTION_INPUT_METHOD_SETTINGS 输入法管理
-  //   // ACTION_INPUT_METHOD_SUBTYPE_SETTINGS 输入法设置
-  //   // ACTION_INTERNAL_STORAGE_SETTINGS 存储空间
-  //   // ACTION_LOCALE_SETTINGS 选择语言
-  //   // ACTION_LOCATION_SOURCE_SETTINGS 位置信息
-  //   // ACTION_MANAGE_ALL_APPLICATIONS_SETTINGS 所有应用列表
-  //   // ACTION_MANAGE_APPLICATIONS_SETTINGS 安装的应用列表
-  //   // ACTION_MEMORY_CARD_SETTINGS 存储空间
-  //   // ACTION_NETWORK_OPERATOR_SETTINGS sim卡与流量
-  //   // ACTION_PRIVACY_SETTINGS 隐私权
-  //   // ACTION_SEARCH_SETTINGS 全局搜索
-  //   // ACTION_SECURITY_SETTINGS 安全
-  //   // ACTION_SETTINGS 手机设置
-  //   // ACTION_SOUND_SETTINGS 声音与震动
-  //   // ACTION_SYNC_SETTINGS 用户与账号
-  //   // ACTION_USER_DICTIONARY_SETTINGS 个人字典
-  //   // ACTION_WIFI_SETTINGS wlan wifi 设置
-  //   // ACTION_WIRELESS_SETTINGS 无线和网络、飞行模式
-    
-  //   var main = plus.android.runtimeMainActivity() //获取activity
-  //   var Intent = plus.android.importClass('android.content.Intent')
-  //   var Settings = plus.android.importClass('android.provider.Settings')
-  // https://www.apiref.com/android-zh/android/provider/package-summary.html
-  //   var intent = new Intent(Settings.ACTION_SOUND_SETTINGS) //可设置http://ask.dcloud.net.cn/question/14732这里所有Action字段
-  //   main.startActivity(intent)
-    
-    
-  //   const main = plus.android.runtimeMainActivity(); //获取activity
-  //   let intent = plus.android.newObject('android.content.Intent', 'android.settings.APPLICATION_DETAILS_SETTINGS');
-  //   let uri = plus.android.invoke('android.net.Uri', 'fromParts', 'package', main.getPackageName(), null);
-  //   plus.android.invoke(intent, 'setData', uri);
-  //   main.startActivity(intent);
-  // }
-  /**
-   * 打开设置页面
-   * @param {Object} settingName 例如 : android.settings.APPLICATION_DETAILS_SETTINGS
-   */
-  openSetting(settingName) {
-  	try {
-  		let os = plus.os.name;
-  		if ('Android' == os) {
-        const main = plus.android.runtimeMainActivity();
-        // let intent = plus.android.newObject('android.content.Intent', 'android.settings.APPLICATION_DETAILS_SETTINGS');
-        let intent = plus.android.newObject('android.content.Intent', settingName);
-        let uri = plus.android.invoke('android.net.Uri', 'fromParts', 'package', main.getPackageName(), null);
-        plus.android.invoke(intent, 'setData', uri);
-        main.startActivity(intent);
-  		} else {
-  			//unsupport, nothing to do.
-        return false
-  		}
-  	} catch (e) {
-  		console.error('error @openSettings!!',e);
-      return false
-  	}
-  },
-  /**
-   * 打开手机系统的定位服务开关（注意：是手机系统的，不是本应用的）
-   */
-  openAppLocationSetting(){
-    let system = uni.getSystemInfoSync(); // 获取系统信息
-    	if (system.platform === 'android') { // 判断平台
-    		var context = plus.android.importClass("android.content.Context");
-    		var locationManager = plus.android.importClass("android.location.LocationManager");
-    		var main = plus.android.runtimeMainActivity();
-    		var mainSvr = main.getSystemService(context.LOCATION_SERVICE);
-    		if (!mainSvr.isProviderEnabled(locationManager.GPS_PROVIDER)) {
-    			uni.showModal({
-    				title: '提示',
-    				content: '请打开定位服务功能',
-    				showCancel: false, // 不显示取消按钮
-    				success() {
-    					var Intent = plus.android.importClass('android.content.Intent');
-    					var Settings = plus.android.importClass('android.provider.Settings');
-    					var intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-    					main.startActivity(intent); // 打开系统设置GPS服务页面
-    
-    				}
-    			});
-    		}
-    	} else if (system.platform === 'ios') {
-    		var cllocationManger = plus.ios.import("CLLocationManager");
-    		var enable = cllocationManger.locationServicesEnabled();
-    		var status = cllocationManger.authorizationStatus();
-    		plus.ios.deleteObject(cllocationManger);
-    		console.log("手机系统的定位没有打开");
-    		uni.showModal({
-    			title: '提示',
-    			content: '请打开定位服务功能',
-    			showCancel: false, // 不显示取消按钮
-    			success() {
-    				var UIApplication = plus.ios.import("UIApplication");
-    				var application2 = UIApplication.sharedApplication();
-    				var NSURL2 = plus.ios.import("NSURL");
-    				var setting2 = NSURL2.URLWithString("App-Prefs:root=Privacy&path=LOCATION");
-    				application2.openURL(setting2);
-    				plus.ios.deleteObject(setting2);
-    				plus.ios.deleteObject(NSURL2);
-    				plus.ios.deleteObject(application2);
-    			}
-    		});
-    	}
-  },
-  /**
-   * 打开应用设置页面
-   */
-  openAppSetting() {
-  	try {
-  		let os = plus.os.name;
-      if ('Android' == os) {
-        const main = plus.android.runtimeMainActivity();
-        let intent = plus.android.newObject('android.content.Intent', 'android.settings.APPLICATION_DETAILS_SETTINGS');
-        let uri = plus.android.invoke('android.net.Uri', 'fromParts', 'package', main.getPackageName(), null);
-        plus.android.invoke(intent, 'setData', uri);
-        main.startActivity(intent);
-        
-        // console.log(plus.device.vendor);
-        // var Intent = plus.android.importClass('android.content.Intent')
-        // var Settings = plus.android.importClass('android.provider.Settings')
-        // var Uri = plus.android.importClass('android.net.Uri')
-        // var mainActivity = plus.android.runtimeMainActivity()
-        // var intent = new Intent()
-        // intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        // var uri = Uri.fromParts('package', mainActivity.getPackageName(), null)
-        // intent.setData(uri)
-        // mainActivity.startActivity(intent)
-      }else{
-        var UIApplication = plus.ios.import('UIApplication')
-        var application2 = UIApplication.sharedApplication()
-        var NSURL2 = plus.ios.import('NSURL')
-        // var setting2 = NSURL2.URLWithString("prefs:root=LOCATION_SERVICES");		
-        var setting2 = NSURL2.URLWithString('app-settings:')
-        application2.openURL(setting2)
-              
-        plus.ios.deleteObject(setting2)
-        plus.ios.deleteObject(NSURL2)
-        plus.ios.deleteObject(application2)
-      }
-  	} catch (e) {
-  		console.error('error @openAppSetting!!');
-  	}
-  },
-  // 调用第三方应用案例 根据包名从应用市场下载
-  androidMarket(pname) {
-  	plus.runtime.openURL("market://details?id=" + pname);
-  },
-  /**
-   * 根据包名启动第三方应用
-   * @param {String} pname 包名，如微信是com.tencent.mm
-   * @param {String} pnamestr 应用名称，如微信
-   */
-  openApp(pname, pnamestr) {
-  	try {
-  		const os = plus.os.name;
-  		if ('Android' == os) {
-  			plus.runtime.launchApplication({
-  				pname: pname
-  			}, function(e) {
-  				let str = `检查到您未安装"${pnamestr}",是否到商城搜索下载？`;
-  				plus.nativeUI.confirm(str, function(i) {
-  					if (i.index == 0) {
-  						permissions.androidMarket(pname);
-  					}
-  				});
-  			});
-  		} else {
-  			//unsupport, nothing to do.
-  		}
-  	} catch (e) {
-  		console.error('error @openApp!!');
-  	}
-  },
-  // navite.js 检测悬浮窗权限并且打开设置
-  check_overlays(callbackFn){
-    // this.judgeIosPermissionPush()
-    const isIos = uni.getSystemInfoSync().platform == 'ios' 
-      const android_overlays = (callbackFn) => {  
-        var main = plus.android.runtimeMainActivity()  
-        var pkName = main.getPackageName()  
-        var Settings = plus.android.importClass('android.provider.Settings')  
-        var Uri = plus.android.importClass('android.net.Uri')  
-        var Build = plus.android.importClass('android.os.Build')  
-        var Intent = plus.android.importClass('android.content.Intent')  
-        var intent = new Intent( 'android.settings.action.MANAGE_OVERLAY_PERMISSION',  Uri.parse('package:' + pkName)  ) 
-        // main.startActivityForResult(intent, 5004);
-        console.log(JSON.stringify(Settings))
-        if (!Settings.canDrawOverlays(main)) {
-          // 检测悬浮窗
-          uni.showModal({
-            title: '温馨提示',  
-            content: '请先打开「悬浮窗」权限！',
-            showCancel: false,
-            success: function(res) {  
-              if (res.confirm) {
-                main.startActivityForResult(intent, 5004) // 转跳到悬浮窗设置  
-                // main.startActivityForResult(intent, 2000) // 转跳到悬浮窗设置  
-                
-                // const main = plus.android.runtimeMainActivity();
-                // let intentChild = plus.android.newObject('android.content.Intent', 'android.settings.APPLICATION_DETAILS_SETTINGS');
-                // let uriChild = plus.android.invoke('android.net.Uri', 'fromParts', 'package', main.getPackageName(), null);
-                // plus.android.invoke(intentChild, 'setData', uriChild);
-                // main.startActivity(intentChild);
-              }  
-            }  
-          })
-        }else{
-          callbackFn && callbackFn()
+    // #ifdef APP-PLUS
+    // app 权限设置列表
+    settingList(name) {
+        // 更多请参考 https://www.apiref.com/android-zh/android/provider/Settings.html
+        var list = {
+            'SETTINGS': 'android.settings.SETTINGS',
+            'APN_SETTINGS': 'android.settings.APN_SETTINGS',
+            'LOCATION_SOURCE_SETTINGS': 'android.settings.LOCATION_SOURCE_SETTINGS',
+            'USER_SETTINGS': 'android.settings.USER_SETTINGS',
+            'WIRELESS_SETTINGS': 'android.settings.WIRELESS_SETTINGS',
+            'SECURITY_SETTINGS': 'android.settings.SECURITY_SETTINGS',
+            'PRIVACY_SETTINGS': 'android.settings.PRIVACY_SETTINGS',
+            'WIFI_SETTINGS': 'android.settings.WIFI_SETTINGS',
+            'WIFI_IP_SETTINGS': 'android.settings.WIFI_IP_SETTINGS',
+            'BLUETOOTH_SETTINGS': 'android.settings.BLUETOOTH_SETTINGS',
+            'CAST_SETTINGS': 'android.settings.CAST_SETTINGS',
+            'DATE_SETTINGS': 'android.settings.DATE_SETTINGS',
+            'SOUND_SETTINGS': 'android.settings.SOUND_SETTINGS',
+            'DISPLAY_SETTINGS': 'android.settings.DISPLAY_SETTINGS',
+            'LOCALE_SETTINGS': 'android.settings.LOCALE_SETTINGS',
+            'VOICE_INPUT_SETTINGS': 'android.settings.VOICE_INPUT_SETTINGS',
+            'INPUT_METHOD_SETTINGS': 'android.settings.INPUT_METHOD_SETTINGS',
+            'MANAGE_APPLICATIONS_SETTINGS': 'android.settings.MANAGE_APPLICATIONS_SETTINGS',
+            'DEVICE_INFO_SETTINGS': 'android.settings.DEVICE_INFO_SETTINGS',
+            'NOTIFICATION_SETTINGS': 'android.settings.NOTIFICATION_SETTINGS',
+            'battery': 'android.settings.BATTERY_SAVER_SETTINGS”', // 显示节电设置
+            'ignore_battery': 'android.settings.IGNORE_BATTERY_OPTIMIZATION_SETTINGS', // 显示屏幕以控制哪些应用可以忽略电池优化
+            'storage': 'android.settings.INTERNAL_STORAGE_SETTINGS”', // 显示内部存储的设置
+            'req_ignore_battery': 'android.settings.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS', // 要求用户允许应用忽略电池优化(白名单)[需要]
+            'per_req_ignore_battery': 'android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS', // 
+            'window': 'android.permission.SYSTEM_ALERT_WINDOW', //  悬浮框权限窗口
+            'open': this.openSetting,
+            'openAppSetting': this.openAppSetting,
+            'openApp': this.openApp
+            // 'broadCast': broadCast,
+            // 'getApplication': getApplication
+        };
+        return list[name] || false
+    },
+    // 判断权限
+    requestPermission(list = [], callFun) {
+        var _this = this;
+        plus.android.requestPermissions(list || [], function(resultObj) {
+                for (var i = 0; i < resultObj.granted.length; i++) {
+                    // var grantedPermission = resultObj.granted[i]
+                    // console.log('已获取的权限：' + grantedPermission)
+                    callFun && callFun(true)
+                }
+                for (var i = 0; i < resultObj.deniedPresent.length; i++) {
+                    // var deniedPresentPermission = resultObj.deniedPresent[i]
+                    // console.log('拒绝本次申请的权限：' + deniedPresentPermission)
+                    callFun && callFun(false)
+                }
+                for (var i = 0; i < resultObj.deniedAlways.length; i++) {
+                    // var deniedAlwaysPermission = resultObj.deniedAlways[i]
+                    // console.log('永久拒绝申请的权限：' + deniedAlwaysPermission)
+                    callFun && callFun(false)
+                }
+                // 若所需权限被永久拒绝,则打开APP设置界面,可以在APP设置界面打开相应权限  
+                if (resultObj.deniedAlways.length > 0) {
+                    // console.log('进来没：')
+                    // _this.openAppSetting()
+                }
+            },
+            function(error) {
+                // console.log('申请权限错误：' + error.code + ' = ' + error.message)
+                callFun && callFun(false)
+            })
+    },
+    // openSetting(){
+
+    //   // ACTION_APPLICATION_DEVELOPMENT_SETTINGS 开发者选项
+    //   // ACTION_ACCESSIBILITY_SETTINGS 无障碍
+    //   // ACTION_ADD_ACCOUNT 添加账号
+    //   // ACTION_AIRPLANE_MODE_SETTINGS 无线和网络 飞行模式
+    //   // ACTION_APN_SETTINGS apn 网络节点
+    //   // ACTION_APPLICATION_SETTINGS 应用列表
+    //   // ACTION_BLUETOOTH_SETTINGS 蓝牙开关
+    //   // sim 卡网络与流量管理
+    //   // ACTION_DATE_SETTINGS 日期和时间 设置
+    //   // ACTION_DEVICE_INFO_SETTINGS 关于手机
+    //   // ACTION_DISPLAY_SETTINGS 显示与亮度设置
+    //   // ACTION_INPUT_METHOD_SETTINGS 输入法管理
+    //   // ACTION_INPUT_METHOD_SUBTYPE_SETTINGS 输入法设置
+    //   // ACTION_INTERNAL_STORAGE_SETTINGS 存储空间
+    //   // ACTION_LOCALE_SETTINGS 选择语言
+    //   // ACTION_LOCATION_SOURCE_SETTINGS 位置信息
+    //   // ACTION_MANAGE_ALL_APPLICATIONS_SETTINGS 所有应用列表
+    //   // ACTION_MANAGE_APPLICATIONS_SETTINGS 安装的应用列表
+    //   // ACTION_MEMORY_CARD_SETTINGS 存储空间
+    //   // ACTION_NETWORK_OPERATOR_SETTINGS sim卡与流量
+    //   // ACTION_PRIVACY_SETTINGS 隐私权
+    //   // ACTION_SEARCH_SETTINGS 全局搜索
+    //   // ACTION_SECURITY_SETTINGS 安全
+    //   // ACTION_SETTINGS 手机设置
+    //   // ACTION_SOUND_SETTINGS 声音与震动
+    //   // ACTION_SYNC_SETTINGS 用户与账号
+    //   // ACTION_USER_DICTIONARY_SETTINGS 个人字典
+    //   // ACTION_WIFI_SETTINGS wlan wifi 设置
+    //   // ACTION_WIRELESS_SETTINGS 无线和网络、飞行模式
+
+    //   var main = plus.android.runtimeMainActivity() //获取activity
+    //   var Intent = plus.android.importClass('android.content.Intent')
+    //   var Settings = plus.android.importClass('android.provider.Settings')
+    // https://www.apiref.com/android-zh/android/provider/package-summary.html
+    //   var intent = new Intent(Settings.ACTION_SOUND_SETTINGS) //可设置http://ask.dcloud.net.cn/question/14732这里所有Action字段
+    //   main.startActivity(intent)
+
+
+    //   const main = plus.android.runtimeMainActivity(); //获取activity
+    //   let intent = plus.android.newObject('android.content.Intent', 'android.settings.APPLICATION_DETAILS_SETTINGS');
+    //   let uri = plus.android.invoke('android.net.Uri', 'fromParts', 'package', main.getPackageName(), null);
+    //   plus.android.invoke(intent, 'setData', uri);
+    //   main.startActivity(intent);
+    // }
+    /**
+     * 打开设置页面
+     * @param {Object} settingName 例如 : android.settings.APPLICATION_DETAILS_SETTINGS
+     */
+    openSetting(settingName) {
+        try {
+            let os = plus.os.name;
+            if ('Android' == os) {
+                const main = plus.android.runtimeMainActivity();
+                // let intent = plus.android.newObject('android.content.Intent', 'android.settings.APPLICATION_DETAILS_SETTINGS');
+                let intent = plus.android.newObject('android.content.Intent', settingName);
+                let uri = plus.android.invoke('android.net.Uri', 'fromParts', 'package', main.getPackageName(),
+                    null);
+                plus.android.invoke(intent, 'setData', uri);
+                main.startActivity(intent);
+            } else {
+                //unsupport, nothing to do.
+                return false
+            }
+        } catch (e) {
+            console.error('error @openSettings!!', e);
+            return false
         }
-      }  
-      const ios_overlays = (callbackFn) => {  
-        // 有空再写
-        // var UIApplication = plus.ios.import("UIApplication");  
-        // var app = UIApplication.sharedApplication();  
-        // var enabledTypes  = 0;  
-      }  
-      return !isIos ? android_overlays(callbackFn) : ios_overlays(callbackFn)  
-  },
-  // 判断是否在白名单中
-  checkWhiteList() {
-  	// 白名单  
-  	var main = plus.android.runtimeMainActivity()
-  	var packName = main.getPackageName()
-  	var Context = plus.android.importClass('android.content.Context')
-  	var PowerManager = plus.android.importClass('android.os.PowerManager')
-  	// 获取电源类
-  	var pm = main.getSystemService(Context.POWER_SERVICE)
-  	let inWhiteList = pm.isIgnoringBatteryOptimizations(packName)
-  	console.log('是否在白名单：', inWhiteList) //是否白名单  
-  	try {
-  		var Uri = plus.android.importClass('android.net.Uri')
-  		var Settings = plus.android.importClass('android.provider.Settings')
-  		var packageURI = Uri.parse('package:' + packName)
-  		var intents = plus.android.newObject('android.content.Intent', Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, packageURI) // 电池  优化，是否允许在后台运行
-  		main.startActivity(intents)
-  		// console.log('调起end')
-  	} catch {
-  		console.log('白名单调起失败')
-  	}
-  	if (pm.isIgnoringBatteryOptimizations(packName)) {
-  	    console.log(11)
-  	} else {
-      uni.showModal({
-          title: '提示',
-          content: '请开启自启动权限和省电策略设置无限制!',
-          success: function(res) {
-              if (res.confirm) {
-                  Settings.openAppSetting()
-              } else if (res.cancel) {
-                  console.log('用户点击取消')
-              }
-          }
-      })
-  	}
-  },
-  // 判断推送权限是否开启
-  judgeIosPermissionPush(toOpen=true) {
-    const isIos = uni.getSystemInfoSync().platform == 'ios' 
-  	if (isIos) { //ios
-  		var result = false
-  		var UIApplication = plus.ios.import('UIApplication')
-  		var app = UIApplication.sharedApplication()
-  		var enabledTypes = 0
-  		if (app.currentUserNotificationSettings) {
-  			var settings = app.currentUserNotificationSettings()
-  			enabledTypes = settings.plusGetAttribute('types')
-  			console.log('enabledTypes1:' + enabledTypes)
-  			if (enabledTypes === 0) {
-  				// gotoAppPermissionSetting()
-  				console.log('推送权限没有开启')
-  			} else {
-  				result = true
-  				console.log('已经开启推送功能!')
-  			}
-  			plus.ios.deleteObject(settings)
-  		} else {
-  			enabledTypes = app.enabledRemoteNotificationTypes()
-  			if (enabledTypes === 0) {
-  				// gotoAppPermissionSetting()
-  				console.log('推送权限没有开启!')
-  			} else {
-  				result = true
-  				console.log('已经开启推送功能!')
-  			}
-  			console.log('enabledTypes2:' + enabledTypes)
-  		}
-  		plus.ios.deleteObject(app)
-  		plus.ios.deleteObject(UIApplication)
-  		return result
-  	} else { //android
-  		var result = false
-  		var main = plus.android.runtimeMainActivity()
-  		var pkName = main.getPackageName()
-  		var uid = main.getApplicationInfo().plusGetAttribute('uid')
-  		var NotificationManagerCompat = plus.android.importClass('androidx.core.app.NotificationManagerCompat')
-  		//("android.support.v4.app.NotificationManagerCompat");
-  		var areNotificationsEnabled = NotificationManagerCompat.from(main)
-  		// 未开通‘允许通知’权限，则弹窗提醒开通，并点击确认后，跳转到系统设置页面进行设置  
-  		if (!areNotificationsEnabled.areNotificationsEnabled()) {
-        if(!toOpen){
-          return false
+    },
+    /**
+     * 打开手机系统的定位服务开关（注意：是手机系统的，不是本应用的）
+     */
+    openAppLocationSetting() {
+        let system = uni.getSystemInfoSync(); // 获取系统信息
+        if (system.platform === 'android') { // 判断平台
+            var context = plus.android.importClass("android.content.Context");
+            var locationManager = plus.android.importClass("android.location.LocationManager");
+            var main = plus.android.runtimeMainActivity();
+            var mainSvr = main.getSystemService(context.LOCATION_SERVICE);
+            if (!mainSvr.isProviderEnabled(locationManager.GPS_PROVIDER)) {
+                uni.showModal({
+                    title: '提示',
+                    content: '请打开定位服务功能',
+                    showCancel: false, // 不显示取消按钮
+                    success() {
+                        var Intent = plus.android.importClass('android.content.Intent');
+                        var Settings = plus.android.importClass('android.provider.Settings');
+                        var intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        main.startActivity(intent); // 打开系统设置GPS服务页面
+
+                    }
+                });
+            }
+        } else if (system.platform === 'ios') {
+            var cllocationManger = plus.ios.import("CLLocationManager");
+            var enable = cllocationManger.locationServicesEnabled();
+            var status = cllocationManger.authorizationStatus();
+            plus.ios.deleteObject(cllocationManger);
+            console.log("手机系统的定位没有打开");
+            uni.showModal({
+                title: '提示',
+                content: '请打开定位服务功能',
+                showCancel: false, // 不显示取消按钮
+                success() {
+                    var UIApplication = plus.ios.import("UIApplication");
+                    var application2 = UIApplication.sharedApplication();
+                    var NSURL2 = plus.ios.import("NSURL");
+                    var setting2 = NSURL2.URLWithString("App-Prefs:root=Privacy&path=LOCATION");
+                    application2.openURL(setting2);
+                    plus.ios.deleteObject(setting2);
+                    plus.ios.deleteObject(NSURL2);
+                    plus.ios.deleteObject(application2);
+                }
+            });
         }
-  			uni.showModal({
-  				title: '通知权限开启提醒',
-  				content: '您还没有开启通知权限，无法接受到消息通知，请前往设置！',
-  				showCancel: false,
-  				confirmText: '去设置',
-  				success: function(res) {
-  					if (res.confirm) {
-  						var Intent = plus.android.importClass('android.content.Intent')
-  						var Build = plus.android.importClass('android.os.Build')
-  						//android 8.0引导  
-  						if (Build.VERSION.SDK_INT >= 26) {
-  							var intent = new Intent('android.settings.APP_NOTIFICATION_SETTINGS')
-  							intent.putExtra('android.provider.extra.APP_PACKAGE', pkName)
-  						} else if (Build.VERSION.SDK_INT >= 21) { //android 5.0-7.0  
-  							var intent = new Intent('android.settings.APP_NOTIFICATION_SETTINGS')
-  							intent.putExtra('app_package', pkName)
-  							intent.putExtra('app_uid', uid)
-  						} else { //(<21)其他--跳转到该应用管理的详情页
-  							var Settings = plus.android.importClass('android.provider.Settings')
-  							var Uri = plus.android.importClass('android.net.Uri')
-  							var intent = new Intent()
-  							intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-  							var uri = Uri.fromParts('package', main.getPackageName(), null)
-  							intent.setData(uri)
-  						}
-  						// 跳转到该应用的系统通知设置页  
-  						main.startActivity(intent)
-  						return result
-  					}
-  				}
-  			})
-  		} else {
-  			result = true
-  			return result
-  		}
-  	}
-  }
-  // #endif
+    },
+    /**
+     * 打开应用设置页面
+     */
+    openAppSetting() {
+        try {
+            let os = plus.os.name;
+            if ('Android' == os) {
+                const main = plus.android.runtimeMainActivity();
+                let intent = plus.android.newObject('android.content.Intent',
+                    'android.settings.APPLICATION_DETAILS_SETTINGS');
+                let uri = plus.android.invoke('android.net.Uri', 'fromParts', 'package', main.getPackageName(),
+                    null);
+                plus.android.invoke(intent, 'setData', uri);
+                main.startActivity(intent);
+
+                // console.log(plus.device.vendor);
+                // var Intent = plus.android.importClass('android.content.Intent')
+                // var Settings = plus.android.importClass('android.provider.Settings')
+                // var Uri = plus.android.importClass('android.net.Uri')
+                // var mainActivity = plus.android.runtimeMainActivity()
+                // var intent = new Intent()
+                // intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                // var uri = Uri.fromParts('package', mainActivity.getPackageName(), null)
+                // intent.setData(uri)
+                // mainActivity.startActivity(intent)
+            } else {
+                var UIApplication = plus.ios.import('UIApplication')
+                var application2 = UIApplication.sharedApplication()
+                var NSURL2 = plus.ios.import('NSURL')
+                // var setting2 = NSURL2.URLWithString("prefs:root=LOCATION_SERVICES");		
+                var setting2 = NSURL2.URLWithString('app-settings:')
+                application2.openURL(setting2)
+
+                plus.ios.deleteObject(setting2)
+                plus.ios.deleteObject(NSURL2)
+                plus.ios.deleteObject(application2)
+            }
+        } catch (e) {
+            console.error('error @openAppSetting!!');
+        }
+    },
+    // 调用第三方应用案例 根据包名从应用市场下载
+    androidMarket(pname) {
+        plus.runtime.openURL("market://details?id=" + pname);
+    },
+    /**
+     * 根据包名启动第三方应用
+     * @param {String} pname 包名，如微信是com.tencent.mm
+     * @param {String} pnamestr 应用名称，如微信
+     */
+    openApp(pname, pnamestr) {
+        try {
+            const os = plus.os.name;
+            if ('Android' == os) {
+                plus.runtime.launchApplication({
+                    pname: pname
+                }, function(e) {
+                    let str = `检查到您未安装"${pnamestr}",是否到商城搜索下载？`;
+                    plus.nativeUI.confirm(str, function(i) {
+                        if (i.index == 0) {
+                            permissions.androidMarket(pname);
+                        }
+                    });
+                });
+            } else {
+                //unsupport, nothing to do.
+            }
+        } catch (e) {
+            console.error('error @openApp!!');
+        }
+    },
+    // navite.js 检测悬浮窗权限并且打开设置
+    check_overlays(callbackFn) {
+        // this.judgeIosPermissionPush()
+        const isIos = uni.getSystemInfoSync().platform == 'ios'
+        const android_overlays = (callbackFn) => {
+            var main = plus.android.runtimeMainActivity()
+            var pkName = main.getPackageName()
+            var Settings = plus.android.importClass('android.provider.Settings')
+            var Uri = plus.android.importClass('android.net.Uri')
+            var Build = plus.android.importClass('android.os.Build')
+            var Intent = plus.android.importClass('android.content.Intent')
+            var intent = new Intent('android.settings.action.MANAGE_OVERLAY_PERMISSION', Uri.parse('package:' +
+                pkName))
+            // main.startActivityForResult(intent, 5004);
+            console.log(JSON.stringify(Settings))
+            if (!Settings.canDrawOverlays(main)) {
+                // 检测悬浮窗
+                uni.showModal({
+                    title: '温馨提示',
+                    content: '请先打开「悬浮窗」权限！',
+                    showCancel: false,
+                    success: function(res) {
+                        if (res.confirm) {
+                            main.startActivityForResult(intent, 5004) // 转跳到悬浮窗设置  
+                            // main.startActivityForResult(intent, 2000) // 转跳到悬浮窗设置  
+
+                            // const main = plus.android.runtimeMainActivity();
+                            // let intentChild = plus.android.newObject('android.content.Intent', 'android.settings.APPLICATION_DETAILS_SETTINGS');
+                            // let uriChild = plus.android.invoke('android.net.Uri', 'fromParts', 'package', main.getPackageName(), null);
+                            // plus.android.invoke(intentChild, 'setData', uriChild);
+                            // main.startActivity(intentChild);
+                        }
+                    }
+                })
+            } else {
+                callbackFn && callbackFn()
+            }
+        }
+        const ios_overlays = (callbackFn) => {
+            // 有空再写
+            // var UIApplication = plus.ios.import("UIApplication");  
+            // var app = UIApplication.sharedApplication();  
+            // var enabledTypes  = 0;  
+        }
+        return !isIos ? android_overlays(callbackFn) : ios_overlays(callbackFn)
+    },
+    // 判断是否在白名单中
+    checkWhiteList() {
+        // 白名单  
+        var main = plus.android.runtimeMainActivity()
+        var packName = main.getPackageName()
+        var Context = plus.android.importClass('android.content.Context')
+        var PowerManager = plus.android.importClass('android.os.PowerManager')
+        // 获取电源类
+        var pm = main.getSystemService(Context.POWER_SERVICE)
+        let inWhiteList = pm.isIgnoringBatteryOptimizations(packName)
+        console.log('是否在白名单：', inWhiteList) //是否白名单  
+        try {
+            var Uri = plus.android.importClass('android.net.Uri')
+            var Settings = plus.android.importClass('android.provider.Settings')
+            var packageURI = Uri.parse('package:' + packName)
+            var intents = plus.android.newObject('android.content.Intent', Settings
+                .ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS, packageURI) // 电池  优化，是否允许在后台运行
+            main.startActivity(intents)
+            // console.log('调起end')
+        } catch {
+            console.log('白名单调起失败')
+        }
+        if (pm.isIgnoringBatteryOptimizations(packName)) {
+            console.log(11)
+        } else {
+            uni.showModal({
+                title: '提示',
+                content: '请开启自启动权限和省电策略设置无限制!',
+                success: function(res) {
+                    if (res.confirm) {
+                        Settings.openAppSetting()
+                    } else if (res.cancel) {
+                        console.log('用户点击取消')
+                    }
+                }
+            })
+        }
+    },
+    // 判断推送权限是否开启
+    judgeIosPermissionPush(toOpen = true) {
+        const isIos = uni.getSystemInfoSync().platform == 'ios'
+        if (isIos) { //ios
+            var result = false
+            var UIApplication = plus.ios.import('UIApplication')
+            var app = UIApplication.sharedApplication()
+            var enabledTypes = 0
+            if (app.currentUserNotificationSettings) {
+                var settings = app.currentUserNotificationSettings()
+                enabledTypes = settings.plusGetAttribute('types')
+                console.log('enabledTypes1:' + enabledTypes)
+                if (enabledTypes === 0) {
+                    // gotoAppPermissionSetting()
+                    console.log('推送权限没有开启')
+                } else {
+                    result = true
+                    console.log('已经开启推送功能!')
+                }
+                plus.ios.deleteObject(settings)
+            } else {
+                enabledTypes = app.enabledRemoteNotificationTypes()
+                if (enabledTypes === 0) {
+                    // gotoAppPermissionSetting()
+                    console.log('推送权限没有开启!')
+                } else {
+                    result = true
+                    console.log('已经开启推送功能!')
+                }
+                console.log('enabledTypes2:' + enabledTypes)
+            }
+            plus.ios.deleteObject(app)
+            plus.ios.deleteObject(UIApplication)
+            return result
+        } else { //android
+            var result = false
+            var main = plus.android.runtimeMainActivity()
+            var pkName = main.getPackageName()
+            var uid = main.getApplicationInfo().plusGetAttribute('uid')
+            var NotificationManagerCompat = plus.android.importClass('androidx.core.app.NotificationManagerCompat')
+            //("android.support.v4.app.NotificationManagerCompat");
+            var areNotificationsEnabled = NotificationManagerCompat.from(main)
+            // 未开通‘允许通知’权限，则弹窗提醒开通，并点击确认后，跳转到系统设置页面进行设置  
+            if (!areNotificationsEnabled.areNotificationsEnabled()) {
+                if (!toOpen) {
+                    return false
+                }
+                uni.showModal({
+                    title: '通知权限开启提醒',
+                    content: '您还没有开启通知权限，无法接受到消息通知，请前往设置！',
+                    showCancel: false,
+                    confirmText: '去设置',
+                    success: function(res) {
+                        if (res.confirm) {
+                            var Intent = plus.android.importClass('android.content.Intent')
+                            var Build = plus.android.importClass('android.os.Build')
+                            //android 8.0引导  
+                            if (Build.VERSION.SDK_INT >= 26) {
+                                var intent = new Intent('android.settings.APP_NOTIFICATION_SETTINGS')
+                                intent.putExtra('android.provider.extra.APP_PACKAGE', pkName)
+                            } else if (Build.VERSION.SDK_INT >= 21) { //android 5.0-7.0  
+                                var intent = new Intent('android.settings.APP_NOTIFICATION_SETTINGS')
+                                intent.putExtra('app_package', pkName)
+                                intent.putExtra('app_uid', uid)
+                            } else { //(<21)其他--跳转到该应用管理的详情页
+                                var Settings = plus.android.importClass('android.provider.Settings')
+                                var Uri = plus.android.importClass('android.net.Uri')
+                                var intent = new Intent()
+                                intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                                var uri = Uri.fromParts('package', main.getPackageName(), null)
+                                intent.setData(uri)
+                            }
+                            // 跳转到该应用的系统通知设置页  
+                            main.startActivity(intent)
+                            return result
+                        }
+                    }
+                })
+            } else {
+                result = true
+                return result
+            }
+        }
+    }
+    // #endif
 }
 export default permissions

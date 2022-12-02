@@ -1,8 +1,8 @@
 <template>
-	<view class="bgview">
-		<wsf-rt-popup :itemList="itemList" ref="rtBubble" @click="itemClick"></wsf-rt-popup>
-    
-		<!-- <view style="flex-direction: row;flex-wrap: wrap;">
+    <view class="bgview">
+        <wsf-rt-popup :itemList="itemList" ref="rtBubble" @click="itemClick"></wsf-rt-popup>
+
+        <!-- <view style="flex-direction: row;flex-wrap: wrap;">
 			
 			<view class="btn" @click="goH5Back()">
 				<text style="color: white;">控制h5返回</text>
@@ -27,309 +27,302 @@
 			</view>
 			
 		</view> -->
-			
-		 <CL-WebH5View 
-				v-if="!notFound"
-       class="webView"
-       ref="webView" 
-			 :url="url"
-			 :regular="reg"
-			 @onIntercept="intercept"
-			 @onProgress="showPross"
-			 @onMessage="showH5Data"
-			 @onStart="startLoading"
-			 @onEnd="loadDone"
-			 @onTitle="onTitle"
-			 @onConsole="onConsole"
-			 :jsdata="jsdata"
-			 @onError="loadError"
-			 :showloading="false"
-		  />
-			
-			<tui-msg type="warn" title="网页无法打开" desc="" color="#f74d54" v-if="notFound" class="err-box">
-				<!--自定义内容部分-->
-				<view class="err-content">{{descTips}}</view>
-				<!-- <tui-button type="green" width="400rpx" height="84rpx" bold margin="32rpx auto 0">主要操作</tui-button> -->
-				<tui-button type="gray-green" width="400rpx" height="84rpx" bold margin="32rpx auto" @tap="back">返回</tui-button>
-			</tui-msg>
-      
+
+        <CL-WebH5View v-if="!notFound" class="webView" ref="webView" :url="url" :regular="reg" @onIntercept="intercept"
+            @onProgress="showPross" @onMessage="showH5Data" @onStart="startLoading" @onEnd="loadDone" @onTitle="onTitle"
+            @onConsole="onConsole" :jsdata="jsdata" @onError="loadError" :showloading="false" />
+
+        <tui-msg type="warn" title="网页无法打开" desc="" color="#f74d54" v-if="notFound" class="err-box">
+            <!--自定义内容部分-->
+            <view class="err-content">{{descTips}}</view>
+            <!-- <tui-button type="green" width="400rpx" height="84rpx" bold margin="32rpx auto 0">主要操作</tui-button> -->
+            <tui-button type="gray-green" width="400rpx" height="84rpx" bold margin="32rpx auto" @tap="back">返回
+            </tui-button>
+        </tui-msg>
+
     </view>
-	
+
 </template>
 
 <script>
-	import thorui from "@/components/common/tui-clipboard/tui-clipboard.js"
-	import qrCode from '@/libs/weapp-qrcode.js';
-	import tui from '@/common/httpRequest'
-	let h5WebView = null;
-  let showLoading = null;
-	export default {
-		data() {
-			return {
-				progress: 0, //加载进度
-				url:"", //加载url
-				// url:"http://test.weisifang.com/", //加载url
-				reg:"", //设置拦截地址;(支持正则字符串)
-        //此组件内web采用固定的receiveAppData方法接收消息，注入的目的是为了
-        // 防止没加载web内未定义receiveAppData时候不报错，如果web内已经定义
-        // 过则此注入无效果
-        jsdata:"function receiveAppData(data){}", 
-        
-				// 右上角操作按钮
-        itemList: [{
-        		title: '复制地址',
-        		icon: 'link',
-						uni_code: 'copy_link'
-        	},
-        	{
-        		title: '刷新页面',
-        		icon: 'refresh',
-						uni_code: 'refresh_link'
-        	}
-        ],
-				
-				// 错误
-				notFound:false,
-				descTips:'刷新或重新进入'
-			}
-		},
-    onLoad(options) {
-			this.notFound = false
-			this.url = decodeURI(options.url)
-    	// #ifdef APP-PLUS
-    	
-    	// #endif
-    },
-    beforeCreate() {
-    },
-    onNavigationBarButtonTap(e) {
-			if(this.notFound){
-				return false;
-			}
-    	// this.helper.navBtns.handle(e)
-      this.$refs.rtBubble.toggle();
-    },
-		mounted() {
-			this.notFound = false
-      // #ifdef APP-PLUS
-			h5WebView = this.$refs.webView;
-      // #endif
-			
-		},
-		 onBackPress(options) {
-			  if (options.from === 'navigateBack') {
-				    return false;
-			   }
-			  this.goH5Back();
-		    return true;
-		 },  
-		methods: {
-			back(){
-				uni.navigateBack({
-				   delta: 1 // 返回的页面数
-				})
-			},
-			evaluateJavascript:function(){
-				//可直接调用h5中的js,或者执行自定义js;
-				// h5WebView.evaluateJavascript("document.title;",e=>{
-				// h5WebView.evaluateJavascript("layer.msg('hello');",e=>{
-				h5WebView.evaluateJavascript("console.log(JSON.stringify(window.app));",e=>{
-						console.log('evaluateJavascript',e)
-           uni.showModal({
-            content:e
-           })
-				});
-			},
-			onTitle:function(e){
-        console.log(e)
-				//监听 h5 title 变化;
-        uni.setNavigationBarTitle({
-        	title: e.detail || ''
-        });
-        if(e.detail == '网页无法打开'){
-          	this.descTips = this.url;
-          	this.notFound = true
+    import thorui from "@/components/common/tui-clipboard/tui-clipboard.js"
+    import qrCode from '@/libs/weapp-qrcode.js';
+    import tui from '@/common/httpRequest'
+    let h5WebView = null;
+    let showLoading = null;
+    export default {
+        data() {
+            return {
+                progress: 0, //加载进度
+                url: "", //加载url
+                // url:"http://test.weisifang.com/", //加载url
+                reg: "", //设置拦截地址;(支持正则字符串)
+                //此组件内web采用固定的receiveAppData方法接收消息，注入的目的是为了
+                // 防止没加载web内未定义receiveAppData时候不报错，如果web内已经定义
+                // 过则此注入无效果
+                jsdata: "function receiveAppData(data){}",
+
+                // 右上角操作按钮
+                itemList: [{
+                        title: '复制地址',
+                        icon: 'link',
+                        uni_code: 'copy_link'
+                    },
+                    {
+                        title: '刷新页面',
+                        icon: 'refresh',
+                        uni_code: 'refresh_link'
+                    }
+                ],
+
+                // 错误
+                notFound: false,
+                descTips: '刷新或重新进入'
+            }
+        },
+        onLoad(options) {
+            this.notFound = false
+            this.url = decodeURI(options.url)
+            // #ifdef APP-PLUS
+
+            // #endif
+        },
+        beforeCreate() {},
+        onNavigationBarButtonTap(e) {
+            if (this.notFound) {
+                return false;
+            }
+            // this.helper.navBtns.handle(e)
+            this.$refs.rtBubble.toggle();
+        },
+        mounted() {
+            this.notFound = false
+            // #ifdef APP-PLUS
+            h5WebView = this.$refs.webView;
+            // #endif
+
+        },
+        onBackPress(options) {
+            if (options.from === 'navigateBack') {
+                return false;
+            }
+            this.goH5Back();
+            return true;
+        },
+        methods: {
+            back() {
+                uni.navigateBack({
+                    delta: 1 // 返回的页面数
+                })
+            },
+            evaluateJavascript: function() {
+                //可直接调用h5中的js,或者执行自定义js;
+                // h5WebView.evaluateJavascript("document.title;",e=>{
+                // h5WebView.evaluateJavascript("layer.msg('hello');",e=>{
+                h5WebView.evaluateJavascript("console.log(JSON.stringify(window.app));", e => {
+                    console.log('evaluateJavascript', e)
+                    uni.showModal({
+                        content: e
+                    })
+                });
+            },
+            onTitle: function(e) {
+                console.log(e)
+                //监听 h5 title 变化;
+                uni.setNavigationBarTitle({
+                    title: e.detail || ''
+                });
+                if (e.detail == '网页无法打开') {
+                    this.descTips = this.url;
+                    this.notFound = true
+                }
+            },
+            onConsole: function(e) {
+                //获取h5调试数据;
+                console.log('onConsole', JSON.stringify(e));
+                // let detailStr = JSON.stringify(e.detail.message)
+                // if(detailStr.indexOf('receiveAppData is not defined') > -1){
+                // 	this.descTips = this.url;
+                // 	this.notFound = true
+                // }
+            },
+            //拦截回调事件
+            intercept: function(e) {
+                uni.showModal({
+                    content: JSON.stringify(e)
+                })
+            },
+
+            //开始加载
+            startLoading: function(e) {
+                this.showLoading = plus.nativeUI.showWaiting("加载中...");
+            },
+            //加载进度
+            showPross: function(e) {
+                if (!this.showLoading) {
+                    return false
+                }
+                this.progress = e.detail
+                this.showLoading.setTitle("加载中..." + e.detail + '%');
+                if (e.detail === 80) {
+                    this.sayHello()
+                }
+                if (e.detail === 100) {
+                    plus.nativeUI.closeWaiting();
+                }
+            },
+            //加载失败
+            loadError: function(e) {
+                console.log('加载失败', e)
+                this.descTips = this.url;
+                this.notFound = true
+                this.showLoading.setTitle("加载失败");
+                plus.nativeUI.closeWaiting();
+            },
+            //加载完成;
+            loadDone: function(e) {
+                //加载完成;
+                plus.nativeUI.closeWaiting();
+                this.sayHello()
+            },
+
+            //控制h5的返回;
+            goH5Back: function() {
+                h5WebView.goBack(state => {
+                    if (state == false) {
+                        uni.navigateBack({
+                            delta: 1 // 返回的页面数
+                        })
+                    }
+                });
+            },
+            //手动刷新
+            reloadH5: function() {
+                h5WebView.reload();
+            },
+            //获取ua
+            getUserAgent: function() {
+                h5WebView.getUserAgent(result => {
+                    uni.showModal({
+                        content: result
+                    })
+                });
+            },
+            //设置ua
+            setUserAgent: function() {
+                //修改android ua时,不能修改平台标识, 需把android加上,因为h5 那边发送消息,是通过ua来判断平台的,
+                switch (uni.getSystemInfoSync().platform) {
+                    case 'android':
+                        console.log('运行Android上')
+                        h5WebView.setUserAgent("hhhhh1asasasas_android");
+                        break;
+                    case 'ios':
+                        console.log('运行iOS上')
+                        h5WebView.setUserAgent("hhhhh1asasasas_ios");
+                        break;
+                    default:
+                        console.log('运行在开发者工具上')
+                        break;
+                }
+            },
+            //收到h5的数据;
+            showH5Data: function(info) {
+                //显示收到的消息;
+                uni.showToast({
+                    // #ifndef MP-ALIPAY
+                    duration: 2500,
+                    // #endif
+                    title: JSON.stringify(info.detail) || '收到信息~',
+                    icon: 'none'
+                })
+            },
+            sayHello: function() {
+                this.sendDataInfo({
+                    msg: 'hello'
+                })
+            },
+            //发送数据到h5;
+            sendDataInfo: function(json) {
+                let obj = Object.assign({}, json || {}, {
+                    'source': 'weisifang.com',
+                    'type': 'app'
+                });
+                //发送消息到h5页面; 要求H5页面必须 定义函数 function receiveAppData(data){}
+                h5WebView.sendMessage(JSON.stringify(obj));
+            },
+            itemClick(e) {
+                // console.log(e)
+                // 复制url链接
+                if (e.uni_code == 'copy_link') {
+                    h5WebView.evaluateJavascript("window.location.href;", e => {
+                        let url = e.replace(/\"/g, "");
+                        thorui.getClipboardData(url, (res) => {
+                            // #ifdef H5 || MP-ALIPAY
+                            if (res) {
+                                tui.toast("复制成功")
+                            } else {
+                                tui.toast("复制失败")
+                            }
+                            // #endif
+                        }, e)
+                    });
+                    return false;
+                }
+                // 刷新页面
+                if (e.uni_code == 'refresh_link') {
+                    this.notFound = false
+                    h5WebView.reload();
+                    // 或者
+                    // h5WebView.evaluateJavascript("window.location.reload();",e=>{
+                    // });
+                    return false;
+                }
+            }
         }
-			},
-			onConsole:function(e){
-				//获取h5调试数据;
-				console.log('onConsole',JSON.stringify(e));
-				// let detailStr = JSON.stringify(e.detail.message)
-				// if(detailStr.indexOf('receiveAppData is not defined') > -1){
-				// 	this.descTips = this.url;
-				// 	this.notFound = true
-				// }
-			},
-			//拦截回调事件
-			intercept:function(e){
-				uni.showModal({
-					content:JSON.stringify(e)
-				})
-			},
-      
-      //开始加载
-      startLoading:function(e){
-        this.showLoading = plus.nativeUI.showWaiting("加载中...");
-      },
-      //加载进度
-      showPross:function(e){
-        if(!this.showLoading){
-          return false
-        }
-        this.progress = e.detail
-        this.showLoading.setTitle("加载中..."+e.detail+'%');
-        if(e.detail === 80){
-          this.sayHello()
-        }
-        if(e.detail === 100){
-          plus.nativeUI.closeWaiting();
-        }
-      },
-      //加载失败
-      loadError:function(e){
-        console.log('加载失败',e)
-				this.descTips = this.url;
-				this.notFound = true
-        this.showLoading.setTitle("加载失败");
-        plus.nativeUI.closeWaiting();
-      },
-			//加载完成;
-			loadDone:function(e){
-				 //加载完成;
-         plus.nativeUI.closeWaiting();
-         this.sayHello()
-			},
-			
-			//控制h5的返回;
-			goH5Back:function(){
-				 h5WebView.goBack(state=>{
-					 if(state==false)
-					 {
-						 uni.navigateBack({
-                delta: 1 // 返回的页面数
-						 })
-					 }
-				 });
-			},
-			//手动刷新
-			reloadH5:function(){
-				h5WebView.reload();
-			},
-			//获取ua
-			getUserAgent:function(){
-				h5WebView.getUserAgent(result=>{
-					uni.showModal({
-						content:result
-					})
-				});
-			},
-			//设置ua
-			setUserAgent:function(){
-				//修改android ua时,不能修改平台标识, 需把android加上,因为h5 那边发送消息,是通过ua来判断平台的,
-				switch(uni.getSystemInfoSync().platform){
-				    case 'android':
-				       console.log('运行Android上')
-					   h5WebView.setUserAgent("hhhhh1asasasas_android");
-				       break;
-				    case 'ios':
-				       console.log('运行iOS上')
-					   h5WebView.setUserAgent("hhhhh1asasasas_ios");
-				       break;
-				    default:
-				       console.log('运行在开发者工具上')
-				       break;
-				}
-			},
-			//收到h5的数据;
-			showH5Data: function(info) {
-				//显示收到的消息;
-				uni.showToast({
-					// #ifndef MP-ALIPAY
-					duration: 2500,
-					// #endif
-					title: JSON.stringify(info.detail) || '收到信息~',
-					icon: 'none'
-				})
-			},
-			sayHello: function(){
-        this.sendDataInfo({msg:'hello'})
-      },
-			//发送数据到h5;
-			sendDataInfo: function(json) {
-        let obj = Object.assign({}, json || {},{'source':'weisifang.com','type':'app'});
-				//发送消息到h5页面; 要求H5页面必须 定义函数 function receiveAppData(data){}
-				h5WebView.sendMessage(JSON.stringify(obj));
-			},
-      itemClick(e) {
-        // console.log(e)
-				// 复制url链接
-				if(e.uni_code == 'copy_link'){
-					h5WebView.evaluateJavascript("window.location.href;",e=>{
-						 let url = e.replace(/\"/g, "");
-					   thorui.getClipboardData(url, (res) => {
-					   	// #ifdef H5 || MP-ALIPAY
-					   	if (res) {
-					   		tui.toast("复制成功")
-					   	} else {
-					   		tui.toast("复制失败")
-					   	}
-					   	// #endif
-					   },e)
-					});
-					return false;
-				}
-				// 刷新页面
-				if(e.uni_code == 'refresh_link'){
-					this.notFound = false
-					h5WebView.reload();
-					// 或者
-					// h5WebView.evaluateJavascript("window.location.reload();",e=>{
-					// });
-					return false;
-				}
-			}
-		}
-	}
+    }
 </script>
 
 <style>
-	.bgview{
-		position: fixed;
-		left: 0;
-		top: 0;
-		bottom: 20px;
-		right: 0;
-	}
-	
-	.btn{
-		
-		align-items: center;
-		justify-content: center;
-		background-color: #ffaa00;
-		color: white;
-		font-size: 24rpx;
-		margin-left: 20rpx;
-		margin-right: 20rpx;
-		margin-bottom: 10rpx;
-		padding: 20rpx;
-	}
-	.webView {
-		flex: 1;
-		width: 750upx;
-	}
-	.err-box{
-		flex: 1;
-		width: 750upx;
-	}
-	.err-content{
-		width: 680upx;
-		height: 200upx;
-		text-align: center;
-		align-items: center;
-		justify-content: center;
-		flex-direction: column;
-		border-top: 2rpx solid #ffaa00;
-		border-bottom: 2rpx solid #ffaa00;
-		margin: 20rpx auto;
-	}
+    .bgview {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 20px;
+        right: 0;
+    }
+
+    .btn {
+
+        align-items: center;
+        justify-content: center;
+        background-color: #ffaa00;
+        color: white;
+        font-size: 24rpx;
+        margin-left: 20rpx;
+        margin-right: 20rpx;
+        margin-bottom: 10rpx;
+        padding: 20rpx;
+    }
+
+    .webView {
+        flex: 1;
+        width: 750upx;
+    }
+
+    .err-box {
+        flex: 1;
+        width: 750upx;
+    }
+
+    .err-content {
+        width: 680upx;
+        height: 200upx;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border-top: 2rpx solid #ffaa00;
+        border-bottom: 2rpx solid #ffaa00;
+        margin: 20rpx auto;
+    }
 </style>

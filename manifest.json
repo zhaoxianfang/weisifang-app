@@ -159,7 +159,8 @@
                 }
             },
             "splashscreen" : {
-                "useOriginalMsgbox" : true
+                "useOriginalMsgbox" : true,
+                "androidStyle" : "common"
             }
         },
         "nvueCompiler" : "uni-app",

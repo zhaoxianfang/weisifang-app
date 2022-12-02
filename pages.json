@@ -1,269 +1,262 @@
 {
-	"pages": [{
-			"path": "pages/tabbar/index/index",
-			"style": {
-				// #ifdef H5
-				"titleNView": false,
-				// #endif
-				"navigationBarTitleText": "威四方",
-				"app-plus": {
-					"bounce": "vertical",
-					"titleNView": {
-            "buttons": [{
-              "id": "1",
-              "uni_code": "scan",
-              "float": "right",
-              "fontSize": "22px",
-              "fontSrc": "/static/fonts/iconfont.ttf",// 也可以使用字体icon
-              "text": "\ue61c",
-              "width": "auto"
-            }]
-          }
-				}
-			}
-		}, {
-			"path": "pages/tabbar/work/work",
-			"style": {
-				// #ifdef H5
-				"titleNView": false,
-				// #endif
-				"navigationBarTitleText": "应用",
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "pages/tabbar/my/my",
-			"style": {
-				// #ifdef MP-ALIPAY
-				"navigationBarTitleText": "",
-				// #endif
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 50,
-				"navigationStyle": "custom",
-				"app-plus": {
-					"titleNView": false,
-					"bounce": "vertical"
-				},
-				"mp-alipay": {
-					"allowsBounceVertical": "YES",
-					"transparentTitle": "always",
-					"titlePenetrate": "YES"
-				}
-			}
-		},
-		{
-			"path": "components/app-upgrade/views/app-upgrade",
-			"style": {
-				// #ifdef APP-PLUS
-				"navigationStyle": "custom",
-				// #endif
-				"navigationBarTitleText": "APP更新",
-				"app-plus": {
-					"background": "transparent",
-					"webviewBGTransparent": true, //webview的背景是否透明//配合background属性防止跳转闪白
-					"popGesture": "none" //禁止侧滑关闭（ios）
-				}
-			}
-		},{
-			"path": "pages/common/login/login",
-			"style": {
-				"navigationBarTitleText": "登录",
-				"enablePullDownRefresh": false,
-        "titleNView": false,
-        "navigationStyle": "custom"
-			}
-		},{
-			"path": "pages/common/login/register",
-			"style": {
-				"navigationBarTitleText": "注册",
-				"enablePullDownRefresh": false,
-        "titleNView": false,
-        "navigationStyle": "custom"
-			}
-		},{
-			"path": "pages/common/login/forget",
-			"style": {
-				"navigationBarTitleText": "忘记密码",
-				"enablePullDownRefresh": false,
-        "titleNView": false,
-        "navigationStyle": "custom"
-			}
-		},{
-        "path" : "pages/common/webview/webview",
-        "style" : {
-            "navigationBarTitleText": "",
-            "enablePullDownRefresh": false,
-            "app-plus": {
-            	"titleNView": {
-                "buttons": [{
-                  "id": "2",
-                  "uni_code": "webview_menu",
-                  "float": "right",
-                  "fontSize": "22px",
-                  "fontSrc": "/static/fonts/iconfont.ttf",// 也可以使用字体icon
-                  "text": "\ue704",
-                  "width": "auto"
-                }]
-              }
+    "pages": [{
+            "path": "pages/tabbar/index/index",
+            "style": {
+                // #ifdef H5
+                "titleNView": false,
+                // #endif
+                "navigationBarTitleText": "威四方",
+                "app-plus": {
+                    "bounce": "vertical",
+                    "titleNView": {
+                        "buttons": [{
+                            "id": "1",
+                            "uni_code": "scan",
+                            "float": "right",
+                            "fontSize": "22px",
+                            "fontSrc": "/static/fonts/iconfont.ttf", // 也可以使用字体icon
+                            "text": "\ue61c",
+                            "width": "auto"
+                        }]
+                    }
+                }
             }
-        }
-      },{
-				"path" : "pages/common/msg/msg",
-				"style" : {
-						"navigationBarTitleText": "识别结果",
-						"enablePullDownRefresh": false
-				}
-      },{
-            "path" : "pages/common/setting/setting",
-            "style" :                                                                                    
-            {
+        }, {
+            "path": "pages/tabbar/work/work",
+            "style": {
+                // #ifdef H5
+                "titleNView": false,
+                // #endif
+                "navigationBarTitleText": "应用",
+                "app-plus": {
+                    "bounce": "vertical"
+                }
+            }
+        }, {
+            "path": "pages/tabbar/my/my",
+            "style": {
+                // #ifdef MP-ALIPAY
+                "navigationBarTitleText": "",
+                // #endif
+                "navigationBarBackgroundColor": "#fff",
+                "navigationBarTextStyle": "black",
+                "enablePullDownRefresh": true,
+                "onReachBottomDistance": 50,
+                "navigationStyle": "custom",
+                "app-plus": {
+                    "titleNView": false,
+                    "bounce": "vertical"
+                },
+                "mp-alipay": {
+                    "allowsBounceVertical": "YES",
+                    "transparentTitle": "always",
+                    "titlePenetrate": "YES"
+                }
+            }
+        },
+        {
+            "path": "components/app-upgrade/views/app-upgrade",
+            "style": {
+                // #ifdef APP-PLUS
+                "navigationStyle": "custom",
+                // #endif
+                "navigationBarTitleText": "APP更新",
+                "app-plus": {
+                    "background": "transparent",
+                    "webviewBGTransparent": true, //webview的背景是否透明//配合background属性防止跳转闪白
+                    "popGesture": "none" //禁止侧滑关闭（ios）
+                }
+            }
+        }, {
+            "path": "pages/common/login/login",
+            "style": {
+                "navigationBarTitleText": "登录",
+                "enablePullDownRefresh": false,
+                "titleNView": false,
+                "navigationStyle": "custom"
+            }
+        }, {
+            "path": "pages/common/login/register",
+            "style": {
+                "navigationBarTitleText": "注册",
+                "enablePullDownRefresh": false,
+                "titleNView": false,
+                "navigationStyle": "custom"
+            }
+        }, {
+            "path": "pages/common/login/forget",
+            "style": {
+                "navigationBarTitleText": "忘记密码",
+                "enablePullDownRefresh": false,
+                "titleNView": false,
+                "navigationStyle": "custom"
+            }
+        }, {
+            "path": "pages/common/webview/webview",
+            "style": {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+                "app-plus": {
+                    "titleNView": {
+                        "buttons": [{
+                            "id": "2",
+                            "uni_code": "webview_menu",
+                            "float": "right",
+                            "fontSize": "22px",
+                            "fontSrc": "/static/fonts/iconfont.ttf", // 也可以使用字体icon
+                            "text": "\ue704",
+                            "width": "auto"
+                        }]
+                    }
+                }
+            }
+        }, {
+            "path": "pages/common/msg/msg",
+            "style": {
+                "navigationBarTitleText": "识别结果",
+                "enablePullDownRefresh": false
+            }
+        }, {
+            "path": "pages/common/setting/setting",
+            "style": {
                 "navigationBarTitleText": "设置",
                 "enablePullDownRefresh": false
             }
-            
-        },{
-            "path" : "pages/common/setting/permissions",
-            "style" :                                                                                    
-            {
+
+        }, {
+            "path": "pages/common/setting/permissions",
+            "style": {
                 "navigationBarTitleText": "权限设置",
                 "enablePullDownRefresh": false
             }
-            
-        }
-        ,{
-            "path" : "pages/common/setting/test",
-            "style" :                                                                                    
-            {
+
+        }, {
+            "path": "pages/common/setting/test",
+            "style": {
                 "navigationBarTitleText": "测试",
                 "enablePullDownRefresh": false
             }
-            
-        }
-        ,{
-            "path" : "pages/common/log/log",
-            "style" :                                                                                    
-            {
+
+        }, {
+            "path": "pages/common/log/log",
+            "style": {
                 "navigationBarTitleText": "更新日志",
                 "enablePullDownRefresh": false
             }
-            
+
         }
     ],
-	"preloadRule": {
-		"pages/tabbar/work/work": {
-			"network": "all",
-			"packages": ["pagesA"]
-		}
-	},
-	"subPackages": [{
-		"root": "pagesA",
-		"pages": [{
-			"path": "wms/index/index",
-			"style": {
-				// #ifdef H5
-				"titleNView": false,
-				// #endif
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"backgroundColorTop": "#F7F7F7",
-				"backgroundColorBottom": "#F7F7F7",
-				"navigationBarTitleText": "仓库管理",
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 50
-			}
-		}, {
-			"path": "picture/index/index",
-			"style": {
-				"navigationBarTitleText": "我的相册",
-				"enablePullDownRefresh": false,
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "picture/index/detail",
-			"style": {
-				"navigationBarTitleText": "相片列表详情",
-				"enablePullDownRefresh": false,
-        "onReachBottomDistance": 250
-			}
-		}, {
-			"path": "picture/index/upload",
-			"style": {
-				"navigationBarTitleText": "上传图片",
-				"enablePullDownRefresh": false
-			}
-		}, {
-			"path": "docs/index/index",
-			"style": {
-				"navigationBarTitleText": "文档",
-				"enablePullDownRefresh": false
-			}
-		}, {
-			"path": "calendar/index/index",
-			"style": {
-				"navigationBarTitleText": "备忘录",
-				"enablePullDownRefresh": false
-			}
-		}, {
-			"path": "files/index/index",
-			"style": {
-				"navigationBarTitleText": "我的文件",
-				"enablePullDownRefresh": false
-			}
-		} ,{
-      "path" : "ocr/index",
-      "style" : {
-        "navigationBarTitleText": "OCR文字识别",
-        "enablePullDownRefresh": false
-      }
+    "preloadRule": {
+        "pages/tabbar/work/work": {
+            "network": "all",
+            "packages": ["pagesA"]
+        }
+    },
+    "subPackages": [{
+        "root": "pagesA",
+        "pages": [{
+            "path": "wms/index/index",
+            "style": {
+                // #ifdef H5
+                "titleNView": false,
+                // #endif
+                "navigationBarBackgroundColor": "#fff",
+                "navigationBarTextStyle": "black",
+                "backgroundColorTop": "#F7F7F7",
+                "backgroundColorBottom": "#F7F7F7",
+                "navigationBarTitleText": "仓库管理",
+                "enablePullDownRefresh": true,
+                "onReachBottomDistance": 50
+            }
+        }, {
+            "path": "picture/index/index",
+            "style": {
+                "navigationBarTitleText": "我的相册",
+                "enablePullDownRefresh": false,
+                "app-plus": {
+                    "bounce": "vertical"
+                }
+            }
+        }, {
+            "path": "picture/index/detail",
+            "style": {
+                "navigationBarTitleText": "相片列表详情",
+                "enablePullDownRefresh": false,
+                "onReachBottomDistance": 250
+            }
+        }, {
+            "path": "picture/index/upload",
+            "style": {
+                "navigationBarTitleText": "上传图片",
+                "enablePullDownRefresh": false
+            }
+        }, {
+            "path": "docs/index/index",
+            "style": {
+                "navigationBarTitleText": "文档",
+                "enablePullDownRefresh": false
+            }
+        }, {
+            "path": "calendar/index/index",
+            "style": {
+                "navigationBarTitleText": "备忘录",
+                "enablePullDownRefresh": false
+            }
+        }, {
+            "path": "files/index/index",
+            "style": {
+                "navigationBarTitleText": "我的文件",
+                "enablePullDownRefresh": false
+            }
+        }, {
+            "path": "ocr/index",
+            "style": {
+                "navigationBarTitleText": "OCR文字识别",
+                "enablePullDownRefresh": false
+            }
+        }]
+    }, {
+        "root": "pagesB",
+        "pages": []
+    }],
+    "easycom": {
+        "autoscan": true,
+        "custom": {
+            "tui-(.*)": "@/components/thorui/tui-$1/tui-$1.vue",
+            "wsf-(.*)": "@/components/weisifang/wsf-$1/wsf-$1.vue"
+        }
+    },
+    "globalStyle": {
+        "backgroundTextStyle": "dark",
+        "navigationBarBackgroundColor": "#5677FC",
+        "navigationBarTitleText": "威四方",
+        "navigationBarTextStyle": "white",
+        "backgroundColor": "#fafafa",
+        "backgroundColorTop": "#fafafa",
+        "backgroundColorBottom": "#fafafa"
+    },
+    "tabBar": {
+        "color": "#666666",
+        "selectedColor": "#5677FC",
+        "backgroundColor": "#FFFFFF",
+        "list": [{
+                "pagePath": "pages/tabbar/index/index",
+                "text": "首页",
+                "iconPath": "static/images/tabbar/home_gray.png",
+                "selectedIconPath": "static/images/tabbar/home_active.png"
+            },
+            {
+                "pagePath": "pages/tabbar/work/work",
+                "text": "应用",
+                "iconPath": "static/images/tabbar/work_gray.png",
+                "selectedIconPath": "static/images/tabbar/work_active.png"
+            },
+            {
+                "pagePath": "pages/tabbar/my/my",
+                "text": "我的",
+                "iconPath": "static/images/tabbar/user_gray.png",
+                "selectedIconPath": "static/images/tabbar/user_active.png"
+            }
+        ]
     }
-    ]
-	}, {
-		"root": "pagesB",
-		"pages": []
-	}],
-	"easycom": {
-		"autoscan": true,
-		"custom": {
-			"tui-(.*)": "@/components/thorui/tui-$1/tui-$1.vue",
-			"wsf-(.*)": "@/components/weisifang/wsf-$1/wsf-$1.vue"
-		}
-	},
-	"globalStyle": {
-		"backgroundTextStyle": "dark",
-		"navigationBarBackgroundColor": "#5677FC",
-		"navigationBarTitleText": "威四方",
-		"navigationBarTextStyle": "white",
-		"backgroundColor": "#fafafa",
-		"backgroundColorTop": "#fafafa",
-		"backgroundColorBottom": "#fafafa"
-	},
-	"tabBar": {
-		"color": "#666666",
-		"selectedColor": "#5677FC",
-		"backgroundColor": "#FFFFFF",
-		"list": [{
-				"pagePath": "pages/tabbar/index/index",
-				"text": "首页",
-				"iconPath": "static/images/tabbar/home_gray.png",
-				"selectedIconPath": "static/images/tabbar/home_active.png"
-			},
-			{
-				"pagePath": "pages/tabbar/work/work",
-				"text": "应用",
-				"iconPath": "static/images/tabbar/work_gray.png",
-				"selectedIconPath": "static/images/tabbar/work_active.png"
-			},
-			{
-				"pagePath": "pages/tabbar/my/my",
-				"text": "我的",
-				"iconPath": "static/images/tabbar/user_gray.png",
-				"selectedIconPath": "static/images/tabbar/user_active.png"
-			}
-		]
-	}
 }

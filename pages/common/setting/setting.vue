@@ -1,196 +1,142 @@
 <template>
-	<view class="container">
-		<tui-list-cell :hover="false" :unlined="true">
-			<view class="tui-message-item">
-				<view>
-					<view class="tui-title">开启消息推送</view>
-					<view class="tui-sub-title">开启后，可以第一时间收到订阅的消息哦！</view>
-				</view>
-				<tui-button type="danger" width="140rpx" height="60rpx" :size="24" @click="toAuth">前往设置</tui-button>
-			</view>
-		</tui-list-cell>
-		<view class="tui-top">
-			<tui-list-cell @click="href(2)">
-				<view class="tui-message-item">
-					<view class="tui-title-box">
-						<view class="tui-icon-box tui-bg-danger">
-							<tui-icon name="kefu" color="#fff" :size="26"></tui-icon>
-						</view>
-						<view class="tui-title">客服消息</view>
-					</view>
-					<tui-badge :position="false" type="red" :scale="false">1</tui-badge>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell @click="href(3)">
-				<view class="tui-message-item">
-					<view class="tui-title-box">
-						<view class="tui-icon-box tui-bg-warning">
-							<tui-icon name="transport" color="#fff" :size="28"></tui-icon>
-						</view>
-						<view class="tui-title">发货通知</view>
-					</view>
-					<tui-badge :position="false" type="red" :scale="false">12</tui-badge>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell @click="href(4)">
-				<view class="tui-message-item">
-					<view class="tui-title-box">
-						<view class="tui-icon-box tui-bg-pink">
-							<tui-icon name="unreceive" color="#fff" :size="26"></tui-icon>
-						</view>
-						<view class="tui-title">收货通知</view>
-					</view>
-					<tui-badge :position="false" type="red" :scale="false" v-if="false">1</tui-badge>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell @click="href(5)">
-				<view class="tui-message-item">
-					<view class="tui-title-box">
-						<view class="tui-icon-box tui-bg-success">
-							<tui-icon name="wallet" color="#fff" :size="26"></tui-icon>
-						</view>
-						<view class="tui-title">付款通知</view>
-					</view>
-					<tui-badge :position="false" type="red" :scale="false">8</tui-badge>
-				</view>
-			</tui-list-cell>
-			<tui-list-cell :unlined="true" @click="toTest">
-				<view class="tui-message-item">
-					<view class="tui-title-box">
-						<view class="tui-icon-box tui-bg-blue">
-							<tui-icon name="message" color="#fff" :size="30"></tui-icon>
-						</view>
-						<view class="tui-title">系统通知(测试页面)</view>
-					</view>
-					<tui-badge :position="false" type="red" :scale="false">10</tui-badge>
-				</view>
-			</tui-list-cell>
-		</view>
-    <view class="tui-btn-box">
-      <tui-button type="danger" plain @click="showActionSheet=true">退出登录</tui-button>
+    <view class="container">
+        <view class="tui-top">
+            <tui-list-cell :hover="false" :unlined="true">
+                <view class="tui-notice-item">
+                    <view class="tui-list-item_title">消息通知</view>
+                    <wsf-switch @change="openPushChange" :checked="notifyPushStatus" :disabled="notifyPushStatus"
+                        color="#19be6b" class="tui-scale-small"></wsf-switch>
+                </view>
+            </tui-list-cell>
+            <tui-list-cell :hover="false">
+                <view class="tui-notice-item">
+                    <view class="tui-list-item_title">获取手机定位</view>
+                    <wsf-switch @change="openLocationChange" :checked="locationStatus" :disabled="locationStatus"
+                        color="#19be6b" class="tui-scale-small"></wsf-switch>
+                </view>
+            </tui-list-cell>
+        </view>
+        <view class="tui-top">
+            <tui-list-cell :hover="false" :arrow="false" @click="changeIcon">
+                <view class="tui-notice-item">
+                    <view class="tui-list-item_title">切换图标</view>
+                    <view class="tui-right">点击切换</view>
+                </view>
+            </tui-list-cell>
+        </view>
+        <view class="tui-top">
+            <tui-list-cell :hover="false" :arrow="true" @click="toSetting">
+                <view class="tui-notice-item">
+                    <view class="tui-list-item_title">其他应用权限</view>
+                    <view class="tui-right">去设置</view>
+                </view>
+            </tui-list-cell>
+        </view>
     </view>
-    
-    <tui-actionsheet :show="showActionSheet" tips="退出登录会清除您的登录信息，确认退出吗？" :item-list="itemList" :mask-closable="true" color="#9a9a9a"
-     :size="26" :is-cancel="true" @click="itemClick" @cancel="closeActionSheet"></tui-actionsheet>
-  </view>
 </template>
 
 <script>
-	export default {
-		data() {
-			return {
-        // 退出
-        showActionSheet : false,
-        itemList : [{
-          text: "退出登录",
-          color: "#E3302D"
-        }],
-      };
-		},
-		methods: {
-      closeActionSheet: function() {
-      	this.showActionSheet = false
-      },
-      itemClick: function(e) {
-      	let index = e.index;
-      	this.closeActionSheet();
-        if(index < 0){
-          this.$store.dispatch('logout',true)
-          this.tui.toast('退出成功', 2000);
-          // 关闭所有页面，跳转到登录页面。
-          uni.reLaunch({
-            url: '/pages/common/login/login'
-          });
+    const notify = uni.requireNativePlugin('Ba-Notify')
+    import baChangeIcon from '@/js_sdk/weisifang/baChangeIcon.js'
+    export default {
+        data() {
+            return {
+                notifyPushStatus: false, // 系统消息通知（推送权限）
+                locationStatus: false, // 获取定位
+                baIconIndex: 0,
+            };
+        },
+        created() {
+
+        },
+        onShow() {
+            this.init();
+        },
+        methods: {
+            init() {
+                this.isNotifyEnabled();
+                this.isOpenLocation()
+            },
+            // 开启消息通知
+            openPushChange: function(e) {
+                if (!this.notifyPushStatus) {
+                    this.goSetNotify();
+                }
+            },
+            // 判断是否开启消息推送
+            isNotifyEnabled() { //是否打开通知权限
+                notify.isNotifyEnabled((res) => {
+                    console.log(res)
+                    this.notifyPushStatus = res.isNotifyEnabled ? true : false
+                });
+            },
+            isOpenLocation() {
+                this.helper.permissions.requestPermission(['android.permission.ACCESS_FINE_LOCATION'], function(
+                    status) {
+                    console.log(status)
+                })
+            },
+            goSetNotify() { //跳转到通知设置界面
+                notify.goSetNotify();
+            },
+            // 切换APP图标
+            changeIcon() {
+                baChangeIcon.getCurrentSer((index) => {
+                    this.baIconIndex = index
+
+                    if (this.baIconIndex < 5) {
+                        this.baIconIndex++
+                    } else {
+                        this.baIconIndex = 0
+                    }
+                    baChangeIcon.change(this.baIconIndex)
+                })
+
+            },
+            // 开启定位
+            async openLocationChange(e) {
+                this.helper.permissions.requestPermission(['android.permission.ACCESS_FINE_LOCATION'])
+            },
+            toSetting() {
+                this.helper.permissions.openSetting('android.settings.APPLICATION_DETAILS_SETTINGS') // app 设置页面
+            }
         }
-      },
-			href(type) {
-				if(type==1){
-					this.tui.href('../notice/notice');
-				}else{
-					this.tui.toast("功能开发中~")
-				}
-			},
-      toTest(){
-        this.tui.href('./test');
-      },
-      toAuth(){
-        this.tui.href('./permissions');
-      }
-		}
-	};
+    };
 </script>
 
-<style lang="scss">
-	.container {
-		padding:20rpx 0 48rpx;
+<style lang="scss" scoped>
+    .container {
+        padding-bottom: 48rpx;
 
-		.tui-message-item {
-			width: 100%;
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			
-			box-sizing: border-box;
+        .tui-top {
+            margin-top: 20rpx;
+        }
 
-			.tui-title {
-				font-size: $uni-font-size-lg;
-			}
+        .tui-notice-item {
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: $uni-font-size-lg;
 
-			.tui-sub-title {
-				font-size: $uni-font-size-sm;
-				color: $uni-text-color-grey;
-				padding-top: 4rpx;
-			}
+            .tui-list-item_title {
+                display: flex;
+                align-items: center;
+            }
 
-			.tui-title-box {
-				display: flex;
-				align-items: center;
-				justify-content: center;
+            .tui-scale-small {
+                transform: scale(0.8);
+                transform-origin: 100% center;
+            }
+        }
+    }
 
-				.tui-icon-box {
-					width: 88rpx;
-					height: 88rpx;
-					color: $uni-text-color-inverse;
-					border-radius: $uni-border-radius-lg;
-					display: flex;
-					align-items: center;
-					justify-content: center;
-					margin-right: $uni-spacing-row-base;
-				}
 
-				.tui-bg-danger {
-					background-color: $uni-color-error;
-				}
-
-				.tui-bg-warning {
-					background-color: $uni-color-warning;
-				}
-
-				.tui-bg-success {
-					background-color: $uni-color-success;
-				}
-
-				.tui-bg-primary {
-					background-color: $uni-color-primary;
-				}
-
-				.tui-bg-pink {
-					background-color: $uni-color-pink;
-				}
-
-				.tui-bg-blue {
-					background-color: $uni-color-primary;
-				}
-			}
-		}
-
-		.tui-top {
-			margin-top: 20rpx;
-		}
-	}
-  .tui-btn-box {
-    background-color: #fff;
-  	margin-top: 80rpx;
-    padding: 20rpx;
-  }
+    .tui-right {
+        margin-left: auto;
+        margin-right: 34rpx;
+        font-size: 26rpx;
+        color: #999;
+    }
 </style>
