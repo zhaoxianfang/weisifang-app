@@ -32,7 +32,7 @@
             @onProgress="showPross" @onMessage="showH5Data" @onStart="startLoading" @onEnd="loadDone" @onTitle="onTitle"
             @onConsole="onConsole" :jsdata="jsdata" @onError="loadError" :showloading="false" />
 
-        <tui-msg type="warn" title="网页无法打开" desc="" color="#f74d54" v-if="notFound" class="err-box">
+        <tui-msg type="warn" title="提示" desc="" color="#f74d54" v-if="notFound" class="err-box">
             <!--自定义内容部分-->
             <view class="err-content">{{descTips}}</view>
             <!-- <tui-button type="green" width="400rpx" height="84rpx" bold margin="32rpx auto 0">主要操作</tui-button> -->
@@ -56,7 +56,7 @@
                 progress: 0, //加载进度
                 url: "", //加载url
                 // url:"http://test.weisifang.com/", //加载url
-                reg: "", //设置拦截地址;(支持正则字符串)
+                reg: "", //设置拦截地址;reg="https://www.baidu.com/" 或正则字符串reg="^https://www.(baidu|hao123).com/$",需进行全匹配
                 //此组件内web采用固定的receiveAppData方法接收消息，注入的目的是为了
                 // 防止没加载web内未定义receiveAppData时候不报错，如果web内已经定义
                 // 过则此注入无效果
@@ -82,7 +82,8 @@
         },
         onLoad(options) {
             this.notFound = false
-            this.url = decodeURI(options.url)
+            let open_url = decodeURI(options.url)
+            this.url = this.customInterceptUrl(open_url) ? '' : open_url;
             // #ifdef APP-PLUS
 
             // #endif
@@ -96,7 +97,7 @@
             this.$refs.rtBubble.toggle();
         },
         mounted() {
-            this.notFound = false
+            this.customInterceptUrl(this.url);
             // #ifdef APP-PLUS
             h5WebView = this.$refs.webView;
             // #endif
@@ -114,6 +115,23 @@
                 uni.navigateBack({
                     delta: 1 // 返回的页面数
                 })
+            },
+            // 自定义拦截url,和组件无关,被拦截的返回 true 否则返回 false
+            customInterceptUrl(open_url = '') {
+                if (open_url == '' || open_url == undefined) {
+                    return true;
+                }
+                var strRegex = "^(http|https)://[0-9a-zA-Z_-]{0,}.(qq|weixin|alipay).(com|cn)";
+
+                var reg = new RegExp(strRegex);
+                if (reg.test(open_url)) {
+                    // 拦截 禁止加载此url
+                    this.notFound = true;
+                    this.descTips = '请使用微信、QQ或支付宝扫码！'
+                    return true;
+                }
+                this.notFound = false;
+                return false;
             },
             evaluateJavascript: function() {
                 //可直接调用h5中的js,或者执行自定义js;
@@ -148,6 +166,7 @@
             },
             //拦截回调事件
             intercept: function(e) {
+                console.log('拦截回调', e)
                 uni.showModal({
                     content: JSON.stringify(e)
                 })
