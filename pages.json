@@ -103,8 +103,8 @@
                             "uni_code": "webview_menu",
                             "float": "right",
                             "fontSize": "22px",
-                            "fontSrc": "/static/fonts/iconfont.ttf", // 也可以使用字体icon
-                            "text": "\ue704",
+                            "fontSrc": "/static/fonts/iconfont.ttf", // 也可以使用字体icon uni-app
+                            "text": "\ue8aa",
                             "width": "auto"
                         }]
                     }
