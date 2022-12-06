@@ -5,7 +5,7 @@
 const location = uni.requireNativePlugin('Ba-Location')
 const minTimeMs = 30
 const minDistanceM = 1
-import helper from './helper.js'
+import helper from '../weisifang/helper.js'
 // #endif
 
 const baLocation = {

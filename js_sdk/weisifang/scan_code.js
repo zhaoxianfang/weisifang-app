@@ -1,6 +1,6 @@
 // 扫码相关的
 import helper from './helper.js'
-import baScanner from './baScanner.js'
+import baScanner from '../Ba/baScanner.js'
 const scanCode = {
     // 扫码
     scan(onlyCamera = false) {

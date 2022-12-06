@@ -4,7 +4,7 @@
 // #ifdef APP-PLUS
 const idCode = uni.requireNativePlugin('Ba-IdCode')
 
-import helper from './helper.js'
+import helper from '../weisifang/helper.js'
 // #endif
 
 const baIdCode = {

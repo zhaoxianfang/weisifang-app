@@ -4,7 +4,7 @@
 // #ifdef APP-PLUS
 const beep = uni.requireNativePlugin('Ba-Beep')
 
-import helper from './helper.js'
+import helper from '../weisifang/helper.js'
 // #endif
 
 const baBeep = {
