@@ -263,20 +263,6 @@
                     "parameters" : {}
                 }
             },
-            "Phone-Identification-code" : {
-                "__plugin_info__" : {
-                    "name" : "安卓手机唯一标识码 唯一码 唯一标识",
-                    "description" : "安卓手机唯一码，java用的是utdid阿里的第三方库，同一应用在同个设备上反复重装唯一码均唯一",
-                    "platforms" : "Android",
-                    "url" : "https://ext.dcloud.net.cn/plugin?id=10164",
-                    "android_package_name" : "com.weisifang",
-                    "ios_bundle_id" : "",
-                    "isCloud" : true,
-                    "bought" : 1,
-                    "pid" : "10164",
-                    "parameters" : {}
-                }
-            },
             "Ba-Websocket" : {
                 "__plugin_info__" : {
                     "name" : "websocket原生服务（自动重连、心跳检测） Ba-Websocket",
@@ -344,6 +330,76 @@
                     "isCloud" : true,
                     "bought" : 1,
                     "pid" : "9402",
+                    "parameters" : {}
+                }
+            },
+            "Ba-Autoboot" : {
+                "__plugin_info__" : {
+                    "name" : "应用开机自启插件 Ba-Autoboot",
+                    "description" : "uniapp开机自启插件 Ba-Autoboot，主要用安卓平板、电视、窗口屏、广告屏、机顶盒等等，手机的话不能保证所有。",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=8877",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "8877",
+                    "parameters" : {}
+                }
+            },
+            "Ba-IdCode" : {
+                "__plugin_info__" : {
+                    "name" : "获取设备唯一标识（OAID、AAID、IMEI等） Ba-IdCode",
+                    "description" : "Ba-IdCode 是一款可以获取国内各大手机厂商 OAID 及海外手机平台 AAID 的插件。另外也支持 IMEI/MEID、AndroidID、WidevineID、PseudoID、GUID 等",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=10318",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "10318",
+                    "parameters" : {}
+                }
+            },
+            "Ba-KeepAlive" : {
+                "__plugin_info__" : {
+                    "name" : "安卓保活（采用多种主流技术） Ba-KeepAlive",
+                    "description" : "原生保活插件，支持市面上大部分机型，Android4.4到13.0 。为定位、推送、websocket、定时任务、蓝牙、聊天等保驾护航（**注意：**不保证支持所有机型和场景，建议先试用再购买）",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=9423",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "9423",
+                    "parameters" : {}
+                }
+            },
+            "Ba-Location" : {
+                "__plugin_info__" : {
+                    "name" : "实时定位（系统、后台运行、支持息屏） Ba-Location",
+                    "description" : "Ba-Location 是一款系统GPS实时定位插件，可后台运行，可以息屏运行，可在内网使用。",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=10330",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "10330",
+                    "parameters" : {}
+                }
+            },
+            "Ba-FloatWindow" : {
+                "__plugin_info__" : {
+                    "name" : "悬浮窗（在其他应用上层显示） Ba-FloatWindow",
+                    "description" : "Ba-FloatWindow 是一款在其他应用上层显示的悬浮窗插件。支持多种场景；支持拖动；支持多个。",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=9432",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "9432",
                     "parameters" : {}
                 }
             }
