@@ -5,7 +5,6 @@ import store from './store'
 import tui from './common/httpRequest'
 import helper from './js_sdk/weisifang/helper'
 import ba from './js_sdk/ba'
-import baNotify from './js_sdk/weisifang/baNotify'
 // API 封装
 import api from './api'
 
@@ -19,8 +18,7 @@ import Vue from 'vue'
 Vue.config.productionTip = false
 Vue.prototype.tui = tui
 Vue.prototype.helper = helper
-Vue.prototype.ba = ba
-Vue.prototype.baNotify = baNotify // ba 本地消息通知
+Vue.prototype.ba = ba // Ba 插件合集
 Vue.prototype.$store = store
 Vue.prototype.$api = api
 App.mpType = 'app'

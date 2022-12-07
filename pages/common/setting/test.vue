@@ -24,7 +24,16 @@
             <tui-button bold type="gray-green" @click="clearNotify">清空通知</tui-button>
         </view>
         <view class="tui-btn-box">
-            <tui-button bold type="gray-danger" @click="unregister">注销</tui-button>
+            <tui-button bold type="gray-danger" @click="registerBroadcast">注册广播</tui-button>
+        </view>
+        <view class="tui-btn-box">
+            <tui-button bold type="gray-danger" @click="testBroadcast">测试广播</tui-button>
+        </view>
+        <view class="tui-btn-box">
+            <tui-button bold type="gray-danger" @click="setAppGray">全局置灰</tui-button>
+        </view>
+        <view class="tui-btn-box">
+            <tui-button bold type="gray-danger" @click="unsetAppGray">取消置灰</tui-button>
         </view>
         <view class="tui-btn-box">
             <tui-button bold type="gray-warning" @click="isRunning">是否正在运行</tui-button>
@@ -43,10 +52,6 @@
 </template>
 
 <script>
-    const Phone_Identification_code = uni.requireNativePlugin('Phone-Identification-code');
-    import baChangeIcon from '@/js_sdk/weisifang/baChangeIcon.js'
-    import baScanner from '@/js_sdk/weisifang/baScanner.js'
-
     export default {
         data() {
             return {
@@ -66,17 +71,11 @@
             },
             // 安卓手机唯一标识码 唯一码 唯一标识
             phoneCode() {
-                Phone_Identification_code.send({}, e => {
-                    // 回调函数
-                    uni.showToast({
-                        title: '响应数据：' + JSON.stringify(e),
-                        icon: 'none'
-                    });
-                });
+
             },
             onScan() {
                 // 连续扫码
-                baScanner.scan({
+                this.ba.scanner.scan({
                     isContinuous: true
                 }, (res) => {
                     return false
@@ -88,103 +87,35 @@
                 } else {
                     this.baIconIndex = 0
                 }
-                baChangeIcon.change(this.baIconIndex)
+                this.ba.changeIcon.change(this.baIconIndex)
             },
             getCurrentIcon() { //获取当前icon样式
-                baChangeIcon.getCurrentSer()
+                this.ba.changeIcon.getCurrentSer()
             },
             ocr() {
                 this.tui.href('/pagesA/ocr/index');
             },
             notify() {
-                this.baNotify.send({
+                this.ba.notify.send({
                     title: '新消息', // 设置通知中心的标题
                     content: '您有一条消息通知', // 设置通知中心中的内容
                 });
-                // let content = 'content';
-                // let leftText = "左按钮";
-                // let rightText = "右按钮";
-                // let thumbUrl = plus.io.convertLocalFileSystemURL("_www/static/images/tabbar/work_active.png");
-                // let bigUrl = plus.io.convertLocalFileSystemURL("_www/static/images/tabbar/work_active.png");
-                // 大图通知
-                // notify.show({
-                // 	'channelID': '1',
-                // 	'channelName': '大图通知',
-                // 	'ID': 1,
-                // 	'notifyType': 1, // 1 大图通知
-                // 	'ticker': 'Ticker',
-                // 	'title': '大图通知',
-                //  "extend":"附加参数",
-                // 	'content': content,
-                // 	'thumbUrl': thumbUrl,
-                // 	'bigUrl': bigUrl,
-                // },
-                // (res) => {
-                // 	console.log(res)
-                // });
-                // 4 消息盒子
-                // let msgList = ['消息1', '消息2', '消息3'];
-                // notify.show({
-                // 		'channelID': '4',
-                // 		'channelName': '消息盒子',
-                // 		'ID': 4,
-                // 		'notifyType': 4,
-                // 		'ticker': 'Ticker',
-                // 		'title': 'mailbox',
-                // 		'content': content,
-                // 		'thumbUrl': thumbUrl,
-                //      "extend":"附加参数",
-                // 		'msgList': msgList
-                // 	},
-                // 	(res) => {
-                // 		console.log(res)
-                // 	});
-
-                //进度通知
-                // let progress = 10;
-                // notify.show({
-                // 		'channelID': '6',
-                // 		'channelName': '进度通知',
-                // 		'ID': 6,
-                // 		'notifyType': 6,
-                // 		'ticker': 'Ticker',
-                // 		'title': '进度通知',
-                // 		'content': content,
-                // 		'maxProgress': 100,
-                // 		'progress': progress, //当前进度
-                // 		'indeterminate': false, //是否模糊进度显示 true:跑马灯式
-                // 		'finishText': "下载完成",
-                // 		'ongoing':true , // 通知持续显示，侧滑不能删除，默认 false
-                // 		'autoCancel':false, // 点击通知，自动消失，默认 true
-                // 		"extend":"附加参数"
-                // 	},
-                // 	(res) => {
-                // 		console.log(res)
-                // 		progress=progress+10
-                // 	});
-
-                // 多行通知
-                // content = "《一代人》\n" +
-                //     "\n" +
-                //     "\n" +
-                //     "黑夜给了我黑色的眼睛\n" +
-                //     "我却用它寻找光明";
-                // notify.show({
-                //         'channelID': '5',
-                //         'channelName': 'channel_5',
-                //         // 'ID': 5,
-                //         'notifyType': 5,
-                //         'ticker': 'Ticker',
-                //         'title': '多行通知',
-                //         'content': content,
-                //     },
-                //     (res) => {
-                //         console.log(res)
-                //     });
             },
             // 清空通知
             clearNotify() { //清空某类型消息
-                this.baNotify.clear()
+                this.ba.notify.clear()
+            },
+            registerBroadcast() { // 注册广播
+                this.ba.broadcast.register()
+            },
+            testBroadcast() {
+                this.ba.broadcast.sendBroadcast()
+            },
+            setAppGray() {
+                this.ba.gray.openGray()
+            },
+            unsetAppGray() {
+                this.ba.gray.closeGray()
             },
             register() { //注册
 

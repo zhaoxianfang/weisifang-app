@@ -11,6 +11,15 @@
 
             // app 辅助功能初始化
             helper.init();
+
+            // ba 开机启动监听
+            // this.checkArguments();
+            // 重点是以下： 一定要监听后台恢复 ！一定要   
+            plus.globalEvent.addEventListener('newintent', (e) => {
+                this.checkArguments(); // 检测启动参数  
+            });
+            // ba 开机启动监听 结束
+
             // 检测app 最新版本
             helper.checkAppUpgrade(0);
 
@@ -83,6 +92,22 @@
                 console.log('发生错误：' + errMsg);
             });
             // #endif
+        },
+        methods: {
+            checkArguments() {
+                var args = plus.runtime.arguments;
+                if (args) {
+                    let args1 = JSON.parse(args);
+                    if (args1.BaAutoboot) { //判断是否为BaAutoboot 自启传来的消息
+                        //这里写你的处理逻辑
+                        uni.showToast({
+                            title: "BaAutoboot 开机自启",
+                            icon: "none",
+                            duration: 3000
+                        })
+                    }
+                }
+            },
         }
     };
 </script>

@@ -7,6 +7,8 @@ import baIdCode from '@/js_sdk/ba/baIdCode.js'
 import baLocation from '@/js_sdk/ba/baLocation.js'
 import baNotify from '@/js_sdk/ba/baNotify.js'
 import baScanner from '@/js_sdk/ba/baScanner.js'
+import baGray from '@/js_sdk/ba/baGray.js'
+import baBroadcast from '@/js_sdk/ba/baBroadcast.js'
 
 const ba = {
     beep: baBeep,
@@ -14,6 +16,8 @@ const ba = {
     idCode: baIdCode,
     location: baLocation,
     notify: baNotify,
-    scanner: baScanner
+    scanner: baScanner,
+    gray: baGray,
+    broadcast: baBroadcast
 }
 export default ba

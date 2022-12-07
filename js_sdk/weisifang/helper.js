@@ -10,6 +10,7 @@ import {
     checkUpdate
 } from '../../components/app-upgrade/js/app-update-check.js'
 import utils from '@/js_sdk/weisifang/utils.js'
+import baBroadcast from '@/js_sdk/ba/baBroadcast.js'
 isIos = (plus.os.name === 'iOS')
 // #endif
 
@@ -33,7 +34,10 @@ const helper = {
         plus.navigator.setFullscreen(false); // 设置应用全屏显示！
 
         this.clickToBack()
-
+        // 先注销注册广播
+        baBroadcast.unregister()
+        // 注册广播
+        baBroadcast.register()
         this.test_live('测试保活')
         // #endif
     },

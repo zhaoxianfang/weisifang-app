@@ -23,7 +23,7 @@ const baIdCode = {
         idCode.getIdCodes(res => {
             console.log(res);
             if (res.data) {
-                this.msgList.unshift(JSON.stringify(res.data))
+                // this.msgList.unshift(JSON.stringify(res.data))
             }
             uni.showToast({
                 title: res.msg,
@@ -36,7 +36,7 @@ const baIdCode = {
         idCode.getOAID(res => {
             console.log(res);
             if (res.data) {
-                this.msgList.unshift(JSON.stringify(res.data))
+                // this.msgList.unshift(JSON.stringify(res.data))
             }
             uni.showToast({
                 title: res.msg,
