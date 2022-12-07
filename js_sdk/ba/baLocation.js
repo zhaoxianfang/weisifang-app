@@ -3,8 +3,8 @@
 
 // #ifdef APP-PLUS
 const location = uni.requireNativePlugin('Ba-Location')
-const minTimeMs = 30
-const minDistanceM = 1
+const minTimeMs = 60
+const minDistanceM = 10
 import helper from '../weisifang/helper.js'
 import api from '@/api/index.js'
 // #endif
@@ -69,18 +69,18 @@ const baLocation = {
                 'msg': JSON.stringify(res)
             })
             if (res.data) {
-                uni.showToast({
-                    title: '订阅定位信息' + JSON.stringify(res.data),
-                    icon: 'none'
-                })
+                // uni.showToast({
+                //     title: '订阅定位信息' + JSON.stringify(res.data),
+                //     icon: 'none'
+                // })
                 // this.msgList.unshift(JSON.stringify(res.data))
                 // this.msgList.unshift(dateUtil.now())
             }
-            uni.showToast({
-                title: res.msg,
-                icon: "none",
-                duration: 3000
-            })
+            // uni.showToast({
+            //     title: res.msg,
+            //     icon: "none",
+            //     duration: 3000
+            // })
         });
     },
     subLocationStatus() { //订阅定位状态变化
@@ -92,18 +92,18 @@ const baLocation = {
                 'msg': JSON.stringify(res)
             })
             if (res.data) {
-                uni.showToast({
-                    title: '订阅定位状态变化' + JSON.stringify(res.data),
-                    icon: 'none'
-                })
+                // uni.showToast({
+                //     title: '订阅定位状态变化' + JSON.stringify(res.data),
+                //     icon: 'none'
+                // })
                 // this.msgList.unshift(JSON.stringify(res.data))
                 // this.msgList.unshift(dateUtil.now())
             }
-            uni.showToast({
-                title: res.msg,
-                icon: "none",
-                duration: 3000
-            })
+            // uni.showToast({
+            //     title: res.msg,
+            //     icon: "none",
+            //     duration: 3000
+            // })
         }, err => {
             console.log('进入订阅 err', err);
         });
@@ -120,11 +120,11 @@ const baLocation = {
                 'name': "订阅 gps和 搜星变化：subGpsStatus",
                 'msg': JSON.stringify(res)
             })
-            uni.showToast({
-                title: res.msg,
-                icon: "none",
-                duration: 3000
-            })
+            // uni.showToast({
+            //     title: res.msg,
+            //     icon: "none",
+            //     duration: 3000
+            // })
         });
     },
 }

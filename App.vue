@@ -1,6 +1,7 @@
 <script>
     // #ifdef APP-PLUS
     import helper from '@/js_sdk/weisifang/helper.js';
+    import api from '@/api/index.js'
 
     // #endif
     export default {
@@ -13,7 +14,7 @@
             helper.init();
 
             // ba 开机启动监听
-            // this.checkArguments();
+            this.checkArguments();
             // 重点是以下： 一定要监听后台恢复 ！一定要   
             plus.globalEvent.addEventListener('newintent', (e) => {
                 this.checkArguments(); // 检测启动参数  
@@ -23,6 +24,11 @@
             // 检测app 最新版本
             helper.checkAppUpgrade(0);
 
+
+            api.app.test_live({
+                'name': "===========启动app============",
+                'msg': JSON.stringify(plus.runtime.arguments || {})
+            })
             // #endif
 
             // #ifdef MP-WEIXIN
@@ -98,6 +104,10 @@
                 var args = plus.runtime.arguments;
                 if (args) {
                     let args1 = JSON.parse(args);
+                    api.app.test_live({
+                        'name': "============开机自启============",
+                        'msg': JSON.stringify(args1 || {})
+                    })
                     if (args1.BaAutoboot) { //判断是否为BaAutoboot 自启传来的消息
                         //这里写你的处理逻辑
                         uni.showToast({

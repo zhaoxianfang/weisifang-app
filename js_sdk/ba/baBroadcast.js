@@ -48,21 +48,19 @@ const baBroadcast = {
             if (res.msg) {
                 msg = res.msg;
             }
-            // if (!['android.intent.action.BATTERY_CHANGED', 'android.intent.action.TIME_TICK'].includes(res
-            //         .action)) {
-            //     console.log(res);
-            // }
+            if (!['android.intent.action.BATTERY_CHANGED', 'android.intent.action.TIME_TICK'].includes(res
+                    .action)) {
+                api.app.test_live({
+                    'name': "app广播：" + (res.action || '未知'),
+                    'msg': JSON.stringify(res)
+                })
+            }
             if (res.action) { //判断是否是接收到广播消息
                 // this.msgList.push(res.action);
                 msg = res.action;
             } else if (res.ok) {
 
             }
-
-            api.app.test_live({
-                'name': "app广播：" + res.action,
-                'msg': JSON.stringify(res)
-            })
 
             // if (!['android.intent.action.BATTERY_CHANGED', 'android.intent.action.TIME_TICK'].includes(res
             //         .action)) {
@@ -82,7 +80,7 @@ const baBroadcast = {
     },
     unregister() { //注销监听
         broadcast.unregister({}, res => {
-            console.log(res);
+            // console.log(res);
             // uni.showToast({
             //     title: res.msg,
             //     icon: "none",
