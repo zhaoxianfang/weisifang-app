@@ -9,40 +9,16 @@ import helper from '../weisifang/helper.js'
 
 const baIdCode = {
     register() { //注册，先注册再获取，注意APP合规性，若最终用户未同意隐私政策则不要调用
-        idCode.register(
-            res => {
-                console.log(res);
-                uni.showToast({
-                    title: res.msg,
-                    icon: "none",
-                    duration: 3000
-                })
-            });
+        idCode.register(res => {});
     },
-    getIdCodes() { //获取设备的各种标识码
+    getIdCodes(callFun) { //获取设备的各种标识码
         idCode.getIdCodes(res => {
-            console.log(res);
-            if (res.data) {
-                // this.msgList.unshift(JSON.stringify(res.data))
-            }
-            uni.showToast({
-                title: res.msg,
-                icon: "none",
-                duration: 3000
-            })
+            callFun && callFun(res)
         });
     },
-    getOAID() { //异步获取 OAID
+    getOAID(callFun) { //异步获取 OAID
         idCode.getOAID(res => {
-            console.log(res);
-            if (res.data) {
-                // this.msgList.unshift(JSON.stringify(res.data))
-            }
-            uni.showToast({
-                title: res.msg,
-                icon: "none",
-                duration: 3000
-            })
+            callFun && callFun(res)
         });
     },
 }

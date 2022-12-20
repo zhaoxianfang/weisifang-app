@@ -36,6 +36,12 @@
             <tui-button bold type="gray-danger" @click="unsetAppGray">取消置灰</tui-button>
         </view>
         <view class="tui-btn-box">
+            <tui-button bold type="gray-danger" @click="getId">获取设备ID</tui-button>
+        </view>
+        <view class="tui-btn-box">
+            <tui-button bold type="gray-danger" disabled="">-------</tui-button>
+        </view>
+        <view class="tui-btn-box">
             <tui-button bold type="gray-warning" @click="isRunning">是否正在运行</tui-button>
         </view>
         <view class="tui-btn-box">
@@ -116,6 +122,19 @@
             },
             unsetAppGray() {
                 this.ba.gray.closeGray()
+            },
+            // 获取设备ID
+            getId() {
+                this.ba.idCode.getIdCodes(res => {
+                    console.log('getIdCodes', res);
+                    if (res.data) {
+                        uni.showToast({
+                            title: res.data.AndroidID,
+                            icon: "none",
+                            duration: 3000
+                        })
+                    }
+                });
             },
             register() { //注册
 

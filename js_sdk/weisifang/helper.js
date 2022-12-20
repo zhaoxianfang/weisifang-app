@@ -4,6 +4,7 @@ import files from '@/js_sdk/weisifang/files.js'
 import permissions from '@/js_sdk/weisifang/permissions.js'
 import scanCode from '@/js_sdk/weisifang/scan_code.js'
 import navButtonsHandle from '@/js_sdk/weisifang/navButtonsHandle.js'
+import baIdCode from '@/js_sdk/ba/baIdCode.js'
 
 // #ifdef APP-PLUS
 import {
@@ -34,11 +35,13 @@ const helper = {
         plus.navigator.setFullscreen(false); // 设置应用全屏显示！
 
         this.clickToBack()
-        // 先注销注册广播
-        baBroadcast.unregister()
-        // 注册广播
-        baBroadcast.register()
-        this.test_live('测试保活')
+        // // 先注销注册广播
+        // baBroadcast.unregister()
+        // // 注册广播
+        // baBroadcast.register()
+        // this.test_live('测试保活')
+        // 注册获取手机id
+        baIdCode.register()
         // #endif
     },
     openUrl(url) {
