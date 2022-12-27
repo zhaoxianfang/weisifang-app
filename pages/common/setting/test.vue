@@ -39,6 +39,12 @@
             <tui-button bold type="gray-danger" @click="getId">获取设备ID</tui-button>
         </view>
         <view class="tui-btn-box">
+            <tui-button bold type="gray-danger" @click="setAppWidget">使用默认init方式设置窗口小工具</tui-button>
+        </view>
+        <view class="tui-btn-box">
+            <tui-button bold type="gray-danger" @click="testBeep">测试到账播报</tui-button>
+        </view>
+        <view class="tui-btn-box">
             <tui-button bold type="gray-danger" disabled="">-------</tui-button>
         </view>
         <view class="tui-btn-box">
@@ -135,6 +141,12 @@
                         })
                     }
                 });
+            },
+            setAppWidget() {
+                this.ba.appWidget.requestPin()
+            },
+            testBeep() {
+                this.ba.beep.playList(["_daozhang", "_1", "_bai", "_2", "_shi", "_dian", "_5", "_yuan"]);
             },
             register() { //注册
 

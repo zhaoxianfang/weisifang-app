@@ -9,6 +9,7 @@ import baNotify from '@/js_sdk/ba/baNotify.js'
 import baScanner from '@/js_sdk/ba/baScanner.js'
 import baGray from '@/js_sdk/ba/baGray.js'
 import baBroadcast from '@/js_sdk/ba/baBroadcast.js'
+import baAppWidget from '@/js_sdk/ba/baAppWidget.js'
 
 const ba = {
     beep: baBeep,
@@ -18,6 +19,7 @@ const ba = {
     notify: baNotify,
     scanner: baScanner,
     gray: baGray,
-    broadcast: baBroadcast
+    broadcast: baBroadcast,
+    appWidget: baAppWidget
 }
 export default ba
