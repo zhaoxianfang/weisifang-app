@@ -55,23 +55,15 @@ const baVideoPip = {
     /**
      * 是否支持画中画
      */
-    isSupportPip() {
+    isSupportPip(callFun) {
         let that = this;
         videoPip.isSupportPip(
             res => {
                 console.log(res);
                 if (res.data) {
-                    uni.showToast({
-                        title: "isSupportPip:" + res.data.isSupportPip,
-                        icon: "none",
-                        duration: 3000
-                    })
+                    callFun && callFun(res.data.isSupportPip, res.msg)
                 } else {
-                    uni.showToast({
-                        title: res.msg,
-                        icon: "none",
-                        duration: 3000
-                    })
+                    callFun && callFun(false, res.msg)
                 }
             }
         );
@@ -79,23 +71,15 @@ const baVideoPip = {
     /**
      * 画中画开关是否打开
      */
-    isOpenEnable() {
+    isOpenEnable(callFun) {
         let that = this;
         videoPip.isOpenEnable(
             res => {
                 console.log(res);
                 if (res.data) {
-                    uni.showToast({
-                        title: "isOpenEnable:" + res.data.isOpenEnable,
-                        icon: "none",
-                        duration: 3000
-                    })
+                    callFun && callFun(res.data.isOpenEnable, res.msg)
                 } else {
-                    uni.showToast({
-                        title: res.msg,
-                        icon: "none",
-                        duration: 3000
-                    })
+                    callFun && callFun(false, res.msg)
                 }
             }
         );
@@ -103,23 +87,15 @@ const baVideoPip = {
     /**
      * 画中画是否打开（本插件）
      */
-    isStart() {
+    isStart(callFun) {
         let that = this;
         videoPip.isStart(
             res => {
                 console.log(res);
                 if (res.data) {
-                    uni.showToast({
-                        title: "isStart:" + res.data.isStart,
-                        icon: "none",
-                        duration: 3000
-                    })
+                    callFun && callFun(res.data.isStart, res.msg)
                 } else {
-                    uni.showToast({
-                        title: res.msg,
-                        icon: "none",
-                        duration: 3000
-                    })
+                    callFun && callFun(false, res.msg)
                 }
             }
         );

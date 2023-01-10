@@ -45,19 +45,19 @@
             <tui-button bold type="gray-danger" @click="testBeep">测试到账播报</tui-button>
         </view>
         <view class="tui-btn-box">
-            <tui-button bold type="gray-danger" disabled="">-------</tui-button>
+            <tui-button bold type="gray-warning" @click="isSupportPip">是否支持画中画</tui-button>
         </view>
         <view class="tui-btn-box">
-            <tui-button bold type="gray-warning" @click="isRunning">是否正在运行</tui-button>
+            <tui-button bold type="gray-warning" @click="isOpenEnable">画中画开关是否打开</tui-button>
         </view>
         <view class="tui-btn-box">
-            <tui-button bold type="gray-warning" @click="getWhiteList">获取当前设备白名单项</tui-button>
+            <tui-button bold type="gray-warning" @click="isStart">画中画插件是否打开</tui-button>
         </view>
         <view class="tui-btn-box">
-            <tui-button bold type="gray-warning" @click="openWhiteList">打开白名单</tui-button>
+            <tui-button bold type="gray-warning" @click="startPip">打开画中画</tui-button>
         </view>
         <view class="tui-btn-box">
-            <tui-button bold type="gray-warning" @click="whiteList">获取并打开白名单</tui-button>
+            <tui-button bold type="gray-warning" @click="closePip">关闭画中画</tui-button>
         </view>
 
     </view>
@@ -147,6 +147,48 @@
             },
             testBeep() {
                 this.ba.beep.playList(["_daozhang", "_1", "_bai", "_2", "_shi", "_dian", "_5", "_yuan"]);
+            },
+            // 是否支持画中画
+            isSupportPip() {
+                this.ba.videoPip.isSupportPip(function(enable, msg) {
+                    console.log(enable, msg)
+                    uni.showToast({
+                        title: "是否支持画中画:[" + enable + ']msg:' + msg,
+                        icon: "none",
+                        duration: 3000
+                    })
+                })
+            },
+            // 画中画开关是否打开
+            isOpenEnable() {
+                this.ba.videoPip.isOpenEnable(function(enable, msg) {
+                    console.log(enable, msg)
+                    uni.showToast({
+                        title: "画中画是否打开:[" + enable + ']msg:' + msg,
+                        icon: "none",
+                        duration: 3000
+                    })
+                })
+            },
+            // 画中画插件是否打开
+            isStart() {
+                this.ba.videoPip.isStart(function(enable, msg) {
+                    console.log(enable, msg)
+                    uni.showToast({
+                        title: "画中画插件是否打开:[" + enable + ']msg:' + msg,
+                        icon: "none",
+                        duration: 3000
+                    })
+                })
+            },
+            // 关闭画中画
+            closePip() {
+                this.ba.videoPip.closePip()
+            },
+            // 打开画中画
+            startPip() {
+                let url = 'https://test.weisifang.com/video.mp4';
+                this.ba.videoPip.startPip(url)
             },
             register() { //注册
 
