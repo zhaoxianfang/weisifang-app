@@ -10,6 +10,7 @@ import baScanner from '@/js_sdk/ba/baScanner.js'
 import baGray from '@/js_sdk/ba/baGray.js'
 import baBroadcast from '@/js_sdk/ba/baBroadcast.js'
 import baAppWidget from '@/js_sdk/ba/baAppWidget.js'
+import baVideoPip from '@/js_sdk/ba/baVideoPip.js'
 
 const ba = {
     beep: baBeep,
@@ -20,6 +21,7 @@ const ba = {
     scanner: baScanner,
     gray: baGray,
     broadcast: baBroadcast,
-    appWidget: baAppWidget
+    appWidget: baAppWidget,
+    videoPip: baVideoPip
 }
 export default ba

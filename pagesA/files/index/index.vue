@@ -114,14 +114,13 @@
             openLoaclFiles() {
                 var _this = this
                 this.helper.files.selectFiles({
-                    'selectType': 1, // 选择类型：默认为0（ 0：浏览文件目录 1：文件在线文件）
-                    'maxCount': 1,
-                    'filetypes': 'jpg,png,doc,ppt,xls,mp3,mp4,avi,mov,rmvb,rm,flv,wmv' // 文件类型，多个英文","隔开
+                    maxCount: 1
                 }, function(file) {
                     if (file === false) {
                         console.log('选择文件出错啦 ')
                         return false
                     }
+                    console.log('file', file)
                     _this.helper.files.preview(file[0].absolutePath, file[0].name)
                 })
             },

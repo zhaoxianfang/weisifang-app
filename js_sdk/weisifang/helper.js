@@ -110,7 +110,7 @@ const helper = {
                             }
                         })
                     } else {
-                        console.log('获取app/version:失败');
+                        console.log('获取app/version:失败', res);
                     }
                 })
                 .catch(e => {

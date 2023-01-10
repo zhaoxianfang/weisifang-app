@@ -430,6 +430,20 @@
                     "pid" : "10503",
                     "parameters" : {}
                 }
+            },
+            "Ba-VideoPip" : {
+                "__plugin_info__" : {
+                    "name" : "画中画悬浮窗（视频） Ba-VideoPip",
+                    "description" : "Ba-VideoPip 是一款画中画方式的视频悬浮窗插件。支持点播、直播；支持官方、三方播放器无缝切换；支持动态刷新（如切换视频或进度）。",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=10619",
+                    "android_package_name" : "com.weisifang",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 1,
+                    "pid" : "10619",
+                    "parameters" : {}
+                }
             }
         }
     },
