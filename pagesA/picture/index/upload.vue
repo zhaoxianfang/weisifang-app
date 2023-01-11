@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import config from '@/common/config.js' // 倒入默认配置
+    import config from '@/api/config.js' // 倒入默认配置
     export default {
         name: 'upload-page',
         data() {

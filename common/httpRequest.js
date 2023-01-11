@@ -2,7 +2,7 @@
  * 常用方法封装 请求，文件上传等
  **/
 
-import config from './config.js' // 倒入默认配置
+import config from '@/api/config.js' // 倒入默认配置
 
 const tui = {
     //接口地址
@@ -114,9 +114,10 @@ const tui = {
                     let res_content = res.data || res
                     if (!this.isObj(res_content)) {
                         if (this.isHtml(res.data)) {
-                            console.log('返回html 一般是报错了')
+                            // console.log('返回html 一般是报错了')
                             tui.toast('出错啦~')
                             // this.toLogin()
+                            reject(res)
                             return false
                         }
                     }

@@ -144,6 +144,13 @@
                 "enablePullDownRefresh": false
             }
 
+        }, {
+            "path": "pages/common/article/detail",
+            "style": {
+                "navigationBarTitleText": "文章详情",
+                "enablePullDownRefresh": false
+            }
+
         }
     ],
     "preloadRule": {

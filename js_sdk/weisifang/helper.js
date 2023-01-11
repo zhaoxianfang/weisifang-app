@@ -187,6 +187,28 @@ const helper = {
         var mm = String(today.getMonth() + 1).padStart(2, '0');
         var yyyy = today.getFullYear();
         return yyyy + '-' + mm + '-' + dd;
-    }
+    },
+    //判断字符是否为空的方法
+    isEmpty: function(obj) {
+        if (typeof obj == "undefined" || obj == null || obj == "" || obj.length == 0 || (!/[^(^\s*)|(\s*$)]/
+                .test(obj)) || (helper.getType(obj) == 'Object' && Object.keys(obj).length == 0) || (helper
+                .getType(obj) == 'string' && ['{}', '[]'].includes(obj))) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+    /**
+     * 判断一个对象的类型
+     * @param args
+     * @returns
+     */
+    getType: function(data) {
+        let type = typeof data;
+        if (type !== "object") {
+            return type;
+        }
+        return Object.prototype.toString.call(data).replace(/^\[object (\S+)\]$/, '$1');
+    },
 }
 export default helper
