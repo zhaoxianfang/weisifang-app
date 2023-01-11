@@ -273,6 +273,8 @@
         flex-direction: column;
         border-top: 2rpx solid #ffaa00;
         border-bottom: 2rpx solid #ffaa00;
+        /* #ifndef APP-PLUS-NVUE */
         margin: 20rpx auto;
+        /* #endif */
     }
 </style>

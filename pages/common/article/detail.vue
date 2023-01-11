@@ -1,6 +1,6 @@
 <template>
     <view>
-        <wsf-article :title="title" :content="content" :type="type" :subTitle="subTitle"></wsf-article>
+        <wsf-article :title="title" :content="content" :type="type" :error="error"></wsf-article>
         <view class="tui-btn-back" @tap="back">返回</view>
     </view>
 </template>
@@ -10,7 +10,7 @@
         data() {
             return {
                 title: '',
-                subTitle: '',
+                error: '',
                 content: '',
                 type: 1
             }
@@ -39,28 +39,20 @@
             getArticleDetail(id) {
                 let _this = this;
                 this.$api.article.detail(id).then(res => {
-                        if (!_this.helper.isEmpty(res.data) && !_this.helper.isEmpty(res.data.id)) {
-                            _this.title = res.data.title
-                            _this.type = res.data.type
-                            _this.content = res.data.content
-                        } else {
-                            _this.title = '出错啦'
-                            _this.type = 1
-                            _this.subTitle = res.message || '文章内容获取失败!'
-                            _this.content = ''
-                        }
-                        // 设置标题
-                        uni.setNavigationBarTitle({
-                            title: _this.title
-                        });
-                    })
-                    .catch(e => {
-                        this.tui.toast('出错啦')
-                        _this.title = '出错啦!'
-                        _this.subTitle = '此文章不存在或设置了不可预览!'
-                        _this.type = 1
-                        _this.content = ''
+                    if (!_this.helper.isEmpty(res.data) && !_this.helper.isEmpty(res.data.id)) {
+                        _this.title = res.data.title
+                        _this.type = res.data.type
+                        _this.content = res.data.content
+                    } else {
+                        _this.error = res.data.message || '文章内容获取失败!'
+                    }
+                    // 设置标题
+                    uni.setNavigationBarTitle({
+                        title: _this.title
                     });
+                }).catch(_ => {
+                    _this.error = '文章内容获取失败!'
+                });
             }
         }
     }

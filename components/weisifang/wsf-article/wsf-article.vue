@@ -1,10 +1,10 @@
 <template>
     <view class="container">
         <view class="header">
-            <view class="title">{{title}}</view>
-            <view class="sub-title" v-if="subTitle">{{subTitle}}</view>
+            <view class="title" v-if="error.length<1">{{title || ''}}</view>
+            <view class="sub-title" v-if="error">{{error || '出错啦'}}</view>
         </view>
-        <view class="tui-richtext" v-if="content.length>0">
+        <view class="tui-richtext" v-if="error.length<1 && content.length>0">
             <view v-if="['1',1].includes(type)">
                 <uParse :content="content || ''" />
             </view>
@@ -39,8 +39,8 @@
                 type: String,
                 default: ''
             },
-            // 文章副标题
-            subTitle: {
+            // 文章错误提示
+            error: {
                 type: String,
                 default: ''
             }
@@ -92,9 +92,10 @@
     }
 
     .sub-title {
-        font-size: 24rpx;
+        font-size: 40rpx;
         color: #7a7a7a;
         padding-top: 18rpx;
+        text-indent: 2em
     }
 
     .tui-richtext {

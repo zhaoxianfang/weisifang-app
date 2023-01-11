@@ -3,12 +3,12 @@
  **/
 
 import config from '@/api/config.js' // 倒入默认配置
+import helper from '@/js_sdk/weisifang/helper.js'
 
 const tui = {
     //接口地址
     interfaceUrl: function() {
         return config.baseURL
-        // return 'http://www.weisifang.com'
     },
     toast: function(text, duration, success) {
         uni.showToast({
@@ -121,9 +121,14 @@ const tui = {
                             return false
                         }
                     }
-
+                    if (!helper.isEmpty(res.statusCode) && (res.statusCode > 299 || res
+                            .statusCode < 200)) {
+                        reject(res)
+                        return false
+                    }
 
                     resolve(res.data)
+                    return true
                 },
                 fail: res => {
                     clearTimeout(tui.delayed)
